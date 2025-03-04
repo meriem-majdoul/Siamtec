@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "226695008961",
+    "firebase_url": "https://groupe-synergys-7e672.firebaseio.com",
+    "project_id": "groupe-synergys-7e672",
+    "storage_bucket": "groupe-synergys-7e672.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:226695008961:android:984009f07a7086d804fa40",
+        "android_client_info": {
+          "package_name": "com.synergys"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "226695008961-8ad8utjcvio69ab3v1qtvup7411998ii.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB1a1tPCRNDIFvauqaOu-wE10AfXfWxiJo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "226695008961-8ad8utjcvio69ab3v1qtvup7411998ii.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

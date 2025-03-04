@@ -1,0 +1,58 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+
+buildscript {
+    ext {
+        
+        buildToolsVersion = "35.0.0"
+        minSdkVersion = 24
+        compileSdkVersion = 35
+        targetSdkVersion = 35
+        ndkVersion = "27.1.12297006"
+        kotlinVersion = "1.9.24"
+        // reactNativeReanimatedVersion = "3.14.0"  // Vérifiez la version correcte selon votre projet
+    }
+    repositories {
+        google()
+        mavenCentral()  // jcenter() est déprécié
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:8.8.0' // Exemple de version valide
+        classpath 'com.google.gms:google-services:4.3.15'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.0"
+        classpath("com.facebook.react:react-native-gradle-plugin:0.78.0")
+        // implementation project(':react-native-reanimated')
+    }
+}
+
+
+
+
+// apply plugin: "com.facebook.react.rootproject"
+
+// allprojects {
+//     repositories {
+//         google()
+//         mavenCentral()
+//         maven {
+//             url "https://oss.sonatype.org/content/repositories/snapshots"
+//         }
+//         maven {
+//             url "https://react-native-community.github.io/maven/"
+//         }
+//     }
+// }
+allprojects {
+    repositories {
+        mavenCentral()
+        google()
+        maven {
+            url 'https://repo.maven.apache.org/maven2/'
+        }
+        maven {
+            url 'https://oss.sonatype.org/content/repositories/snapshots/'
+        }
+    }
+}
+
+
+

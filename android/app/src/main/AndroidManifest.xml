@@ -1,0 +1,53 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="com.synergys"
+          xmlns:tools="http://schemas.android.com/tools"
+          >
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    
+    <application
+      android:name="com.synergys.MainApplication"
+      android:label="@string/app_name"
+      android:icon="@mipmap/ic_launcher"
+      android:roundIcon="@mipmap/ic_launcher_round"
+      android:allowBackup="false"
+      android:theme="@style/AppTheme"
+      android:supportsRtl="true"
+      android:requestLegacyExternalStorage="true"
+      tools:replace="android:allowBackup">
+        <meta-data
+           android:name="com.google.android.geo.API_KEY"
+           android:value="AIzaSyDKYloIbFHpaNh5QWGa7CWjKr8v-3aiu80"/>
+      <activity
+        android:name="com.synergys.MainActivity"
+        android:label="@string/app_name"
+        android:configChanges="keyboard|keyboardHidden|orientation|screenSize|uiMode"
+        android:launchMode="singleTask"
+        android:screenOrientation="portrait"
+        android:windowSoftInputMode="adjustPan"
+        android:exported="true">
+        
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+            <action android:name="android.intent.action.DOWNLOAD_COMPLETE"/>
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+
+        <intent-filter>
+            <action android:name="android.intent.action.VIEW"/>
+            <category android:name="android.intent.category.DEFAULT"/>
+            <category android:name="android.intent.category.BROWSABLE"/>
+            <data android:scheme="http" />
+            <data android:scheme="https" />
+            <data android:host="synergys.page.link"/>
+        </intent-filter>
+
+      </activity>
+      <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />
+    </application>
+
+</manifest>
+
