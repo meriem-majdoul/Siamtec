@@ -1,0 +1,105 @@
+IOS:
+
+1. CodePush Integration
+2. Notifications config & test
+3. Add libraries updates (React Navigation dynamic links...)
+3. Check out if any config is required for other installed libraries
+4. Change app name
+
+5. Add Splashscreen
+6. Add Favicon
+
+7. Generate ipa
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
++ le bouton valider n'est toujours pas assez visible 
+--> Vert, Gras, plus grand.
+
++ il n'ya pas de retour lorsque l'on crée un client 
+--> Tester les scénarios de navigation
+
++ Le prospect ne peut être convertible en client tant qu'il n'ya pas de projet crée pour lui 
+--> Ajouter une condition (projects.length > 0) pour afficher le boutton de conversion
+
++ L'action commentaire au début doit être supprimé 
+--> Changer le process (penser aux implications sur les projets existants)
+
++ Renommer "Créer la fiche EEB (Fiche d'étude d'évaluations des besoins)"
+--> Renomer dans le model
+
++ De manière générale, il faut que les étape s'affiche sans avoir besoin de cliquer dessus
+--> Appuie automatique sur la prochaine action.
+
++ Dans le use case du commercial, le contact commercial devra être prérempli.
+--> Préremplir l'utilisateur courrant dans le contact commercial s'il est de type commercial
+
+5.1  Nous devrons pouvoir en mettre plusieurs (contacts commerciaux) ??.
+
++ Les sections en dessous du process doivent être de base pliés et avoir un petit "+" pour les déplier" sauf pour le bloc note (cela perturbe les utilisateurs)
+--> Multi Toggle System show/hide
+
++ Lorsque l'on nous propose de créer la fiche, il faudrait ne pas passer par l'insertion du document mais que l'on nous 
+propose directement l'écran "importer ou générer" 
+--> Beaucoup de modifications à faire (à penser soigneusement...)
+
+* Il faudrait pouvoir revenir dans les étapes précédentes du process
+--> Travail considérable à faire. Peut être a planifier pour une version ultérieure.
+
+Pour la simulation: 
+
++ Dans le champs situation professionnelle de Mr et MMe au lieu de le ré-écrire marquer "Choisir"
++ Changer Année dans le logement par "Depuis combien de temps habitez-vous ici?"
++ Changer "Revenu fiscal de référence en €" par "Revenu fiscal de référence en € du foyer" et ajouter un "I" qui donnera une 
+infobulle "IMPORTANT" Cumulez les revenus fiscaux de tous les occupants du foyer"
++ Supprimer surface du terrain en m2
++ Supprimer référence cadastrale   
++ Pour nombre de niveaux habitables = mettre "RDC, R+1, R+2, R+3"
++ Modifier "Nombre de pièces" par "Nombres de pièces à vivre"
++ Modifier "Orientation de la pente" par "Orientation de la toiture" (à déplacer dans la section toiture, avant la question 
+sur largeur utile etc...)
++ Supprimer "support de la pente"  (à déplacer dans la section toiture, avant la question sur largeur utile etc...)
++ Pour l'année d'installation renommer par "Année d'installation du dernier équipement" 
++ Avant types de chauffage (qui sera renommé, voir plus bas) ajouter types de chauffage qui proposera ces choix: 
+Radiateur, Chaudière, poèle, Insert/cheminée, Pompe à chaleur
++ Nous retrouverons ensuite les choix déjà existant de type de chauffage (qui est renommé) 
++ Dans types de chauffage renommer par "Source d'énergie": 
+
++ Pour électrique ajouter en type d'émetteur "Radiateur inertie"  
++ Pour gaz ajouter "Autre"
++ Pour fioul ajouter "Autre" 
++ Enlever pompe à chaleur
++ Enlever poèle 
++ Pour Bois mettre le même type d'emetteur que gaz et fioul 
+
++ Renommer "Produisez-vous de l'éléctricité'' par Produisez-vous déjà de l'électricité par une source d'énergie renouvelable?
++ Ajouter "Dépense annuelle en électricité en €"
+
++ Supprimer la partie adresse, téléphone, adresse mail
++ Dans le résultat supprimer la partie et maintenant? (on laisse l'image) 
++ Dans le pdf généré supprimé les 2 pages non utilisés
+
+
+34. ARRET DU RENDEZ VOUS A DEVIS
+

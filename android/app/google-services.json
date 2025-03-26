@@ -1,0 +1,99 @@
+{
+  "project_info": {
+    "project_number": "226695008961",
+    "firebase_url": "https://groupe-synergys-7e672.firebaseio.com",
+    "project_id": "groupe-synergys-7e672",
+    "storage_bucket": "groupe-synergys-7e672.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:226695008961:android:984009f07a7086d804fa40",
+        "android_client_info": {
+          "package_name": "com.synergys"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "226695008961-t67vt0van6kc8380cc48d28k57ihg324.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.synergys",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "226695008961-u11o4perdeiejaso4r25n7np4l2ti255.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.synergys",
+            "certificate_hash": "5846d6812cc9d4f64af59475773da27ffb6a739b"
+          }
+        },
+        {
+          "client_id": "226695008961-8ad8utjcvio69ab3v1qtvup7411998ii.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB1a1tPCRNDIFvauqaOu-wE10AfXfWxiJo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "226695008961-8ad8utjcvio69ab3v1qtvup7411998ii.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "226695008961-rhr55a47i7slvvvgv030984es2b6rd23.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "org.reactjs.native.example.AsanaWorld"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:226695008961:android:2e592c594b6ba37d04fa40",
+        "android_client_info": {
+          "package_name": "fr.groupe.synergys"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "226695008961-8ad8utjcvio69ab3v1qtvup7411998ii.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB1a1tPCRNDIFvauqaOu-wE10AfXfWxiJo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "226695008961-8ad8utjcvio69ab3v1qtvup7411998ii.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "226695008961-rhr55a47i7slvvvgv030984es2b6rd23.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "org.reactjs.native.example.AsanaWorld"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,19 @@
+iOS:
+
+- Undefined symbols for architecture arm64
+-> Remove GoogleService-Info-2.plist (I forgot to delete a duplicate file of GoolgleService-Info)
+-> Delete Pods
+-> Delete Podfile.lock
+-> Comment use_frameworks! on Podfile
+-> run pod install
+
+General:
+ENOENT & permission related issues: use command in powershell: "Set-ExecutionPolicy Unrestricted"
+
+CHANGE node version
+> nvm install 8.12.0 // to install the version I wanted
+> nvm use 8.12.0  // use the installed version
+
+
+Error: Requiring module "src\screens\Inbox\NewMessage.js", which threw an exception: Invariant Violation: ViewPropTypes has been removed from React Native. Migrate to ViewPropTypes exported from 'deprecated-react-native-prop-types'., js engine: hermes
+https://stackoverflow.com/questions/72755476/invariant-violation-viewproptypes-has-been-removed-from-react-native-migrate-t

@@ -1,0 +1,108 @@
+Process V8 documentation: (45 actions)
+
+1. Initialisation
+1.1 Création prospect
+   - Saisir le Nom du client
+   - Saisir le Prénom du client
+   - Adresse postale
+   - Numéro de téléphone
+
+-----------------------------------------------------------------
+2. Rendez-vous 1
+2.1 Évaluation des besoins
+   - Créer un dossier de cheminement
+
+2.2 Initiation rendez-vous 2
+   - Créer un rendez-vous 2
+
+2.3 Création d'une offre précontractuelle
+   - Créer une offre précontractuelle
+
+-----------------------------------------------------------------
+3. Rendez-vous N
+3.1 Créer un rendez-vous 2
+   - Créer un rendez-vous 2
+
+3.2 Signature des documents
+   - Relevé d'impôt
+   - Justificatif de domicile
+   - Plan cadastral
+   - Taxe foncière
+   - Autre(s) document(s)
+   - Validation du contrôle de conformité
+   - Créer une offre précontractuelle
+   - Signer l'offre précontractuelle
+   - Créer un mandat MaPrimeRénov
+   - Signer le mandat MaPrimeRénov
+
+3.3 Modalité de paiement
+   - Modalité de paiement
+   - Propositions de financement
+
+3.4 Création d'une visite technique
+   - Créer une visite technique
+
+-----------------------------------------------------------------
+4. Visite technique
+4.1 Planification visite technique
+   - Créer une visite technique
+   - Valider la date de la visite technique
+   - Affecter un technicien à la visite technique
+   - Selectionnez les types de travaux
+
+4.2 Remplissage visite technique
+   - Remplir la visite technique
+   - Voulez-vous cloturer la visite technique
+   - Signer la visite technique
+
+-----------------------------------------------------------------
+5. En attente d'installation //##update
+
+5.1 Préparation de l'installation
+   - Commande du matériel
+   - Réception du matériel
+   - Proposition de date
+   - Confirmation d'installation 
+
+5.1 Plannification installation
+   - Créer une tâche de type installation
+
+5.2 Mise à jour du statut de l'installation
+   - Mettre à jour le statut de l'installation (1)
+   - Mettre à jour le statut de l'installation (2)
+
+5.3 Création d'un PV réception
+   - Créer un PV réception
+   - Signer le PV réception
+
+5.4 Réserve
+   - Êtes-vous satisfait de notre travail ?
+
+5.5 Plannification tâche rattrapage
+   - Créer une tâche rattrapage
+   - Finaliser la tâche rattrapage
+
+5.6 Facturation
+   - Créer une facture
+
+5.7 Finalisation de la facturation
+   - Modifier le statut du paiement
+   - Validation de la facture par le DAF
+   - Saisir le montant de la facture
+   - Créer une attestation fluide
+
+5.8 Envoi facture par mail
+   - Envoi automatique de la facture finale + attestation fluide par mail en cours...
+
+5.9 Satisfaction client
+   - Êtes-vous satisfait de notre service ?
+
+-----------------------------------------------------------------
+6. Finalisation
+6.1 Projet finalisé
+   - Le process du projet est terminé.
+
+-----------------------------------------------------------------
+7. Annulation
+7.1 Annulation du projet
+   - Appuyez ici pour reprendre le projet

@@ -1,0 +1,266 @@
+
+Questions:
+1. Visite tech préalable = RD1 & Visite tech = RDN ??
+2. Can a RDN last for multiple days ? in this case, multiple tasks will be created for each day. And postponing this RDN will 
+involve canceling multiple tasks. Which will involve auto-updating (runoperation) multiple documents during the process.
+
+DONE:
++++ ERRORS: Handling exceptions thrown by async functions
++++ FEATURE: Adresse de saisi manuelle
++++ Autofill address fields
++++ automatic fill task/document
+
+TO DO:
++++ Reactive Twilio verify
+++ Test utils functions that handle exceptions (pickdoc, saveFile...) on all screens
++++ ondelete order -> this.setState is not a function on fetchDocs()
++++ Commercial/poseur can only see his clients --> To not view other commercials projects from client's profile
++ uninstall react-native-image-to-pdf
++ Test denormalization updates
+
++++ Set ongoback=mainHandler from signature to processAction
++++ BUG: sometimes menu is empty
+--> Try to do privilleges/role setting on redux after navigating from authlistener
+--> make an intermediary logical component that handles those init operations before redirecting to Home screen
+++ Add intervenant field to project
+++ On submit task: check if assignedTo is subscriber: if not.. add assignedTo as intervenant on the project
+++ Responsable of a commercial action is intervenant || contactCom (just to display responsable the name on instruction)
+++ Display projects where intervant.id === currentUser.id (concat to listprojects, orders, documents)
+++ Notify assignedTo to do action (trigger CF)
+
+FEATURES:
++++ PROCESS MODEL UPDATE: Prompt user to reset process object onUpdateProcessModel event.
++ NOTIFICATION: Mark all as read option
++ NOTIFICATION: Delete notification
+
+ADJUSTMENTS:
+++ CREATETASK: a com/poseur has access to a task to which he is assigned to even though he is not subscriber to the concerned project.
+-> IDEA: Once we affect a task to a user --> Automatically we add him as a subscriber to the concerned project --> So he can read the project data --> Then he can do the process actions
++ CREATETASK: com / poseur should not be able to assign a task to another user (assignedTo is disabled. It is by default filled with currentUser)
++ UPDATES: Update libraries: react-native-paper, react-native-calendars
+
+BUGS:
++ NOTIFICATION: Handle redirect screen through deeplink after pressing a notification 
++++ PROCESS: check bug occured on Dossier action logement: No action displayed on process... (COULD NOT REPRODUCE THE BUG)
++++ TABLET: BLOCKED ONPRESS CHOICES (COULD NOT REPRODUCE THE BUG)
+-> NOT HAPPENING ON EMULATOR
+
+TESTS:
++ TEST: Make further Tests on denormalization updates
+
+-----------------------------------------------------------------------------------------------
+BEFORE RELEASE ON PROD:
++ GLOBAL: Fetch all collections on app start for offline support (THERE IS FEW USERS (20))
++ MAINTAINANCE: Add library to make auto version upgrade from google play
+----------------------------------------------------------------------------------------------
+
++ DESIGN: ModalOptions green header, white text
++ DESIGN: address description first line is hidden sometimes when there is 2lines
++ DESIGN: ListDocuments XD design"
++ DESIGN: favicon
++ DESIGN: splashscreen (design pending..)
++ DESIGN: Check phone screenshots
++ UX: onPress other form field focus it on one press not two
++ UX: pop up instruction when opening task swipable
++ UX: Change filter from menu to modal
+
+Design done:
+- Calendar like google calendars
+- Change emptylist icon color to gray
+- Change connection color button (first screen)
+- Change login screen style
+- add + to add team member instead of user icon
+- Filter: add close icon + Button put bottom
+- notificationitem police
+- not read: bell bg green/white bell
+- Change button color to primary (prospect form...)
+- BUG: notifications showed many times 
+- BE: add collaborators to email receivers projects events
+- SETTINGS: activate double authentication verify Twilio
+- Replace attachment pickers by Squares
+
+
+DONE: (01/05/2021)
+OPTIMIZATION:
++++ Optimize process fetch/update
+
+DONE: (05/04/2021)
++ CHATS: Navigate to user profile onPress avatar
++++ update createdBy/editedBy to {id, fullName, email, role}
++++ Make Activity section reusable on all forms (CreateProject, CreateTask, UploadDocument, CreateOrder, CreateRequest)
+++ USERS:  Handle display of profile of deleted user (onPress createdBy, editedBy...)
++ CREATETASK: autofill 'com' tasks with contact commercial & 'tech' tasks with contact technique
+++ USERS: onUpdateUser (deleted = true) handler: remove user account (on delete user)..
++++ Change project.subscribers to list of ids
++ BACKEND: Update all user, client & project objects through collections on update source(listen to only selected fields: fullName, role, etc).. (cloud function trigger)
+++ PROCESS: Cancel annulation (rollback: delete 'cancelProcess' phase)
+++ PROFILE: Refresh goals onGoBack
+++ CREATEPROJECT: Highrole can at anytime update bill amount (even before process action)
++ PROCESS & CREATETASK: Unicity of docType verification: (We suppose, according to the process model, that each task/document type is unique per project. Example: A project has only one Installation/one quote)
+-> OPTION 1: Verify if a task with same type already exists for the selected project (to avoid duplicates)
+-> OPTION 2: Admin can create any type of task/doc at any time -> Do a verification and alert him if the type he is attempting to create already exists (in the state !== 'Annulé' and deleted === false) for the project.
+-> OPTION 3 (SELECTED): Verify if at least one document exist (ignore other duplicates..) 
++ Ordre decroissant etapes / phases text show / dash between Steps.
++ DASHBOARD (NEW): From today to next days: red tasks, green for others
++ DASHBOARD (NEW): Add objectives
++ DASHBOARD (NEW):
+-> COM: show objectives: DC defines a "Chiffre d'affaire" every month for com. 
+-> DC: graph all comercials: global "Chiffre d'affaire"
++ DASHBOARD (NEW): Shortcuts: CreateProspect/CreateClient
++ DASHBOARD (NEW): tasks (recent and display outdated)
++ DASHBOARD (NEW): notifications récentes non lu (5) + voir toutes les notifications / Aucune notification récente if nothing
++ NOTIFICATION: Handle navigation to deleted document
++ PROCESS: ADD PROCESS PROGRESS SCREEN
++ CREATETASK: Handle conflicts
++ CREATETASK: Add property 'toute la journée' to task
++ PROCESS: Store process on firestore and handle it as done with permissions (redux cach)
++ ISSUE: Avoid duplicates of tasks/documents in "multi-users case" (especially if user is not up to date while offline)
+-> Solution:  Disable offline updates + Assign the action to one and only one responsible at a time..
++ GLOBAL: Change Notification collection (decompose body: intervenant, action, entity) + Filter (adjust cloud function)
++ GLOBAL: "Entité" "Nom de l'entité" action (email title)
++ PROCESS: Add responsible for each action
++ BACKEND & PROCESS: Notifications & Emails
++ 2. Add 2 Contacts as attribute of project: 
+* Contact commercial {nom, prenom, role, email, telephone}
+* Contact technique {nom, prenom, role, email, telephone}
++ CREATEPROJECT: Collaborators = admin, DC, RT, Contact com, Contact tech
++ LISTEMPLOYEES: add filter to employees (by role) to select com & tech easily
+
+DONE: (09/03/2021)
+- Add initialisation & maintenance (projects phases)
+- project title decrease size + 2number of lines (like Asana)
+- AGENDA: Task item on calendar: 50% task name & 50% assignee name
+- USERS: Merge client with prospects: Separate clients/prospects from users (create new collection Clients having prospect: true/false)
+- PROFILE: Add section to client 'Projects'
+- Make on screen containing both clients and prospects: LISTCLIENTS (project/request client selection)
+
+DONE: (08/03/2021)
+- Change picker library & change selected value style to match textinput style
+- Loading Create project no loading displayed..
+- CREATETASK: Color picker
+- PROJECTS: Color picker
+- PROJECTS: Other View for ListProjects (3 elements per row like Asana -> see screenshot sent by Adam on Whatsapp)
+- Change notification icon to bell-exclamation secondary color
+- replace icons envoyé reçu on messages by share and mail fontawesome
+- remove projects from mendatory fields  CreateTask
+- IMPORTANT: Add searchbar to Address Map 
+- TEXTINPUT: add * to mendatory fields
+- Change input fontfamily
+- Add motifs background to each list screen (users, teams, requests, ordersy)
+
+Done:
++ UploadDocument:
+- Add 'attachmentSource' property (conversion + conversionSource: 'Devis id')
+- Rester sur Document après création (pas de retour en arrière)
+- Ajouter (Facture générée) au nom d'une facture générée à partir d'un devis
++ Signature:
+- Rétrecir police et rétrecir saut ligne 
++ CreateTask:
+- CreateTask: Remove Project from mendatory fields
++ PdfGeneration:
+- Merger Devis avec conditions
+- Adjust Facture content
++ CreateOrder:
+- La remise: 2 champs textes CEE + Renov pour commande
+
+LIBRARIES CUSTOMIZATION DONE:
+1- react-native-calendars: 
++ Add Synergys Background
+Steps: 
+1. Path: C:\Users\lyous\OneDrive\Desktop\Github\Groupe-Synergys\node_modules\react-native-calendars\src\agenda\index.js
+2. Wrap renderReservations() inside <Background>
+3. Add style= {{zIndex: 1}} to <ReservationsList /> inside renderReservations()
+4. Remove onRefresh from Agenda props as it disables zIndex
+
+2- react-native-paper: style & render
+2- react-native-paper: List.Accordion: added titleComponent prop (can be proposed on github)
+3- react-native-autocomplete-input: style & render
+4- react-native-tags-autocomplete: style & render
+5- react-navigation: Deep links support/parse firebase dynamic links
+
+DONE:
++ PROCESS: Change action design (NEW)
++ PROCESS: Complete process model handling
++ PROCESS: Remove "Ignorer option" from all actions of Maintainance (if maintainance not initialized previously)
++ PROCESS: Handle action loadings to avoid press before configure action (and preferably set check animation)
++ PROCESS: Add verification actions in case user starts project from a phase depending on docs/tasks created on previous phase (exp: Devis, RD2), or like DOSSIER ACTION LOGEMENT which skips rd2 & rdn
+-> RDN: rd2Creation, quoteCreationChoice
+-> Visite technique: technicalVisitCreation, 
++ Adjust navigation (Try put all screens same stack or think about a better solution) ()
++ Commercial task types = [RD1, RDN, VTP, VT] tag: com
++ Poseur task types = [Installation, Rattrapage, Panne, Entretien] tag: tech
++ Add dynamiclly task types & doc types..
++ Update all user objects through collections on update name.. (cloud function trigger)
+
+//FIXED: Specific bugs process (test more..)
+(Maybe:::: RDN -> technicalVisitValidation (onchange date and press Valider -> The step starts again from begining.))
+Crash (project.name is undefined) if pressing quickly Installation > installationCreation > installationCreation
+(project is empty) if pressing quickly Installation > pvCreation > pvCreation
+
++ PROCESS: onSnapshot to update realtime process (in case other users change it simultaneously) DRAWBACK: Offline will not be always up to date
++ BREAKING PROCESS CHANGE: Change nextStep/nextPhase from step attributes to action attributes.
++ CONDITIONAL FACTURE CHOICE: check if generated quote exist -> choose conversion or manual
++ PROCESS: Add action loading on navigating back
++ PROCESS & CREATETASK: Verify if dueDate > startDate
++ OFFLINE: Disable edit mode when offline (show pop up onsubmit)  
++ PROCESS: Update project step/status attributes all along the process evolution.
++ IMPORTANT PROCESS: Query verification Document upload (add where('attachment.downloadURL', '!=', '') && Route navigation depending on doc exist or not -> if exist we can see attachment still uploading..)
++ PROCESS & UPLOADOCUMENT: Handle waiting/or not during upload document if coming from action link
+-> OPTION1 (SELECTED): Wait (user can go back but action is still not verified until attachment is fully uploaded)
+-> OPTION2: Go back (if user press action he'll find the attachment still uploading)
++ PROCESS & UPLOADOCUMENT: Remove not available doc types from generate choices
+
+Ideas2:
++ Maintainance & Troubleshooting:
+- Add id of each item on List overview -> User can communicate easily to us the element having an issue.
+- Add pull to refresh/refresh icon on forms (instead of onSnapshot).. because user has to refresh it voluntarely
+
+
+
+
+
+
+
+//Bugs:
+1. Modalité de paiement blocage
+2. Après création nouveau client à partir d'un nouveau projet, le client n'est pas renseigné automatiquement, et quand on clique sur client ça retourne vers liste projects
+3. Exporter document.
+
+
+
+
+
+
+
+
+
+
+
+// const clients = {
+//     canCreate: true,
+//     canUpdate: true,
+//     canRead: true,
+//     canDelete: false
+// }
+
+// const queryFilters = [
+//     { filterOrder: 1, clause: 'where', filter: 'project.subscribers', operation: 'array-contains', value: '' },
+// ]
+
+// const queryFilters = [
+//     { filterOrder: 1, clause: 'where', filter: 'project.subscribers', operation: 'array-contains', value: '' },
+// ]
+
+// const queryFilters = [
+//     { filterOrder: 1, clause: 'where', filter: 'type', operation: '==', value: 'ticket' },
+//     { filterOrder: 2, clause: 'orderBy', field: 'createdAt', sort: 'desc' },
+// ]
+
+// const queryFilters = [
+//     { filterOrder: 1, clause: 'where', filter: 'subscribers', operation: 'array-contains', value: '' },
+//     { filterOrder: 2, clause: 'where', filter: 'deleted', operation: '==', value: false },
+//     { filterOrder: 3, clause: 'orderBy', field: 'createdAt', sort: 'desc' },
+// ]
+
+
+        // db.collection('Permissions').doc('Poseur').update({ 'clients': clients })

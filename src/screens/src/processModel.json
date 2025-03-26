@@ -1,0 +1,183 @@
+ {
+  "init": {
+    "title": "Prospect",
+    "status": "pending",
+    "instructions": "Lorem ipsum dolor",
+    "phaseOrder": 1,
+    "previousPhase": "",
+    "progress": 0,
+    "isCurrent": false,
+    "steps": {
+      "prospectCreation": {
+        "title": "Création prospect",
+        "status": "pending",
+        "instructions": "Lorem ipsum dolor",
+        "stepOrder": 1,
+        "previousStep": "",
+        "progress": 0,
+        "isCurrent": false,
+        "actions": [
+          {
+            "id": "nom",
+            "title": "Nom",
+            "instructions": "Lorem ipsum dolor",
+            "collection": "Projects",
+            "documentId": "",
+            "properties": [
+              "client",
+              "fullName"
+            ],
+            "screenName": "Profile",
+            "screenParams": {
+              "userId": "",
+              "isClient": true
+            },
+            "type": "auto",
+            "responsable": "",
+            "status": "done"
+          },
+          {
+            "id": "prenom",
+            "title": "Prénom",
+            "instructions": "Lorem ipsum dolor",
+            "collection": "Projects",
+            "documentId": "GS-PR-0W02",
+            "properties": [
+              "client",
+              "fullName"
+            ],
+            "screenName": "Profile",
+            "screenParams": {
+              "userId": "",
+              "isClient": true
+            },
+            "type": "auto",
+            "responsable": "",
+            "status": "done"
+          },
+          {
+            "id": "address",
+            "title": "Adresse postale",
+            "instructions": "Lorem ipsum dolor",
+            "collection": "Projects",
+            "documentId": "GS-PR-0W02",
+            "properties": [
+              "client",
+              "address"
+            ],
+            "screenName": "Profile",
+            "screenParams": {
+              "userId": "",
+              "isClient": true
+            },
+            "type": "auto",
+            "responsable": "",
+            "status": "pending"
+          }
+        ]
+      }
+    }
+  },
+  "rd1": {
+    "title": "Rendez-vous 1",
+    "status": "pending",
+    "instructions": "Lorem ipsum dolor",
+    "phaseOrder": 2,
+    "previousPhase": "init",
+    "progress": 0,
+    "isCurrent": false,
+    "steps": {
+      "priorTechnicalVisit": {
+        "title": "Visite technique préalable",
+        "status": "pending",
+        "instructions": "Lorem ipsum dolor",
+        "stepOrder": 1,
+        "previousStep": "",
+        "progress": 0,
+        "isCurrent": false,
+        "actions": {
+          "rd1Date": {
+            "title": "Date du rendez-vous",
+            "instructions": "Lorem ipsum dolor",
+            "screenName": "CreateTask",
+            "screenParams": {
+              "TaskId": ""
+            },
+            "type": "auto",
+            "responsable": ""
+          }
+        }
+      },
+      "aidFile": {
+        "title": "Dossier aidé",
+        "status": "pending",
+        "instructions": "Lorem ipsum dolor",
+        "stepOrder": 2.1,
+        "previousStep": "prior-technical-visit",
+        "progress": 0,
+        "isCurrent": false,
+        "actions": {}
+      },
+      "housingActionFile": {
+        "title": "Dossier action logement",
+        "status": "pending",
+        "instructions": "Lorem ipsum dolor",
+        "stepOrder": 2.2,
+        "previousStep": "prior-technical-visit",
+        "progress": 0,
+        "isCurrent": false,
+        "actions": {
+          "eebFile": {
+            "title": "Fiche EEB",
+            "instructions": "Lorem ipsum dolor",
+            "screenName": "UploadDocument",
+            "screenParams": {
+              "project": "",
+              "DocumentType": ""
+            },
+            "type": "auto",
+            "responsable": ""
+          }
+        }
+      }
+    }
+  },
+  "rdn": {
+    "title": "Présentation étude",
+    "status": "pending",
+    "instructions": "Lorem ipsum dolor",
+    "phaseOrder": 3,
+    "previousPhase": "Rendez-vous 1",
+    "progress": 0,
+    "isCurrent": false,
+    "steps": {}
+  },
+  "technicalVisitManagement": {
+    "title": "Gestion visite technique",
+    "status": "pending",
+    "instructions": "Lorem ipsum dolor",
+    "phaseOrder": 4,
+    "previousPhase": "Présentation étude",
+    "progress": 0,
+    "isCurrent": false,
+    "steps": {
+      "siteCreation": {
+        "title": "Création chantier",
+        "status": "pending",
+        "instructions": "Lorem ipsum dolor",
+        "stepOrder": 1,
+        "previousStep": "",
+        "progress": 0,
+        "isCurrent": false,
+        "actions": {
+          "tvDateValidation": {
+            "title": "Valider la date de la visite technique",
+            "instructions": "Lorem ipsum dolor",
+            "type": "manual",
+            "responsable": ""
+          }
+        }
+      }
+    }
+  }
+}

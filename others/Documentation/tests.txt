@@ -1,0 +1,14 @@
+1. Creation prospect
+2. FInaliser un process
+3. Generer les documents
+
+
+- CancelProject is not deleted after restore project
+- uploaddoc nav then hide loading
+- order remise not working
+
+-last test to do: Remplir la VT au process
+
+
+HPgmLaTA6Y&Raypt$1 (webmail)
+2LW!F3saaKKjPAi

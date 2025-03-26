@@ -1,0 +1,65 @@
+
+- Creer video demo pour Admin
+- Creer video demo pour Client
+
+
+DONE: 
+- Creer video demo pour Guest
+- Desactiver les types de documents pour le cas d'un client
+- Mode hors ligne nshowing out of view on iOS
+- Desactiver modification "Types de travaux" pour un client
+- Espace vide entre projets dans Profile client (client connecte)
+- Afficher "Aucun pack propose" si conditions pas verifies dans simulation
+
+
+
+const choice1 = ["PAC AIR EAU", "Chauffage solaire combiné"]
+const choice2 = ["Chaudière à granulé", "Chauffage solaire combiné"]
+export const pack1 = [choice1, choice2]
+
+const choice3 = ["PAC AIR EAU", "Chauffe-eau solaire individuel"]
+const choice4 = ["PAC AIR EAU", "Ballon thermodynamique"]
+const choice5 = ["Chaudière à granulé", "Chauffe-eau solaire individuel"]
+const choice6 = ["Chaudière à granulé", "Ballon thermodynamique"]
+export const pack2 = [choice3, choice4, choice5, choice6]
+
+
+PAE: 
+- Source d'énergie = Gaz ou Fioul
+
+SSC:
+- Orientation de la toiture = "Sud-Est/Sud-Ouest"ou "Sud"
+- Cout d'electricite par metre carre > 10 (Cout d'electricite par metre carre = Dépense annuelle en électricité / Surface habitable)
+- Surface du toit >= 10 (Surface du toit = Longeur Utile * Largeur utile)
+- Garage ou dépendance avec disponibilité de plus de 4m2 ? OUI
+- Source d'énergie = "Gaz" ou "Fioul"
+
+BT:
+- Production d'eau chaude sanitaire = "Cumulus électrique" ou "Chaudière"
+
+    if (isPAE) {
+            if (isSSC) {
+                packs = packs.concat(pack1)
+            }
+            if (isBT) {
+                packs = packs.concat(pack2)
+            }
+            if (isSSC || isBT) {
+                isPVElligible = true
+            }
+    }
+
+
+Exemple pour avoir un pack propose dans les resultats:
+1. Source d'énergie = Gaz ou Fioul
+2. Longeur utile = 5, Largeur utile = 10 
+3. Garage ou dépendance avec disponibilité de plus de 4m2 ? OUI
+4. Orientation de la toiture = "Sud-Est/Sud-Ouest"ou "Sud"
+5. Dépense annuelle en électricité  = 5000 ; Surface habitable = 500
+
+
+-----------------
+iPad responsivity tasks:
+
+- Modal not responding (not fixing: Upgraded react-native-reanimated from 1.13.0 to 2.2.3)
+- Font size: added util function to scale for iPad

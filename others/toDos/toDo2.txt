@@ -1,0 +1,152 @@
+BETA:
+Questions:
+1. Qui doit confirmer la remise dans une commande? L'admin, RC ou RT (qui doit être notifier)
+2. Ou est comment montrer (differencier) les clients en cours ?
+3. Il faudrait pouvoir renommer les documents et photos inséré dans l'app 
+4 - il faudra donc ajouter la remise aussi sur cette ligne 1.1, cf image
+
+REPONSES
+- Comment calculer les taxes (à partir des prix avant ou après remises/primes ?): Voir les pieces jointes
+- Qui doit créer une visite technique: Seul le dr technique et l'admin peuvent ajouter
+
+-----------------------------------
+AUTRES:
+Questions
+1. Le prospect (ou le client) est créé par le chargé d'affaires ou le dc, ou Marie (use case à créer) 
+2. Il y'a certaines étapes qui semble en trop ou décalé  ?? Lequelles ?
+
+--------------------------------------
+Taches:
+VERSION BETA:
+2 - Attention nous remarquons qu'à la signature du devis le cerfa attestation simplifié ne se met pas à jour avec les infos client 
+et date.
+4 - Version ios
+
+DONE:
+1 - A la signature du devis, 2 documents devront signer en plus du devis :
+* Mandat maprimerénov (pdf à généré ; ci-joint) 
+* Mandat synergys (pdf à généré ; ci-joint) 
+1 - Voir la pièce jointe concernant devis remise pour ajuster le calcul des taxes. 
+2 - Aussi, lorsqu'on signe le devis, nous pouvons ensuite sortir de l'écran par la croix. Le problème est que la signature ne se sauvegarde pas. Ce serait bien d'avoir un message de confirmation de sortie 
+3 - Sort OrderLines to get product before services (current sort function is wrong..)
+4 - Si oui: On proposera 2 liens de sites internet: 
+* www.adhefi.com
+* www.moncofidispro.fr
+
+DEPLOYMENT TASKS:
+- Activate Twilio
+- Schedule db backups
+- Change emails destination of attestation fluide + Facture 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---------------------------------------------------
+OTHERS:
+1.
+- État : (le client final verra uniquement cette phase et pas étape)
+Visite technique préalable (Du début du process jusqu'a la 
+Étude en cours
+Étude réalisée 
+Projet validé 
+Visite technique
+Installation en cours
+Installation effectuée
+
+- Pour poser la visite technique: il faudrait un planning dédié à cette tache '' le planning de la visite technique" 
+qui grisera les créneaux au fur et à mesure qu'ils seront pris ou sinon seul les créneaux dispos seront proposés. 
+Les commerciaux pourront poser des créneaux mais pas les modifier ni les valider.  
+(l'étape de validation de la visite technique ne devra plus être dans le proccess en revanche le directeur technique 
+aura la possibilité d'intervenir sur le planning de la visite technique, si jamais le directeur modifie le planning 
+une info bulle de mise en garde devra lui être présenté pour valider la modif: "Le client a t-il était prévenu?" OUI-NON) 
+
+-  Avant de clôturer la visite technique: il faudra que le poseur remplisse ca VT: 
+Ce sera des questions à répondre + des photos à ajouter. Toutes les infos devront se collecter dans un fichier "Visite technique".  
+Chaque produit sera sujet à une checklist à remplir. Les checklists proposées seront donc en fonction des produits sélectionnés 
+dans le devis.
+
+Suivre ce proccess: 
+
+1. Photo du compteur électrique (photo à prendre ou à importer)  
+2. Quelle est la puissance de l'abonnement souscrit? (zone de saisi)
+3. Type de phase? (monophasé ou triphasé)
+4. Photo du tableau électrique existant (photo à prendre ou à importer + commentaire) 
+5. Cheklist 1 (le titre du 1er produit du devis) etc... (Les checklists des produits vont nous être envoyés) , puis les autres checklists si il y'a d'autres produits 
+6. Taille de tableau électrique à installer ? (zone de saisi avec à la fin écrit "module(s)" pour le poseur comprenne la question) 
+7. A partir de là un récapitulatif en pdf devra être généré 
+8. Sur ce PDF le montant de l'acompte du projet devra être inscrit 
+9. Puis une étape:  Acompte Récupéré: Oui ou Non ( si non motif) 
+10. Puis une question: Validation du client (signature électronique du pdf) 
+// embed images as Base64 on the generated pdf.
+// use StepsForm
+
+- À planification installation: 
+La première étape il y'a: "Créer une tache de type d'installation" à renommer 
+
+- Avant de mettre à jour le statut de l'intervention il faut que le poseur valide l'installation en ayant la possibilité de mettre 
+les photos de l'installation et des commentaires. Cette étape s'appellera pour lui: Photo de l'installation, des organes de sécurité,
+des étiquettes produits et fluide (minimum 4 photos obligatoires pour continuer)
+
+- Pour créer le pv de reception c'est le pdf modifiable envoyé par mail. Il faut que les 4 premier champs soit auto-rempli 
++ les champs "fait à"  "le" en "2" exemplaires
+
+- Puis il faut généré l'attestation de bonne exéctution qualitenr (document envoyé par mail) 
+
+- Puis généré attestation fluide (document envoyé par mail, a signé électronique)
+
+- Avant de passé à êtes-vous satisfait a notre travail, ajouter une étape: Avez-vous signé le dossier financement ? 
+  Avez-vous signé le dossier d'aide? (questions posée uniquement si financement et/ou aide)
+
+- Pour la fonctionnalité de l'œil (qui permet de revoir les étapes), il serait préférable de les voir du plus ancien en premier 
+au plus récent 
+
+- Lorsqu'on créer un projet, un message s'affiche il faudrait également que le projet se mette sur le process automatiquement  
+
+- Lorsque l'on doit créer un document, si on ne met rien l'appli affiche '' exportation du document" mais rien ne se fait. 
+Il faudrait un message d'erreur 
+
+- Faire un point sur le off Line
+
+- Juste après la sélection du mode de paiement il faudra ajouter: 
+Montant de l'acompte? (zone de saisie)
+Reste à payer: (zone de saisie) 
+
+- De manière générale, lorsque l'on planifie une tache cela serait sympa que l'ergonomie se rapproche de la replanification 
+dans la gestion de conflits (en définitif pour un rdv seul la date début et fin sont super utiles) 
+
+----------------------------------------------
+2.
+- Renommer le nom des "taches"
+- L'affichage est toujours mauvais sur la tablette
+- Grisée de manière plus évidente les champs non modifiables
+- Rendre la date de la tâche modifiable dans la gestion des conflits
+
+-----------------------------------------------
+BUGS: 
+
+- La gestion des conflits ne se déclenche plus
+- Lorsque l'on crée un client ou un projet  il n'y a pas de retour en arrière
+- Crash pendant la simulation (essayer de reproduire)
+- La progresse bar semble mal synchroniser 
+
+
+-------------------------------------------------------
+Questions du client:
+- Nous devrions pouvoir revenir dans le process, apporter des corrections en cas d'erreur de saisie ou autre 
+- Nous devrions pouvoir pivoter l'écran pour voir l'appli au format paysage
+- En offline comment fonctionne la signature électronique
+- Pour Manéro: Définir les couleurs de taches et code couleur en générale
