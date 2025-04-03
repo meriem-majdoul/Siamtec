@@ -1,54 +1,48 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { Card, Title } from 'react-native-paper';
-import LinearGradient from 'react-native-linear-gradient'
+import LinearGradient from 'react-native-linear-gradient';
 
 import moment from 'moment';
-import 'moment/locale/fr'
-moment.locale('fr')
+import 'moment/locale/fr';
+moment.locale('fr');
 
 import * as theme from '../core/theme';
 import { constants, isTablet } from '../core/constants';
 
-import { withNavigation } from 'react-navigation'
+import { useNavigation } from '@react-navigation/native'; // Remplacer withNavigation par useNavigation
 
-const ProjectItem = ({ project, onPress, navigation, ...props }) => {
+const ProjectItem = ({ project, onPress, ...props }) => {
+    const navigation = useNavigation(); // Utilisation du hook useNavigation
 
-    const { id, step, name, description, address, state, client, editedAt, editedBy } = project
-    let { processVersion } = project
-    processVersion = processVersion.replace("version", "") || ""
+    const { id, step, name, description, address, state, client, editedAt, editedBy } = project;
+    let { processVersion } = project;
+    processVersion = processVersion.replace("version", "") || "";
 
     const setStateColor = (state) => {
         switch (state) {
             case 'En attente':
-                return theme.colors.pending
-
+                return theme.colors.pending;
             case 'En cours':
-                return theme.colors.inProgress
-                break
-
+                return theme.colors.inProgress;
             case 'Terminé':
-                return theme.colors.valid
-                break
-
+                return theme.colors.valid;
             case 'Annulé':
-                return theme.colors.canceled
-                break
-
+                return theme.colors.canceled;
             default:
-                return '#333'
+                return '#333';
         }
-    }
+    };
 
     const setStepColor = (step) => {
-        return [theme.colors.valid, theme.colors.valid, theme.colors.valid]
-    }
+        return [theme.colors.valid, theme.colors.valid, theme.colors.valid];
+    };
 
     const viewClientProfile = () => {
-        navigation.navigate('Profile', { user: { id: client.id, roleId: 'client' }, isClient: true })
-    }
+        navigation.navigate('Profile', { user: { id: client.id, roleId: 'client' }, isClient: true });
+    };
 
-    const lastUpdate = `${moment(editedAt).format('ll')} - ${moment(editedAt).format('HH:mm')}`
+    const lastUpdate = `${moment(editedAt).format('ll')} - ${moment(editedAt).format('HH:mm')}`;
 
     return (
         <Card style={styles.container} onPress={onPress}>
@@ -66,7 +60,7 @@ const ProjectItem = ({ project, onPress, navigation, ...props }) => {
                         <Text numberOfLines={1} style={theme.customFontMSregular.caption}>chez <Text style={[theme.customFontMSregular.caption, { textDecorationLine: 'underline' }]} onPress={viewClientProfile}>{client.fullName}</Text></Text>
                     </View>
                     <View style={styles.footer}>
-                        <Text style={[theme.customFontMSregular.caption, { color: theme.colors.gray_dark }]} >{lastUpdate}</Text>
+                        <Text style={[theme.customFontMSregular.caption, { color: theme.colors.gray_dark }]}>{lastUpdate}</Text>
                         <View style={{ width: constants.ScreenWidth * 0.23, borderRadius: 50, backgroundColor: setStateColor(state), padding: 5, elevation: 2 }}>
                             <Text style={[theme.customFontMSregular.caption, { color: theme.colors.secondary, textAlign: 'center' }]}>{state}</Text>
                         </View>
@@ -74,9 +68,8 @@ const ProjectItem = ({ project, onPress, navigation, ...props }) => {
                 </View>
             </Card.Content>
         </Card>
-    )
-
-}
+    );
+};
 
 const styles = StyleSheet.create({
     container: {
@@ -118,6 +111,6 @@ const styles = StyleSheet.create({
         alignItems: 'flex-end',
         justifyContent: 'space-between',
     }
-})
+});
 
-export default withNavigation(ProjectItem)
+export default ProjectItem;

@@ -1,34 +1,35 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { List, Card, Paragraph, Title, Avatar } from 'react-native-paper';
-import Ionicons from 'react-native-vector-icons/Ionicons'
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
-import LinearGradient from 'react-native-linear-gradient'
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import LinearGradient from 'react-native-linear-gradient';
 
 import moment from 'moment';
-import 'moment/locale/fr'
-moment.locale('fr')
+import 'moment/locale/fr';
+moment.locale('fr');
 
-import Button from '../Button'
+import Button from '../Button';
 
 import * as theme from '../../core/theme';
 import { constants, isTablet } from '../../core/constants';
 
-import { withNavigation } from 'react-navigation'
+import { useNavigation } from '@react-navigation/native'; // Remplacez withNavigation par useNavigation
 
-const FormItem = ({ item, onPress, navigation, nameClient1, nameClient2, ...props }) => {
+const FormItem = ({ item, onPress, nameClient1, nameClient2, ...props }) => {
+    const navigation = useNavigation(); // Utilisez le hook useNavigation
 
-    const { id, project, editedAt, isDraft, createdBy, isSubmitted, colorCat, estimation } = item
+    const { id, project, editedAt, isDraft, createdBy, isSubmitted, colorCat, estimation } = item;
 
-    const isNameClient1 = nameClient1 !== ""
-    const isNameClient2 = nameClient2 !== ""
-    const bothNames = isNameClient1 && isNameClient2
+    const isNameClient1 = nameClient1 !== "";
+    const isNameClient2 = nameClient2 !== "";
+    const bothNames = isNameClient1 && isNameClient2;
     if (bothNames)
-        var clientsNames = nameClient1 + " & " + nameClient2
+        var clientsNames = nameClient1 + " & " + nameClient2;
     else if (isNameClient1)
-        var clientsNames = nameClient1
+        var clientsNames = nameClient1;
     else if (isNameClient2)
-        var clientsNames = nameClient2
+        var clientsNames = nameClient2;
 
     return (
         <TouchableOpacity onPress={onPress} style={styles.container}>
@@ -52,9 +53,9 @@ const FormItem = ({ item, onPress, navigation, nameClient1, nameClient2, ...prop
                 <Text style={[theme.customFontMSregular.caption, { color: theme.colors.gray_dark }]}>{moment(editedAt).format('lll')}</Text>
                 {!isSubmitted && <Text style={[theme.customFontMSregular.caption, { color: theme.colors.gray_dark }]}>Brouillon</Text>}
             </View>
-        </TouchableOpacity >
-    )
-}
+        </TouchableOpacity>
+    );
+};
 
 const styles = StyleSheet.create({
     container: {
@@ -94,6 +95,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-between',
     }
-})
+});
 
-export default withNavigation(FormItem)
+export default FormItem;

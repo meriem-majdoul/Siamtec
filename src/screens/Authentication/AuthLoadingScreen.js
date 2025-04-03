@@ -37,7 +37,12 @@ const roles = [
   { id: 'designoffice', value: "Bureau d'étude", level: 0, isHighRole: false, isLowRole: false, isClient: false }
 ]
 
+
+
+
 class AuthLoadingScreen extends Component {
+
+
 
   constructor(props) {
     super(props)
@@ -372,6 +377,7 @@ class AuthLoadingScreen extends Component {
       </Background>
     )
   }
+  
 }
 
 const mapStateToProps = (state) => {

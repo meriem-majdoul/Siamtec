@@ -1,19 +1,21 @@
-import React, { Component } from 'react';
-import ListRequests from './ListResquests'
-import { withNavigation } from 'react-navigation'
+import React from 'react';
+import { useNavigation } from '@react-navigation/native';
+import ListRequests from './ListResquests';
 
-class ListTickets extends Component {
-    render() {
-        return (
-            <ListRequests
-                searchInput={this.props.searchInput}
-                requestType='ticket'
-                creationScreen='CreateTicketReq'
-                offLine={this.props.offLine}
-                permissions={this.props.permissions} 
-                role= {this.props.role}/>
-        )
-    }
-}
+const ListTickets = (props) => {
+    const navigation = useNavigation();
 
-export default withNavigation(ListTickets)
+    return (
+        <ListRequests
+            searchInput={props.searchInput}
+            requestType="ticket"
+            creationScreen="CreateTicketReq"
+            offLine={props.offLine}
+            permissions={props.permissions}
+            role={props.role}
+            navigation={navigation} // Passer navigation comme prop
+        />
+    );
+};
+
+export default ListTickets;

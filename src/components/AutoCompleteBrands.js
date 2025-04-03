@@ -1,6 +1,5 @@
-
-import React from "react"
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, Image } from "react-native"
+import React, { useState } from "react"
+import { StyleSheet, Text, View, Image } from "react-native"
 import { Avatar } from 'react-native-paper'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import AutoTags from "react-native-tag-autocomplete"
@@ -9,144 +8,117 @@ import { db } from '../firebase'
 import * as theme from "../core/theme";
 import { constants, errorMessages, isTablet } from "../core/constants";
 import { displayError, myAlert } from "../core/utils";
-
-import { withNavigation } from 'react-navigation'
-import { Alert } from "react-native"
+import { useNavigation } from '@react-navigation/native'; // Importez useNavigation ici
 
 const uri = "https://mobirise.com/bootstrap-template/profile-template/assets/images/timothy-paul-smith-256424-1200x800.jpg";
 
-class AutoCompleteBrands extends React.Component {
-    constructor(props) {
-        super(props)
-        this.myAlert = myAlert.bind(this)
+const AutoCompleteBrands = (props) => {
+    const navigation = useNavigation(); // Utilisation de useNavigation pour obtenir l'objet navigation
+    const [tagsSelected, setTagsSelected] = useState([]);
 
-        this.state = {
-            tagsSelected: [],
-        }
-    }
+    const myAlert = myAlert.bind(this);
 
-    customFilterData = query => {
-        //override suggestion filter, we can search by specific attributes
+    const customFilterData = query => {
         query = query.toUpperCase();
-        let searchResults = this.props.suggestions.filter(susgestion => {
-            return (
-                // s.id.toUpperCase().includes(query) ||
-                susgestion.name.toUpperCase().includes(query)
-            )
-        })
-        return searchResults
-    }
+        let searchResults = props.suggestions.filter(suggestion => {
+            return suggestion.name.toUpperCase().includes(query);
+        });
+        return searchResults;
+    };
 
-    customRenderTags = tags => {
-        const noTags = tags.length === 0
+    const customRenderTags = tags => {
+        const noTags = tags.length === 0;
         return (
             <View style={[styles.customTagsContainer, { borderBottomWidth: noTags ? 0 : StyleSheet.hairlineWidth * 2 }]}>
-                {this.props.tagsSelected.map((tag, i) => {
+                {props.tagsSelected.map((tag, i) => {
                     return (
-                        <Text
-                            key={i.toString()}
-                            numberOfLines={1}
-                            style={[theme.customFontMSregular.body, { color: theme.colors.gray_dark }]}>
+                        <Text key={i.toString()} numberOfLines={1} style={[theme.customFontMSregular.body, { color: theme.colors.gray_dark }]}>
                             {tag.name}
                         </Text>
-                    )
+                    );
                 })}
             </View>
-        )
-    }
+        );
+    };
 
-    //#edit
-    viewBrand(BrandId) {
-        this.props.navigation.navigate('CreateBrand', { BrandId: BrandId, onGoBack: (brand) => console.log(brand) })
-    }
+    const viewBrand = (BrandId) => {
+        navigation.navigate('CreateBrand', { BrandId: BrandId, onGoBack: (brand) => console.log(brand) });
+    };
 
-    showAlert(BrandId) {
-        const title = "Supprimer la marque"
-        const message = 'Etes-vous sûr de vouloir supprimer cette marque ?'
-        const handleConfirm = () => this.handleDeleteBrand(BrandId)
-        this.myAlert(title, message, handleConfirm)
-    }
+    const showAlert = (BrandId) => {
+        const title = "Supprimer la marque";
+        const message = 'Etes-vous sûr de vouloir supprimer cette marque ?';
+        const handleConfirm = () => handleDeleteBrand(BrandId);
+        myAlert(title, message, handleConfirm);
+    };
 
-    async handleDeleteBrand(BrandId) {
-        await db.collection('Brands').doc(BrandId).delete()
-            .then(async () => this.props.navigation.goBack())
-            .catch((e) => displayError({ message: errorMessages.firestore.delete }))
-    }
+    const handleDeleteBrand = async (BrandId) => {
+        try {
+            await db.collection('Brands').doc(BrandId).delete();
+            navigation.goBack();
+        } catch (e) {
+            displayError({ message: errorMessages.firestore.delete });
+        }
+    };
 
-    customRenderSuggestion = suggestion => {
-        //override suggestion render the drop down
-        const brand = suggestion
-
+    const customRenderSuggestion = suggestion => {
+        const brand = suggestion;
         return (
             <View style={styles.suggestion}>
                 <View style={{ padding: 5 }}>
                     <Image source={{ uri: brand.logo.downloadURL }} style={{ width: 45, height: 45 }} />
                 </View>
-
                 <View style={{ marginLeft: 10 }}>
                     <Text style={theme.customFontMSsemibold.body}>{brand.name}</Text>
                 </View>
             </View>
-        )
-    }
+        );
+    };
 
-    handleDelete = index => {
-        //tag deleted, remove from our tags array
-        let tagsSelected = this.props.tagsSelected
-        tagsSelected.splice(index, 1)
-        this.props.main.setState({ tagsSelected })
-    }
+    const handleDelete = index => {
+        let tagsSelected = props.tagsSelected;
+        tagsSelected.splice(index, 1);
+        props.main.setState({ tagsSelected });
+    };
 
-    handleAddition = brand => {
-        //suggestion clicked, push it to our tags array
-        this.props.main.setState({ tagsSelected: this.props.main.state.tagsSelected.concat([brand]), brandError: '' })
-    }
+    const handleAddition = brand => {
+        props.main.setState({ tagsSelected: props.main.state.tagsSelected.concat([brand]), brandError: '' });
+    };
 
-    onCustomTagCreated = userInput => {
-        //user pressed enter, create a new tag from their input
-        const brand = {
-            name: userInput,
-        }
-        this.handleAddition(brand)
-    }
+    const onCustomTagCreated = userInput => {
+        const brand = { name: userInput };
+        handleAddition(brand);
+    };
 
-    render() {
-        return (
-            <View>
-                <AutoTags
-                    //required
-                    suggestions={this.props.suggestions}
-                    tagsSelected={this.props.tagsSelected}
-                    handleAddition={this.handleAddition}
-                    handleDelete={this.handleDelete}
-                    //optional
-                    placeholder={this.props.placeholder}
-                    filterData={this.customFilterData}
-                    renderSuggestion={this.customRenderSuggestion}
-                    renderTags={this.customRenderTags}
-                    onCustomTagCreated={this.onCustomTagCreated}
-                    //handleEmptyDate= {() => console.log('Empty data..')}
-                    style={styles.autotags}
-                    // autoFocus={this.props.autoFocus}
-                    autoFocus={false}
-                    showInput={this.props.showInput}
-                    suggestionsBellow={this.props.suggestionsBellow}
-                    editable={this.props.editable}
-                    createTagOnSpace={false}
+    return (
+        <View>
+            <AutoTags
+                suggestions={props.suggestions}
+                tagsSelected={props.tagsSelected}
+                handleAddition={handleAddition}
+                handleDelete={handleDelete}
+                placeholder={props.placeholder}
+                filterData={customFilterData}
+                renderSuggestion={customRenderSuggestion}
+                renderTags={customRenderTags}
+                onCustomTagCreated={onCustomTagCreated}
+                style={styles.autotags}
+                autoFocus={false}
+                showInput={props.showInput}
+                suggestionsBellow={props.suggestionsBellow}
+                editable={props.editable}
+                createTagOnSpace={false}
+                containerStyle={styles.containerStyle}
+                inputContainerStyle={styles.inputContainerStyle}
+                listContainerStyle={styles.listContainerStyle}
+                listStyle={[styles.listStyle, theme.style.shadow]}
+            />
+            {props.errorText !== '' && <Text style={[theme.customFontMSregular.caption, styles.error]}>{props.errorText}</Text>}
+        </View>
+    );
+};
 
-                    containerStyle={styles.containerStyle}
-                    inputContainerStyle={styles.inputContainerStyle}
-                    listContainerStyle={styles.listContainerStyle}
-                    listStyle={[styles.listStyle, theme.style.shadow]}
-                // renderTextInput={() => <TextInput style={[theme.customFontMSregular.body, { color: theme.colors.gray_light }]} {...this.props} />}
-                />
-                {this.props.errorText !== '' && <Text style={[theme.customFontMSregular.caption, styles.error]}>{this.props.errorText}</Text>}
-            </View>
-        )
-    }
-}
-
-export default withNavigation(AutoCompleteBrands)
+export default AutoCompleteBrands;
 
 const styles = StyleSheet.create({
     customTagsContainer: {
@@ -177,7 +149,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         paddingHorizontal: 10,
         paddingVertical: 10,
-        // backgroundColor: 'pink'
         borderBottomWidth: StyleSheet.hairlineWidth * 0.5,
         borderBottomColor: theme.colors.gray2
     },
@@ -195,8 +166,6 @@ const styles = StyleSheet.create({
         paddingTop: 4,
         color: theme.colors.error
     },
-
-
     inputContainerStyle: {
         marginLeft: isTablet ? 21 : 5,
         borderBottomWidth: StyleSheet.hairlineWidth,
@@ -206,14 +175,6 @@ const styles = StyleSheet.create({
     containerStyle: {
         minWidth: 200,
         maxWidth: constants.ScreenWidth - theme.padding,
-        // shadowColor: theme.colors.secondary,
-        // shadowOffset: {
-        //     width: 0,
-        //     height: 1,
-        // },
-        // shadowOpacity: 0.1,
-        // shadowRadius: 2.22,
-        // elevation: 3,
     },
     listContainerStyle: {
         backgroundColor: "white",
@@ -225,4 +186,4 @@ const styles = StyleSheet.create({
         paddingHorizontal: theme.padding / 2,
         borderWidth: 0
     }
-})
+});

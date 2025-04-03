@@ -1,10 +1,9 @@
-
 import * as React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { List, Appbar } from 'react-native-paper';
 import { faFilter, faTimes } from 'react-native-fontawesome'
 import { MenuProvider, Menu as PopupMenu, MenuOptions, MenuOption, MenuTrigger, renderers } from 'react-native-popup-menu';
-import { withNavigation } from 'react-navigation'
+import { useNavigation } from '@react-navigation/native'; // Importez useNavigation
 
 import Picker from '../components/Picker'
 import TextInput from '../components/TextInput'
@@ -20,6 +19,8 @@ import ItemPicker from './ItemPicker';
 const { SlideInMenu } = renderers
 
 const Filter = ({ main, opened, toggleFilter, setFilter, resetFilter, options, functions, menuStyle, isAppBar = false, ...props }) => {
+
+    const navigation = useNavigation(); // Utilisez useNavigation pour accéder à navigation
 
     const onPressScreenPicker = (option) => {
         if (option.disabled) return
@@ -45,7 +46,6 @@ const Filter = ({ main, opened, toggleFilter, setFilter, resetFilter, options, f
             }
 
         const refresh = (filter) => {
-            // toggleFilter()
             const obj = callback(filter)
             main.setState(obj)
         }
@@ -56,10 +56,9 @@ const Filter = ({ main, opened, toggleFilter, setFilter, resetFilter, options, f
             showButton: false,
             onGoBack: refresh
         }
-        props.navigation.push(option.screen, navParams)
+        navigation.push(option.screen, navParams) // Utilisez navigation.push à la place de props.navigation.push
     }
 
-    //RENDERERS
     const renderFilterIcon = () => {
         if (isAppBar) return <Appbar.Action icon={<CustomIcon icon={faFilter} color={theme.colors.appBarIcon} size={24}/>} />
         else return <CustomIcon icon={faFilter} />
@@ -155,5 +154,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default withNavigation(Filter)
-
+export default Filter

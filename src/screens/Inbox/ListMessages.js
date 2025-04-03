@@ -1,148 +1,132 @@
-import React, { Component } from 'react'
-import { StyleSheet, View, TouchableOpacity, FlatList, Text, RefreshControl } from 'react-native'
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, View, TouchableOpacity, FlatList, Text, RefreshControl } from 'react-native';
 import { List } from 'react-native-paper';
-import { withNavigation } from 'react-navigation'
-import { faPen, faEnvelope } from 'react-native-vector-icons/FontAwesome5'
+import { faPen, faEnvelope } from 'react-native-vector-icons/FontAwesome5';
 
-import Background from '../../components/NewBackground'
-import ListSubHeader from '../../components/ListSubHeader'
-import MessageItem from '../../components/MessageItem'
-import MyFAB from '../../components/MyFAB'
-import EmptyList from '../../components/EmptyList'
+import Background from '../../components/NewBackground';
+import ListSubHeader from '../../components/ListSubHeader';
+import MessageItem from '../../components/MessageItem';
+import MyFAB from '../../components/MyFAB';
+import EmptyList from '../../components/EmptyList';
 import { Loading } from '../../components';
 
-import firebase, { db } from '../../firebase'
-import * as theme from '../../core/theme'
-import { constants } from '../../core/constants'
-import { configureQuery } from '../../core/privileges'
+import firebase, { db } from '../../firebase';
+import * as theme from '../../core/theme';
+import { constants } from '../../core/constants';
+import { configureQuery } from '../../core/privileges';
 
 import { fetchDocs, fetchDocuments } from "../../api/firestore-api";
 import { countDown } from '../../core/utils';
 
-class ListMessages extends Component {
-    constructor(props) {
-        super(props)
-        this.fetchMessages = this.fetchMessages.bind(this)
-        this.markAsReadAndNavigate = this.markAsReadAndNavigate.bind(this)
-        this.currentUser = firebase.auth().currentUser
+import { useNavigation } from '@react-navigation/native'; // Utilisation du hook useNavigation
 
-        this.state = {
-            messagesList: [],
-            messagesCount: 0,
-            loading: true,
-            refreshing: false
-        }
-    }
+const ListMessages = (props) => {
+    const navigation = useNavigation(); // Récupération de l'objet navigation
+    const [messagesList, setMessagesList] = useState([]);
+    const [messagesCount, setMessagesCount] = useState(0);
+    const [loading, setLoading] = useState(true);
+    const [refreshing, setRefreshing] = useState(false);
 
-    componentWillUnmount() {
-        if (this.willFocusSubscription)
-            this.willFocusSubscription.remove()
-    }
+    const currentUser = firebase.auth().currentUser;
 
-    async componentDidMount() {
-        await this.fetchMessages()
-        this.willFocusSubscription = this.props.navigation.addListener('willFocus', async () => {
-            await this.fetchMessages()
-        })
-    }
+    useEffect(() => {
+        fetchMessages();
 
-    async fetchMessages(count) {
-        this.setState({ refreshing: true })
+        const willFocusSubscription = navigation.addListener('focus', () => {
+            fetchMessages();
+        });
+
+        return () => {
+            willFocusSubscription();
+        };
+    }, []);
+
+    const fetchMessages = async (count) => {
+        setRefreshing(true);
         if (count) {
-            await countDown(count)
+            await countDown(count);
         }
-        const { queryFilters } = this.props.permissions
-        if (queryFilters === [])
-            this.setState({ messagesList: [], messagesCount: 0, loading: false })
-        else {
-            const params = { role: this.props.role.value }
-            const query = configureQuery('Messages', queryFilters, params)
-            const messagesList = await fetchDocuments(query)
-            this.setState({
-                messagesList,
-                messagesCount: messagesList.length,
-                loading: false,
-                refreshing: false
-            })
+        const { queryFilters } = props.permissions;
+        if (queryFilters === []) {
+            setMessagesList([]);
+            setMessagesCount(0);
+            setLoading(false);
+        } else {
+            const params = { role: props.role.value };
+            const query = configureQuery('Messages', queryFilters, params);
+            const messagesList = await fetchDocuments(query);
+            setMessagesList(messagesList);
+            setMessagesCount(messagesList.length);
+            setLoading(false);
+            setRefreshing(false);
         }
-    }
+    };
 
-
-    renderMessage(item) {
-        const message = item.item
+    const renderMessage = (item) => {
+        const message = item.item;
 
         return (
-            <TouchableOpacity onPress={() => this.markAsReadAndNavigate(message)}>
+            <TouchableOpacity onPress={() => markAsReadAndNavigate(message)}>
                 <MessageItem message={message} />
             </TouchableOpacity>
-        )
-    }
+        );
+    };
 
-    markAsReadAndNavigate = async (message) => {
-        let haveRead = message.haveRead.find((id) => id === this.currentUser.uid)
+    const markAsReadAndNavigate = async (message) => {
+        let haveRead = message.haveRead.find((id) => id === currentUser.uid);
 
         if (!haveRead) {
-            let usersHaveRead = message.haveRead
-            usersHaveRead = usersHaveRead.concat([this.currentUser.uid])
-            db.collection('Messages').doc(message.id).update({ haveRead: usersHaveRead })
+            let usersHaveRead = message.haveRead;
+            usersHaveRead = usersHaveRead.concat([currentUser.uid]);
+            db.collection('Messages').doc(message.id).update({ haveRead: usersHaveRead });
         }
 
-        this.props.navigation.navigate('ViewMessage', { MessageId: message.id }) 
-    }
+        navigation.navigate('ViewMessage', { MessageId: message.id });
+    };
 
+    const { messagesCount: count, loading: isLoading } = { messagesCount, loading };
+    const { canCreate } = props.permissions;
 
-    render() {
-        let { messagesCount, loading } = this.state
-        const { canCreate } = this.props.permissions
+    const s = count > 1 ? 's' : '';
 
-        const s = messagesCount > 1 ? 's' : ''
+    return (
+        <View style={{ flex: 1 }}>
+            {isLoading ? (
+                <Background>
+                    <Loading size='large' />
+                </Background>
+            ) : (
+                <Background showMotif={count < 5} style={styles.container}>
+                    <ListSubHeader>{count} sujet{s}</ListSubHeader>
 
-        return (
-            <View style={{ flex: 1 }}>
+                    {count > 0 ? (
+                        <FlatList
+                            style={styles.root}
+                            contentContainerStyle={{ paddingBottom: constants.ScreenHeight * 0.1 }}
+                            data={messagesList}
+                            extraData={{ messagesList, refreshing }}
+                            keyExtractor={(item) => item.id}
+                            renderItem={(item) => renderMessage(item)}
+                            refreshControl={
+                                <RefreshControl refreshing={refreshing} onRefresh={fetchMessages} />
+                            }
+                        />
+                    ) : (
+                        <EmptyList
+                            icon={faEnvelope}
+                            iconColor={theme.colors.miInbox}
+                            header='Messages'
+                            description="Aucun message pour le moment."
+                            offLine={props.offLine}
+                        />
+                    )}
 
-                {loading ?
-                    <Background>
-                        <Loading size='large' />
-                    </Background>
-                    :
-                    <Background showMotif={messagesCount < 5} style={styles.container}>
-                        <ListSubHeader>{messagesCount} sujet{s}</ListSubHeader>
-
-                        {messagesCount > 0 ?
-                            < FlatList
-                                style={styles.root}
-                                contentContainerStyle={{ paddingBottom: constants.ScreenHeight * 0.1 }}
-                                data={this.state.messagesList}
-                                extraData={this.state}
-                                keyExtractor={(item) => { return item.id }}
-                                renderItem={(item) => this.renderMessage(item)}
-                                refreshControl={
-                                    <RefreshControl
-                                        refreshing={this.state.refreshing}
-                                        onRefresh={this.fetchMessages}
-                                    />
-                                }
-                            />
-                            :
-                            <EmptyList
-                                icon={faEnvelope}
-                                iconColor={theme.colors.miInbox}
-                                header='Messages'
-                                description="Aucun message pour le moment."
-                                offLine={this.props.offLine}
-                            />
-                        }
-                        {canCreate &&
-                            <MyFAB icon={faPen} onPress={() => this.props.navigation.navigate('NewMessage')} />
-                        }
-                    </Background >
-                }
-            </View>
-
-        )
-
-    }
-}
+                    {canCreate && <MyFAB icon={faPen} onPress={() => navigation.navigate('NewMessage')} />}
+                </Background>
+            )}
+        </View>
+    );
+};
 
 const styles = StyleSheet.create({
     container: {
@@ -152,18 +136,15 @@ const styles = StyleSheet.create({
     root: {
         zIndex: 1,
         backgroundColor: "#fff",
-    }
-})
-
-
+    },
+});
 
 const mapStateToProps = (state) => {
     return {
         role: state.roles.role,
         permissions: state.permissions,
         network: state.network,
-        //fcmToken: state.fcmtoken
-    }
-}
+    };
+};
 
-export default withNavigation(ListMessages)
+export default ListMessages;

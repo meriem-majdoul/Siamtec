@@ -277,7 +277,7 @@ const GuestTab = () => (
         return <CustomIcon icon={iconName} size={size} color={color} />;
       },
     })}
-    tabBarOptions={{
+    screenOptions={{
       activeTintColor: theme.colors.primary,
       inactiveTintColor: theme.colors.gray_dark,
       labelStyle: {

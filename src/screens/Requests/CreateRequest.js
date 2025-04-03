@@ -30,8 +30,8 @@ import { constants, errorMessages } from "../../core/constants";
 import { generateId, navigateToScreen, myAlert, updateField, nameValidator, uuidGenerator, setToast, load, isEditOffline, refreshClient, refreshProject, refreshAddress, setAddress, removeDuplicateObjects, formatDocument, unformatDocument, displayError } from "../../core/utils";
 
 import { connect } from 'react-redux'
-import CreateTicket from './CreateTicket';
-import CreateProject from './CreateProject';
+// import CreateTicket from './CreateTicket';
+// import CreateProject from './CreateProject';
 import { fetchDocs, fetchDocument, fetchDocuments } from '../../api/firestore-api';
 import CustomIcon from '../../components/CustomIcon';
 

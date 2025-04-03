@@ -1,19 +1,19 @@
-import React, { Component } from 'react';
+import React from 'react';
 import FormItem from './FormItem';
+import { useNavigation } from '@react-navigation/native'; // Importation du hook useNavigation
 
-import { withNavigation } from 'react-navigation'
-
-const PvReceptionItem = ({ pv, onPress, navigation, projectOwner, ...props }) => {
+const PvReceptionItem = ({ pv, onPress, projectOwner, ...props }) => {
+    const navigation = useNavigation(); // Utilisation du hook pour obtenir l'objet navigation
 
     return (
         <FormItem 
             item={pv}
             onPress={onPress} 
-            navigation={navigation}
+            navigation={navigation} // Passage de l'objet navigation à FormItem
             nameClient1={projectOwner}
             nameClient2=""
         />
-    )
+    );
 }
 
-export default withNavigation(PvReceptionItem)
+export default PvReceptionItem;

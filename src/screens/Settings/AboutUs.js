@@ -34,7 +34,7 @@ class AboutUs extends Component {
     constructor(props) {
         super(props)
 
-        this.isRoot = this.props.navigation.getParam('isRoot', true) //#task: set it to true
+        this.isRoot = this.props.route?.params?.isRoot ?? true;//#task: set it to true
 
         this.state = {
             a: ''

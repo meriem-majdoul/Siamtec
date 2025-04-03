@@ -1,36 +1,23 @@
-import React, {Component} from 'react';
-import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
-import {List, Card, Paragraph, Title, Avatar} from 'react-native-paper';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import LinearGradient from 'react-native-linear-gradient';
-
+import React from 'react';
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import * as theme from '../core/theme';
 import moment from 'moment';
 import 'moment/locale/fr';
 moment.locale('fr');
 
-import Button from './Button';
+import { useNavigation } from '@react-navigation/native'; // Import du hook useNavigation
 
-import * as theme from '../core/theme';
-import {constants} from '../core/constants';
+const OrderItem = ({ order, onPress, ...props }) => {
+  const navigation = useNavigation();  // Utilisation du hook useNavigation
 
-import {withNavigation} from 'react-navigation';
-
-const OrderItem = ({order, onPress, navigation, ...props}) => {
   const setStateColor = (state) => {
     switch (state) {
       case 'En cours':
         return theme.colors.inProgress;
-        break;
-
       case 'Terminé':
         return theme.colors.valid;
-        break;
-
       case 'Annulé':
         return theme.colors.canceled;
-        break;
-
       default:
         return '#333';
     }
@@ -43,7 +30,7 @@ const OrderItem = ({order, onPress, navigation, ...props}) => {
     return sum;
   };
 
-  const {subTotal, discount, taxes, primeCEE, primeRenov, aidRegion} = order;
+  const { subTotal, discount, taxes, primeCEE, primeRenov, aidRegion } = order;
   const discountedPrice = subTotal - (subTotal * discount) / 100;
   let taxedPrice = discountedPrice + sumTaxes(taxes);
   taxedPrice = Math.round(taxedPrice);
@@ -51,59 +38,36 @@ const OrderItem = ({order, onPress, navigation, ...props}) => {
 
   return (
     <TouchableOpacity onPress={onPress} style={styles.container}>
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-        }}>
-        <Text
-          style={[
-            theme.customFontMSregular.small,
-            {color: theme.colors.gray_medium},
-          ]}>
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+        <Text style={[theme.customFontMSregular.small, { color: theme.colors.gray_medium }]}>
           {order.id}
         </Text>
         <Text style={theme.customFontMSmedium.header}>€ {netPrice}</Text>
       </View>
 
-      <View style={{marginBottom: 15, marginTop: 3}}>
+      <View style={{ marginBottom: 15, marginTop: 3 }}>
         {order.project && (
-          <Text
-            numberOfLines={1}
-            style={[theme.customFontMSmedium.body, {marginBottom: 5}]}>
+          <Text numberOfLines={1} style={[theme.customFontMSmedium.body, { marginBottom: 5 }]}>
             {order.project.name}
           </Text>
         )}
         {order.project && order.project.client && (
           <Text>
-            <Text
-              style={[
-                theme.customFontMSregular.caption,
-                {color: theme.colors.gray_dark},
-              ]}>
+            <Text style={[theme.customFontMSregular.caption, { color: theme.colors.gray_dark }]}>
               chez
             </Text>{' '}
-            <Text
-              style={[
-                theme.customFontMSmedium.caption,
-                {color: theme.colors.gray_dark},
-              ]}>
+            <Text style={[theme.customFontMSmedium.caption, { color: theme.colors.gray_dark }]}>
               {order.project.client.fullName}
             </Text>
           </Text>
         )}
       </View>
 
-      <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-        <Text
-          style={[
-            theme.customFontMSregular.caption,
-            {color: theme.colors.gray_dark},
-          ]}>
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+        <Text style={[theme.customFontMSregular.caption, { color: theme.colors.gray_dark }]}>
           {moment(order.editedAt).format('ll')}
         </Text>
-        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           <View
             style={{
               width: 100,
@@ -152,4 +116,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default withNavigation(OrderItem);
+export default OrderItem;

@@ -1,22 +1,17 @@
-import React, { Component } from 'react'
-import { StyleSheet, Text, View, Image, FlatList } from 'react-native'
+import React from 'react'
+import { StyleSheet, Text, View } from 'react-native'
 import { List, Avatar } from 'react-native-paper'
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
-
 import * as theme from '../core/theme'
 import { constants } from '../core/constants'
-import Menu from './Menu'
-
 import AvatarText from '../components/AvatarText'
-
 import moment from 'moment'
 import 'moment/locale/fr'
-moment.locale('fr')
-
-import { withNavigation } from 'react-navigation'
+import { useNavigation } from '@react-navigation/native' // Import du hook useNavigation
 import firebase, { db } from '../firebase'
 
-const MessageItem = ({ message, navigation, options, functions, ...props }) => {
+const MessageItem = ({ message, options, functions, ...props }) => {
+    const navigation = useNavigation()  // Utilisation du hook useNavigation
+    const currentUser = firebase.auth().currentUser
 
     const markAsReadAndNavigate = (message) => {
         let haveRead = message.haveRead.find((id) => id === currentUser.uid)
@@ -30,13 +25,12 @@ const MessageItem = ({ message, navigation, options, functions, ...props }) => {
         navigation.navigate('ViewMessage', { MessageId: message.id })
     }
 
-
-    const currentUser = firebase.auth().currentUser
     let haveRead = true
+    let showMessageDescription = false
     if (currentUser) {
         const isCurrentuserSender = message.sender.id === currentUser.uid
         const isCurrentUserReceiver = message.receivers.find((receiver) => receiver.id === currentUser.uid)
-        var showMessageDescription = isCurrentuserSender || isCurrentUserReceiver  //currentUser is speaker ?
+        showMessageDescription = isCurrentuserSender || isCurrentUserReceiver
         haveRead = message.haveRead.includes(currentUser.uid)
     }
 
@@ -60,31 +54,18 @@ const MessageItem = ({ message, navigation, options, functions, ...props }) => {
                     </Text>
                 </View>
             )}
-
             left={props =>
                 <View style={{ justifyContent: 'center', alignItems: 'center', marginHorizontal: theme.padding / 2 }}>
                     <AvatarText label={message.sender.fullName.charAt(0)} size={40} labelStyle={{ color: atColor }} style={{ backgroundColor: atBackgroundColor, elevation: 1 }} />
                 </View>
             }
-
             right={props =>
                 <View style={{ alignItems: 'center', paddingTop: 9, marginRight: theme.padding / 2 }}>
                     <Text style={[theme.customFontMSregular.caption, { color: theme.colors.gray_dark }]}>{moment(message.sentAt).format("Do MMM")}</Text>
-                    {/* <Menu
-                        options={[
-                            { id: 0, title: 'Voir le message' },
-                            { id: 1, title: 'Archiver le message' },
-                        ]}
-
-                        functions={[
-                            () => markAsReadAndNavigate(message),
-                            () => deleteUser(message)
-                        ]}
-                    /> */}
                 </View>
             }
         />
     )
 }
 
-export default withNavigation(MessageItem)
+export default MessageItem

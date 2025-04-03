@@ -1,9 +1,7 @@
-
-
-import React, { Component } from 'react'
+import React, { useState, useEffect } from 'react'
 import { StyleSheet, View, FlatList, Alert, RefreshControl } from 'react-native'
 import { faUserPlus, faUserFriends } from 'react-native-vector-icons/FontAwesome5'
-import { withNavigation } from 'react-navigation'
+import { useNavigation } from '@react-navigation/native'  // Remplacez avecNavigation par useNavigation
 import SearchInput, { createFilter } from 'react-native-search-filter'
 
 import firebase, { db } from '../../firebase'
@@ -20,62 +18,47 @@ import ListSubHeader from '../../components/ListSubHeader'
 
 const KEYS_TO_FILTERS = ['id', 'fullName', 'nom', 'prenom', 'denom', 'role']
 
-class ListUsers extends Component {
+const ListUsers = (props) => {
+  const navigation = useNavigation()
 
-  constructor(props) {
-    super(props)
-    this.myAlert = myAlert.bind(this)
-    this.renderUser = this.renderUser.bind(this)
-    this.fetchUsers = this.fetchUsers.bind(this)
-    this.customOnGoBack = this.customOnGoBack.bind(this)
+  const [usersList, setUsersList] = useState([])
+  const [usersCount, setUsersCount] = useState(3)
+  const [loading, setLoading] = useState(true)
+  const [refreshing, setRefreshing] = useState(false)
 
-    this.state = {
-      usersList: [],
-      usersCount: 3,
-      loading: true,
-      refreshing: false
-    }
-  }
+  const myAlert = myAlert.bind(this)
+  
+  useEffect(() => {
+    fetchUsers()
+    const willFocusSubscription = navigation.addListener('focus', async () => await fetchUsers())
+    return () => willFocusSubscription.remove()
+  }, [navigation])
 
-  componentWillUnmount() {
-    if (this.willFocusSubscription) {
-      this.willFocusSubscription.remove()
-    }
-  }
-
-  async componentDidMount() {
-    await this.fetchUsers()
-    this.willFocusSubscription = this.props.navigation.addListener('willFocus', async () => await this.fetchUsers())
-  }
-
-  async fetchUsers(count) {
-    this.setState({ refreshing: true })
+  const fetchUsers = async (count) => {
+    setRefreshing(true)
 
     if (count) {
       await countDown(count)
     }
 
-    const query = this.props.query
+    const query = props.query
     const usersList = await fetchDocuments(query)
-    this.setState({ 
-      usersList,
-      usersCount: usersList.length,
-      loading: false,
-      refreshing: false
-    })
+    setUsersList(usersList)
+    setUsersCount(usersList.length)
+    setLoading(false)
+    setRefreshing(false)
   }
 
-  alertDeleteUser(user) {
+  const alertDeleteUser = (user) => {
     const title = "Supprimer l'utilisateur"
     const message = 'Êtes-vous sûr de vouloir supprimer cet utilisateur ? Cette opération est irreversible.'
-    const handleConfirm = () => this.deleteUser(user)
-    this.myAlert(title, message, handleConfirm)
+    const handleConfirm = () => deleteUser(user)
+    myAlert(title, message, handleConfirm)
   }
 
-  deleteUser(user) {
-
+  const deleteUser = (user) => {
     const batch = db.batch()
-    const { userType } = this.props
+    const { userType } = props
 
     if (userType === 'utilisateur') {
       //1. Remove user from his team
@@ -98,26 +81,25 @@ class ListUsers extends Component {
     // Commit the batch
     batch.commit()
 
-    this.fetchUsers(3000)
+    fetchUsers(3000)
   }
 
-  renderUser = (user) => {
-
-    const { userType, permissions, offLine } = this.props
+  const renderUser = (user) => {
+    const { userType, permissions, offLine } = props
     const { canRead, canUpdate, canDelete } = permissions
     const isClient = userType === 'client' || userType === 'prospect'
 
     var roleId = getRoleIdFromValue(user.role)
 
     const viewProfile = (isEdit) => {
-      this.props.navigation.navigate('Profile', { user: { id: user.id, roleId }, isClient, isEdit })
+      navigation.navigate('Profile', { user: { id: user.id, roleId }, isClient, isEdit })
     }
 
     const viewUser = () => viewProfile(false)
     const editUser = () => viewProfile(true)
     const deleteUser = () => {
       if (offLine) Alert.alert('', 'Impossible de supprimer un utilisateur en mode hors-ligne')
-      else this.alertDeleteUser(user)
+      else alertDeleteUser(user)
     }
 
     let functions = []
@@ -137,81 +119,73 @@ class ListUsers extends Component {
 
     return (
       <UserItem
-        userType={this.props.userType}
+        userType={props.userType}
         item={user}
-        onPress={() => this.props.onPress(user)}
+        onPress={() => props.onPress(user)}
         options={options}
         functions={functions}
       />
     )
   }
 
-  customOnGoBack(user) {
-    if (this.props.onGoBack) this.props.onGoBack(user)
-    this.fetchUsers(2000)
+  const customOnGoBack = (user) => {
+    if (props.onGoBack) props.onGoBack(user)
+    fetchUsers(2000)
   }
 
-  onPressFAB() {
-    const { prevScreen, userType, onGoBack } = this.props
+  const onPressFAB = () => {
+    const { prevScreen, userType, onGoBack } = props
     const nextScreen = userType === 'utilisateur' ? 'CreateUser' : 'CreateClient'
     const isProspect = userType === 'prospect'
-    this.props.navigation.navigate(nextScreen, { prevScreen, isProspect, onGoBack: (user) => this.customOnGoBack(user) })
+    navigation.navigate(nextScreen, { prevScreen, isProspect, onGoBack: (user) => customOnGoBack(user) })
   }
 
-  render() {
-    let { usersCount, usersList, loading } = this.state
-    const { userType } = this.props
-    const s = usersCount > 1 ? 's' : ''
+  const filteredUsers = usersList.filter(createFilter(props.searchInput, KEYS_TO_FILTERS))
+  const { canCreate } = props.permissions
 
-    const filteredUsers = usersList.filter(createFilter(this.props.searchInput, KEYS_TO_FILTERS))
-    const { canCreate } = this.props.permissions
+  return (
+    <View style={styles.container}>
+      {loading ?
+        <View style={styles.container}>
+          <Loading />
+        </View>
+        :
+        <View style={styles.container}>
 
-    return (
-      <View style={styles.container}>
-        {loading ?
-          <View style={styles.container}>
-            <Loading />
-          </View>
-          :
-          <View style={styles.container}>
+          {usersCount > 0 && <ListSubHeader style={{ backgroundColor: theme.colors.background }}>{usersCount} {props.userType}{usersCount > 1 ? 's' : ''}</ListSubHeader>}
+          {usersCount > 0 ?
+            <FlatList
+              enableEmptySections={true}
+              data={filteredUsers}
+              keyExtractor={item => item.id.toString()}
+              renderItem={({ item }) => renderUser(item)}
+              style={{ paddingHorizontal: theme.padding }}
+              contentContainerStyle={{ paddingBottom: 75 }}
+              refreshControl={
+                <RefreshControl
+                  refreshing={refreshing}
+                  onRefresh={fetchUsers}
+                />
+              }
+            />
+            :
+            <EmptyList
+              icon={props.emptyListIcon || faUserFriends}
+              iconColor={theme.colors.miUsers}
+              header={props.emptyListHeader}
+              description={props.emptyListDesc}
+              offLine={props.offLine}
+            />
+          }
 
-            {usersCount > 0 && <ListSubHeader style={{ backgroundColor: theme.colors.background }}>{usersCount} {userType}{s}</ListSubHeader>}
-            {usersCount > 0 ?
-              <FlatList
-                enableEmptySections={true}
-                data={filteredUsers}
-                keyExtractor={item => item.id.toString()}
-                renderItem={({ item }) => this.renderUser(item)}
-                style={{ paddingHorizontal: theme.padding }}
-                contentContainerStyle={{ paddingBottom: 75 }}
-                refreshControl={
-                  <RefreshControl
-                    refreshing={this.state.refreshing}
-                    onRefresh={this.fetchUsers}
-                  />
-                }
-              />
-              :
-              <EmptyList
-                icon={this.props.emptyListIcon || faUserFriends}
-                iconColor={theme.colors.miUsers}
-                header={this.props.emptyListHeader}
-                description={this.props.emptyListDesc}
-                offLine={this.props.offLine}
-              />
-            }
+          {canCreate && props.showButton && !props.offLine &&
+            <MyFAB icon={faUserPlus} onPress={onPressFAB} />
+          }
 
-            {canCreate && this.props.showButton && !this.props.offLine &&
-              <MyFAB icon={faUserPlus} onPress={this.onPressFAB.bind(this)} />
-            }
-
-          </View>}
-      </View>
-    )
-  }
+        </View>}
+    </View>
+  )
 }
-
-export default withNavigation(ListUsers)
 
 const styles = StyleSheet.create({
   container: {
@@ -225,3 +199,5 @@ const styles = StyleSheet.create({
     paddingLeft: constants.ScreenWidth * 0.05
   }
 })
+
+export default ListUsers

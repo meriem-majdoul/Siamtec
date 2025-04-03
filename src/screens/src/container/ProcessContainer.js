@@ -1,50 +1,35 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import React, { Component } from 'react';
-import { View, ScrollView, Text } from 'react-native';
-import _ from 'lodash'
-import { withNavigation } from 'react-navigation'
+import React, { useState } from 'react';
+import { View, ScrollView } from 'react-native';
+import { useNavigation } from '@react-navigation/native'; // Importer le hook useNavigation
+import _ from 'lodash';
 import PhaseComponent from '../components/PhaseComponent';
 import StepComponent from '../components/StepComponent';
 import { constants } from '../../../core/constants';
 import * as theme from '../../../core/theme';
 import Action from '../../Process/components/Action';
-//import processModel from '../processModel.json';
 
-class ProcessContainer extends Component {
+const ProcessContainer = (props) => {
+  const [currentPage, setCurrentPage] = useState(0); // Utilisation du hook useState pour gérer l'état
 
-  constructor(props) {
-    super(props)
+  const navigation = useNavigation(); // Obtenez l'objet navigation via le hook useNavigation
 
-    this.state = {
-      currentPage: 0,
-    }
-  }
+  const { phaseLabels, phaseStatuses, stepsData } = props;
 
-  render() {
-    const { phaseLabels, phaseStatuses, stepsData } = this.props
-    //let { canUpdate } = this.props
-    const { currentPage } = this.state
+  return (
+    <View style={{ flex: 1 }}>
+      {phaseLabels.length > 0 && (
+        <PhaseComponent
+          labels={phaseLabels}
+          status={phaseStatuses}
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage} // Mettez à jour le state via le setter de useState
+        />
+      )}
 
-    return (
-      <View style={{ flex: 1 }}>
-        {phaseLabels.length > 0 &&
-          <PhaseComponent
-            labels={phaseLabels}
-            status={phaseStatuses}
-            currentPage={currentPage}
-            setCurrentPage={(currentPage) => this.setState({ currentPage })}
-          />
-        }
-
-        <View style={{ flex: 1, marginTop: theme.padding }}>
-          <ScrollView >
-            {stepsData.length > 0 && stepsData[currentPage].reverse().map((item, index) => {
-
-              // const isLastPhase = currentPage === stepsData.length - 1
-              // const isLastStep = index === stepsData[currentPage].length - 1
-              // const isLastStepOfLastPhase = isLastPhase && isLastStep
-              // const canUpdateStep = canUpdate && isLastStepOfLastPhase
-
+      <View style={{ flex: 1, marginTop: theme.padding }}>
+        <ScrollView>
+          {stepsData.length > 0 &&
+            stepsData[currentPage].reverse().map((item, index) => {
               return (
                 <View key={index.toString()}>
                   <StepComponent
@@ -52,32 +37,42 @@ class ProcessContainer extends Component {
                     progress={item.progress}
                     instructions={item.instructions}
                     children={
-                      <View style={{ marginLeft: constants.ScreenWidth * 0.035, paddingBottom: 15, borderLeftWidth: index !== stepsData[currentPage].length - 1 ? 2 : 0, borderLeftColor: theme.colors.gray_light }}>
+                      <View
+                        style={{
+                          marginLeft: constants.ScreenWidth * 0.035,
+                          paddingBottom: 15,
+                          borderLeftWidth:
+                            index !== stepsData[currentPage].length - 1 ? 2 : 0,
+                          borderLeftColor: theme.colors.gray_light,
+                        }}
+                      >
                         {item.actions.map((action, index) => {
                           return (
                             <Action
+                              key={index}
                               isProcessHistory={true}
                               action={action}
-                              actionTheme={{ mainColor: theme.colors.gray_dark, textFont: theme.customFontMSregular.caption, marginVertical: 50 }}
+                              actionTheme={{
+                                mainColor: theme.colors.gray_dark,
+                                textFont: theme.customFontMSregular.caption,
+                                marginVertical: 50,
+                              }}
                               style={{ marginVertical: theme.padding / 2 }}
-                              loading={this.props.loadingAction}
-                              loadingMessage={this.props.loadingMessageAction}
+                              loading={props.loadingAction}
+                              loadingMessage={props.loadingMessageAction}
                             />
-                          )
-                        })
-                        }
+                          );
+                        })}
                       </View>
                     }
                   />
                 </View>
-              )
-            })
-            }
-          </ScrollView>
-        </View>
-      </View >
-    )
-  }
-}
+              );
+            })}
+        </ScrollView>
+      </View>
+    </View>
+  );
+};
 
-export default withNavigation(ProcessContainer)
+export default ProcessContainer;

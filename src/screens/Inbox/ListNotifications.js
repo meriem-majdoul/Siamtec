@@ -1,104 +1,87 @@
-import React, { Component } from 'react'
-import { StyleSheet, Text, View, TouchableOpacity, Image, FlatList, RefreshControl } from 'react-native'
-import { List } from 'react-native-paper';
-import { faBell } from 'react-native-vector-icons/FontAwesome5'
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, Text, View, TouchableOpacity, FlatList, RefreshControl } from 'react-native';
+import { faBell } from 'react-native-vector-icons/FontAwesome5';
 
-import * as theme from '../../core/theme'
-import { constants } from '../../core/constants'
+import * as theme from '../../core/theme';
+import { constants } from '../../core/constants';
 
-import Background from '../../components/NewBackground'
-import ListSubHeader from '../../components/ListSubHeader'
-import NotificationItem from '../../components/NotificationItem'
-import EmptyList from '../../components/EmptyList'
-import MyFAB from '../../components/MyFAB'
-import Loading from '../../components/Loading'
+import Background from '../../components/NewBackground';
+import ListSubHeader from '../../components/ListSubHeader';
+import NotificationItem from '../../components/NotificationItem';
+import EmptyList from '../../components/EmptyList';
+import MyFAB from '../../components/MyFAB';
+import Loading from '../../components/Loading';
 
-import firebase, { db } from '../../firebase'
+import firebase, { db } from '../../firebase';
 import { fetchDocs, fetchDocuments } from "../../api/firestore-api";
 import { load, myAlert } from "../../core/utils";
 
-import { withNavigation } from 'react-navigation'
+import { useNavigation } from '@react-navigation/native'; // Utilisation du hook useNavigation
 
-class ListNotifications extends Component {
-    constructor(props) {
-        super(props)
-        //this.fetchDocs = fetchDocs.bind(this)
-        this.fetchNotifications = this.fetchNotifications.bind(this)
-        this.myAlert = myAlert.bind(this)
-        this.currentUser = firebase.auth().currentUser
+const ListNotifications = (props) => {
+    const navigation = useNavigation(); // Récupérer l'objet navigation
+    const [notificationsList, setNotificationsList] = useState([]);
+    const [notificationsCount, setNotificationsCount] = useState(0);
+    const [loading, setLoading] = useState(true);
+    const [refreshing, setRefreshing] = useState(false);
 
-        this.state = {
-            notificationsList: [],
-            notificationsCount: 0,
-            loading: true,
-            refreshing: false
-        }
-    }
+    const currentUser = firebase.auth().currentUser;
 
-    async componentDidMount() {
-        await this.fetchNotifications()
-    }
+    useEffect(() => {
+        fetchNotifications();
+    }, []);
 
-    async fetchNotifications() {
-        this.setState({ refreshing: true })
-        const collection = this.props.role.id === "client" ? "Clients" : "Users"
+    const fetchNotifications = async () => {
+        setRefreshing(true);
+        const collection = props.role.id === "client" ? "Clients" : "Users";
         let query = db
             .collection(collection)
-            .doc(this.currentUser.uid)
+            .doc(currentUser.uid)
             .collection('Notifications')
             .where('deleted', '==', false)
-            .orderBy('sentAt', 'desc')
-        const notificationsList = await fetchDocuments(query)
+            .orderBy('sentAt', 'desc');
+        
+        const notificationsList = await fetchDocuments(query);
 
-        this.setState({
-            notificationsList,
-            notificationsCount: notificationsList.length,
-            loading: false,
-            refreshing: false
-        })
-    }
+        setNotificationsList(notificationsList);
+        setNotificationsCount(notificationsList.length);
+        setLoading(false);
+        setRefreshing(false);
+    };
 
-    render() {
-        let { notificationsCount, loading } = this.state
+    const { notificationsCount: count, loading: isLoading } = { notificationsCount, loading };
+    const s = count > 1 ? 's' : '';
 
-        const s = notificationsCount > 1 ? 's' : ''
+    return (
+        <View style={{ flex: 1 }}>
+            {isLoading ? (
+                <Background>
+                    <Loading size="large" />
+                </Background>
+            ) : (
+                <Background showMotif={count < 5} style={styles.container}>
+                    <ListSubHeader style={{ marginBottom: 10 }}>{count} notification{s}</ListSubHeader>
 
-        return (
-            <View style={{ flex: 1 }}>
-
-                {loading ?
-                    <Background>
-                        <Loading size='large' />
-                    </Background>
-                    :
-                    <Background showMotif={notificationsCount < 5} style={styles.container}>
-                        <ListSubHeader style={{ marginBottom: 10 }}>{notificationsCount} notification{s}</ListSubHeader>
-
-                        {notificationsCount > 0 ?
-                            <FlatList
-                                style={styles.root}
-                                contentContainerStyle={{ paddingBottom: constants.ScreenHeight * 0.1 }}
-                                data={this.state.notificationsList}
-                                extraData={this.state}
-                                keyExtractor={(item) => { return item.id }}
-                                renderItem={(item) => <NotificationItem notification={item.item} navigation={this.props.navigation} />}
-                                refreshControl={
-                                    <RefreshControl
-                                        refreshing={this.state.refreshing}
-                                        onRefresh={this.fetchNotifications}
-                                    />
-                                }
-                            />
-                            :
-                            <EmptyList icon={faBell} iconColor={theme.colors.miInbox} header='Notifications' description='Aucune notification pour le moment.' offLine={this.props.offLine} />
-                        }
-                    </Background >
-                }
-            </View>
-        )
-
-    }
-}
+                    {count > 0 ? (
+                        <FlatList
+                            style={styles.root}
+                            contentContainerStyle={{ paddingBottom: constants.ScreenHeight * 0.1 }}
+                            data={notificationsList}
+                            extraData={{ notificationsList, refreshing }}
+                            keyExtractor={(item) => item.id}
+                            renderItem={(item) => <NotificationItem notification={item.item} navigation={navigation} />}
+                            refreshControl={
+                                <RefreshControl refreshing={refreshing} onRefresh={fetchNotifications} />
+                            }
+                        />
+                    ) : (
+                        <EmptyList icon={faBell} iconColor={theme.colors.miInbox} header="Notifications" description="Aucune notification pour le moment." offLine={props.offLine} />
+                    )}
+                </Background>
+            )}
+        </View>
+    );
+};
 
 const styles = StyleSheet.create({
     container: {
@@ -106,12 +89,10 @@ const styles = StyleSheet.create({
         backgroundColor: "#ffffff",
     },
     root: {
-        //  marginTop: 10,
         zIndex: 1,
         paddingHorizontal: theme.padding,
         backgroundColor: "#ffffff",
-    }
-})
+    },
+});
 
-
-export default withNavigation(ListNotifications)
+export default ListNotifications;

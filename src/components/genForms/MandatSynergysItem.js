@@ -1,22 +1,22 @@
-import React, { Component } from 'react';
+import React from 'react';
 import FormItem from './FormItem';
+import { useNavigation } from '@react-navigation/native'; // Importation du hook useNavigation
 
-import { withNavigation } from 'react-navigation'
+const MandatSynergysItem = ({ mandat, onPress, ...props }) => {
+    const navigation = useNavigation(); // Utilisation du hook pour obtenir l'objet navigation
 
-const MandatSynergysItem = ({ mandat, onPress, navigation, ...props }) => {
-
-    const { clientFirstName, clientLastName } = mandat
-    const nameClient1 = `${clientFirstName} ${clientLastName}`
+    const { clientFirstName, clientLastName } = mandat;
+    const nameClient1 = `${clientFirstName} ${clientLastName}`;
 
     return (
         <FormItem
             item={mandat}
             onPress={onPress}
-            navigation={navigation}
+            navigation={navigation} // Passage de l'objet navigation à FormItem
             nameClient1={nameClient1}
             nameClient2=""
         />
-    )
-}
+    );
+};
 
-export default withNavigation(MandatSynergysItem)
+export default MandatSynergysItem;

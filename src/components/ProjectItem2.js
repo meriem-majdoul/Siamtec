@@ -8,41 +8,31 @@ import CustomIcon from './CustomIcon'
 import * as theme from '../core/theme'
 import { constants } from '../core/constants'
 
-import { withNavigation } from 'react-navigation'
+import { useNavigation } from '@react-navigation/native'  // Remplacer withNavigation par useNavigation
 
 const iconContainerSize = constants.ScreenWidth * 0.24
 
-const ProjectItem2 = ({ project, onPress, navigation, ...props }) => {
+const ProjectItem2 = ({ project, onPress, ...props }) => {
+    const navigation = useNavigation(); // Utilisation du hook useNavigation
 
     const setIconPhase = (projectStep) => {
         switch (projectStep) {
             case 'Prospect':
                 return faFolderOpen
-                break
-
             case 'Initialisation': //Deprecated
                 return faFolderOpen
-                break
-
             case 'Visite technique préalable':
                 return faCalendar
-                break
-
             case 'Présentation étude':
                 return faCalendarAlt
-                break
-
             case 'Visite technique':
                 return faUserHardHat
-                break
-
             case "En attente d'installation":
                 return faTools
-                break
-
             case 'Maintenance':
                 return faToolbox
-                break
+            default:
+                return null
         }
     }
 
@@ -59,7 +49,7 @@ const ProjectItem2 = ({ project, onPress, navigation, ...props }) => {
             return <CustomIcon icon={icon} color={color} size={iconSize} style={iconStyle} />
         }
 
-        else return null
+        return null
     }
 
     return (
@@ -80,7 +70,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         marginBottom: 24,
-        //backgroundColor: 'pink',
     },
     iconContainer: {
         width: iconContainerSize,
@@ -92,4 +81,4 @@ const styles = StyleSheet.create({
     },
 })
 
-export default withNavigation(ProjectItem2)
+export default ProjectItem2;
