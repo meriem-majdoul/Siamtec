@@ -20,24 +20,27 @@ import MandatSynergysItem from "../../../components/genForms/MandatSynergysItem"
 class ListMandatsSynergys extends React.Component {
 
     constructor(props) {
-        super(props)
-        this.renderItem = this.renderItem.bind(this)
-        this.onPressItem = this.onPressItem.bind(this)
-
-        this.titleText = this.props.navigation.getParam('titleText', 'Mandats Synergys')
-        this.isRoot = this.props.navigation.getParam('isRoot', true)
-
-        this.project = this.props.navigation.getParam('project', undefined)
-        this.autoGenPdf = this.props.navigation.getParam('autoGenPdf', false) // For pdf generation
-        this.docType = this.props.navigation.getParam('docType', '') // For pdf generation
-        this.popCount = this.props.navigation.getParam('popCount', 1) // For pdf generation
-
+        super(props);
+    
+        this.renderItem = this.renderItem.bind(this);
+        this.onPressItem = this.onPressItem.bind(this);
+    
+        const { route } = this.props;
+        this.titleText = route.params?.titleText || 'Mandats Synergys';
+        this.isRoot = route.params?.isRoot ?? true;
+    
+        this.project = route.params?.project ?? undefined;
+        this.autoGenPdf = route.params?.autoGenPdf ?? false; // For pdf generation
+        this.docType = route.params?.docType ?? ''; // For pdf generation
+        this.popCount = route.params?.popCount ?? 1; // For pdf generation
+    
         this.state = {
             index: 0,
             showInput: false,
             searchInput: '',
-        }
+        };
     }
+    
 
     componentDidMount() {
         setStatusBarColor(this, { backgroundColor: theme.colors.primary, barStyle: "dark-content" })
@@ -53,21 +56,28 @@ class ListMandatsSynergys extends React.Component {
     }
 
     onPressItem(item) {
-        if (this.isRoot)
-            this.props.navigation.navigate('CreateMandatSynergys', {
+        const { navigation } = this.props;
+        const project = navigation?.getParam('project', '');
+        const DocumentId = navigation?.getParam('DocumentId', '');
+        const onGoBack = navigation?.getParam('onGoBack', null);
+    
+        if (this.isRoot) {
+            navigation.navigate('CreateMandatSynergys', {
                 MandatSynergysId: item.id
-            })
-
-        else this.props.navigation.navigate('CreateMandatSynergys', {
-            MandatSynergysId: item.id,
-            autoGenPdf: true,
-            docType: this.docType,
-            project: this.props.navigation.getParam('project', ''),
-            DocumentId: this.props.navigation.getParam('DocumentId', ''),
-            popCount: this.popCount,
-            onGoBack: this.props.navigation.getParam('onGoBack', null)
-        })
+            });
+        } else {
+            navigation.navigate('CreateMandatSynergys', {
+                MandatSynergysId: item.id,
+                autoGenPdf: true,
+                docType: this.docType,
+                project,
+                DocumentId,
+                popCount: this.popCount,
+                onGoBack
+            });
+        }
     }
+    
 
     render() {
         const { index, searchInput, showInput } = this.state

@@ -12,7 +12,10 @@ export default class ViewNews extends Component {
 
     constructor(props) {
         super(props);
-        this.newspost = this.props.navigation.getParam('newspost', {})
+        const { route } = this.props;
+
+        // Récupération du paramètre newspost
+        this.newspost = route?.params?.newspost ?? {};
 
         this.state = {
             newspost: [],

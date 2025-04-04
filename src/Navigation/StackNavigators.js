@@ -66,7 +66,7 @@ import CreateOrder from '../screens/Orders/CreateOrder';
 
 // Forms
 // Simulation
-//import CreateSimulation from '../screens/Forms/Simulations/CreateSimulation';
+import CreateSimulation from '../screens/Forms/Simulations/CreateSimulation';
 import ListSimulations from '../screens/Forms/Simulations/ListSimulations';
 import GuestContactSuccess from '../screens/Forms/Simulations/GuestContactSuccess';
 // PV réception
@@ -199,7 +199,7 @@ const OrdersStack = () => (
 const SimulatorStack = () => (
   <Stack.Navigator screenOptions={hideHeader}>
     <Stack.Screen name="ListSimulations" component={ListSimulations} />
-    {/* <Stack.Screen name="CreateSimulation" component={CreateSimulation} /> */}
+    <Stack.Screen name="CreateSimulation" component={CreateSimulation} />
     <Stack.Screen name="GuestContactSuccess" component={GuestContactSuccess} />
   </Stack.Navigator>
 );
@@ -245,7 +245,7 @@ const AuthStack = () => (
 // GUEST APP
 const SimulatorStackGuest = () => (
   <Stack.Navigator screenOptions={hideHeader}>
-    {/* <Stack.Screen name="CreateSimulation" component={CreateSimulation} /> */}
+    <Stack.Screen name="CreateSimulation" component={CreateSimulation} />
     <Stack.Screen name="GuestContactSuccess" component={GuestContactSuccess} />
     <Stack.Screen name="PrivacyPolicy" component={PrivacyPolicy} />
   </Stack.Navigator>

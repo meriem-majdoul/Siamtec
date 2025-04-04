@@ -18,23 +18,28 @@ import { constants } from "../../core/constants"
 class ListEmployees extends React.Component {
 
     constructor(props) {
-        super(props)
-        this.onPressEmployee = this.onPressEmployee.bind(this)
-        this.getEmployee = this.getEmployee.bind(this)
-        this.isRoot = this.props.navigation.getParam('isRoot', true)
-        this.titleText = this.props.navigation.getParam('titleText', '')
-
-        this.isProcess = this.props.navigation.getParam('isProcess', false)
-        this.queryFilters = this.props.navigation.getParam('queryFilters', null)
-        this.query = this.props.navigation.getParam('query', null)
-        this.project = this.props.navigation.getParam('project', null)
-
+        super(props);
+    
+        const { route } = this.props;
+    
+        this.onPressEmployee = this.onPressEmployee.bind(this);
+        this.getEmployee = this.getEmployee.bind(this);
+    
+        // Accès aux paramètres via route?.params
+        this.isRoot = route?.params?.isRoot ?? true;
+        this.titleText = route?.params?.titleText ?? '';
+    
+        this.isProcess = route?.params?.isProcess ?? false;
+        this.queryFilters = route?.params?.queryFilters ?? null;
+        this.query = route?.params?.query ?? null;
+        this.project = route?.params?.project ?? null;
+    
         this.state = {
             showInput: false,
             searchInput: ''
-        }
+        };
     }
-
+    
     onPressEmployee(user) {
         if (this.isProcess)
             this.updateEmployee(user)

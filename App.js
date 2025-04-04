@@ -73,27 +73,25 @@ const AppDrawer = () => (
 );
 
 const App = () => {
-  let persistor = persistStore(Store);
-  persistor.purge()
+  const persistor = persistStore(Store);
 
   return (
     <Provider store={Store}>
-    <PersistGate persistor={persistor}>
-      <PaperProvider theme={paperTheme}>
-        <MenuProvider>
-          <MyStatusBar>
-            {/* {progressView}
-            <Text>{this.state.syncMessage || ""}</Text> */}
-            <NetworkStatus>
-             <RootController />
-
-              <AppToast />
-            </NetworkStatus>
-          </MyStatusBar>
-        </MenuProvider>
-      </PaperProvider>
-    </PersistGate>
-  </Provider>
+      <PersistGate loading={null} persistor={persistor}>
+        <PaperProvider theme={paperTheme}>
+          <MenuProvider>
+            <MyStatusBar>
+              {/* {progressView}
+              <Text>{this.state.syncMessage || ""}</Text> */}
+              <NetworkStatus>
+                <RootController />
+                <AppToast />
+              </NetworkStatus>
+            </MyStatusBar>
+          </MenuProvider>
+        </PaperProvider>
+      </PersistGate>
+    </Provider>
   );
 };
 

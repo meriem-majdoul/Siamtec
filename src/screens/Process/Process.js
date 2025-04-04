@@ -15,20 +15,23 @@ import { blockRoleUpdateOnPhase } from '../../core/privileges';
 
 class Process extends Component {
     constructor(props) {
-        super(props)
-
-        this.initialState = {}
-        this.ProjectId = this.props.navigation.getParam('ProjectId', null)
-        this.title = 'Suivi du projet'
-
+        super(props);
+    
+        const { route } = this.props;
+    
+        this.initialState = {};
+        this.ProjectId = route?.params?.ProjectId ?? null;
+        this.title = 'Suivi du projet';
+    
         this.state = {
             loading: true,
             uploading: false,
             docNotFound: false,
-            //Specific privileges (poseur & commercial)
+            // Specific privileges (poseur & commercial)
             isBlockedUpdates: false,
-        }
+        };
     }
+    
 
     async componentDidMount() {
         const project = await this.fetchProject()

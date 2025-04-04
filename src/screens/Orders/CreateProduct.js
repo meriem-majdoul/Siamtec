@@ -80,8 +80,10 @@ class CreateProduct extends Component {
 
     this.initialState = {};
     this.isInit = true;
+    
+    const { route } = this.props;
 
-    this.ProductId = this.props.navigation.getParam('ProductId', '');
+    this.ProductId = this.props.route?.params?.ProductId ?? '';
     this.isEdit = this.ProductId ? true : false;
     this.title = this.isEdit ? "Modifier l'article" : 'Nouvel article';
 

@@ -29,16 +29,25 @@ class AddGoal extends Component {
         this.handleDeleteGoal = this.handleDeleteGoal.bind(this)
         this.myAlert = myAlert.bind(this)
         this.showAlert = this.showAlert.bind(this)
+        const { route } = this.props;
 
-        this.initialState = {}
-        this.userId = this.props.navigation.getParam('userId', auth.currentUser.uid)
-        this.GoalId = this.props.navigation.getParam('GoalId', '')
-        this.currentTurnover = this.props.navigation.getParam('currentTurnover', 0)
-        this.incomeSources = this.props.navigation.getParam('incomeSources', [])
-        this.isEdit = this.GoalId ? true : false
-        this.GoalId = this.isEdit ? this.GoalId : moment().format('YYYY')
-        this.monthYear = this.props.navigation.getParam('monthYear', '')
-        this.title = this.isEdit ? "Modifier l'objectif" : "Nouvel objectif"
+        // Initialisation des variables avec les paramètres de navigation
+        this.initialState = {};
+    
+        // Accès aux paramètres via route?.params
+        this.userId = route?.params?.userId ?? auth.currentUser.uid;
+        this.GoalId = route?.params?.GoalId ?? '';
+        this.currentTurnover = route?.params?.currentTurnover ?? 0;
+        this.incomeSources = route?.params?.incomeSources ?? [];
+        
+        // Déterminer si c'est une édition ou non
+        this.isEdit = this.GoalId ? true : false;
+        
+        // Si c'est l'édition, utiliser GoalId ; sinon, générer l'année en cours
+        this.GoalId = this.isEdit ? this.GoalId : moment().format('YYYY');
+        
+        this.monthYear = route?.params?.monthYear ?? '';
+        this.title = this.isEdit ? "Modifier l'objectif" : "Nouvel objectif";
 
         this.state = {
             //ID

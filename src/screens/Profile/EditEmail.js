@@ -25,7 +25,8 @@ class EditEmail extends Component {
         this.handleSubmit = this.handleSubmit.bind(this)
         this.renderDialog = this.renderDialog.bind(this)
 
-        this.userId = this.props.navigation.getParam('userId', '')
+        this.userId = this.props.route?.params?.userId ?? '';
+
 
         this.state = {
             newEmail: { value: '', error: '' },

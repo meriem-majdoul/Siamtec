@@ -100,10 +100,10 @@ class StepsForm extends Component {
       : this.props.idPattern
         ? generateId(this.props.idPattern)
         : '';
-
-    this.project = this.props.navigation.getParam('project', null);
-    this.DocumentId = this.props.navigation.getParam('DocumentId', '');
-    this.popCount = this.props.navigation.getParam('popCount', 1);
+        // const { route } = this.props;
+        this.project = this.props.route?.params?.project ?? null;
+        this.DocumentId = this.props.route?.params?.DocumentId ?? '';
+        this.popCount = this.props.route?.params?.popCount ?? 1;
 
     this.isGuest = !auth.currentUser;
 
@@ -1699,11 +1699,17 @@ class StepsForm extends Component {
     saveFile(pdfBase64, pdfName, 'base64')
       .then((destPath) => {
         if (isProcess) {
-          this.props.navigation.state.params.onGoBack({
-            pdfBase64Path: destPath,
-            pdfName,
-            DocumentId: this.DocumentId,
-          });
+          const { params } = this.props.route;
+if (params?.onGoBack) {
+  params.onGoBack({
+    pdfBase64Path: destPath,
+    pdfName,
+    DocumentId: this.DocumentId,
+  });
+} else {
+  console.log('onGoBack function is not defined in params');
+}
+
           this.props.navigation.pop(this.popCount);
         } else FileViewer.open(destPath, { showOpenWithDialog: true });
       })
@@ -2234,11 +2240,9 @@ class StepsForm extends Component {
       toastMessageModal,
       toastTypeModal,
     } = this.state;
-
     const { collection } = this.props;
-    const isProcess =
-      this.props.navigation.state.params &&
-      this.props.navigation.state.params.onGoBack;
+    const isProcess = this.props.route?.params?.onGoBack ? true : false;
+    
 
     if (docNotFound)
       return (

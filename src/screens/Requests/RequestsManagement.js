@@ -21,17 +21,18 @@ import { constants } from "../../core/constants";
 const initialLayout = { width: constants.ScreenWidth }
 
 class RequestsManagement extends React.Component {
-
+    
     constructor(props) {
-        super(props)
-        this.isRoot = this.props.navigation.getParam('isRoot', true)
-
+        super(props);
+        this.isRoot = this.props.route?.params?.isRoot ?? true;
+    
         this.state = {
             index: 0,
             showInput: false,
             searchInput: ''
-        }
+        };
     }
+    
 
     render() {
 

@@ -36,9 +36,12 @@ export default class AddMembers extends Component {
         this.addMembers = this.addMembers.bind(this)
         this.dismiss = this.dismiss.bind(this)
 
-        this.isCreation = this.props.navigation.getParam('isCreation', false) //create or edit data
-        this.teamId = this.props.navigation.getParam('teamId', '')
-        this.existingMembers = this.props.navigation.getParam('existingMembers', [])
+        const { route } = this.props;
+        const { isCreation, teamId, existingMembers } = route.params || {};
+    
+        this.isCreation = isCreation || false; // create or edit data
+        this.teamId = teamId || ''; // team ID
+        this.existingMembers = existingMembers || []; // existing members list
 
         this.state = {
             title: 'Ajouter des membres',

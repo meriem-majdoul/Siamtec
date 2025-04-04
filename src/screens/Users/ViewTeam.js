@@ -29,7 +29,8 @@ export default class ViewTeam extends Component {
         this.editDetails = this.editDetails.bind(this);
         // this.myAlert = myAlert.bind(this);
         // this.showAlert = this.showAlert.bind(this);
-        this.teamId = this.props.navigation.getParam('teamId', null)
+        const { route } = this.props;
+        this.teamId = route.params?.teamId ?? null; 
 
         this.state = {
             members: [],

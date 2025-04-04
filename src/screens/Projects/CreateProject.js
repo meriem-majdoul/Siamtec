@@ -137,17 +137,19 @@ class CreateProject extends Component {
         this.isCurrentHighRole = highRoles.includes(this.props.role.id)
         this.isClient = this.props.role.id === 'client'
 
-        this.projectParam = this.props.navigation.getParam('project', '')
-        this.ProjectId = this.props.navigation.getParam('ProjectId', this.projectParam.id) || ""
-        this.isEdit = this.ProjectId !== ""
-        this.ProjectId = this.isEdit ? this.ProjectId : generateId('GS-PR-')
-        this.title = this.isEdit ? 'Modifier le projet' : 'Nouveau projet'
+       // Accès aux paramètres de navigation avec React Navigation v5/v6
+this.projectParam = this.props.route?.params?.project || '';
+this.ProjectId = this.props.route?.params?.ProjectId || this.projectParam.id || "";
+this.isEdit = this.ProjectId !== "";
+this.ProjectId = this.isEdit ? this.ProjectId : generateId('GS-PR-');
+this.title = this.isEdit ? 'Modifier le projet' : 'Nouveau projet';
 
-        //Pre-fill fields
-        this.client = this.props.navigation.getParam('client', { id: '', fullName: '', email: '', role: '', phone: "" })
-        this.address = this.props.navigation.getParam('address', { description: '', place_id: '', marker: { latitude: '', longitude: '' }, error: '' })
-        this.comContact = this.props.role.id === "com" && !this.isEdit ? this.props.currentUser : { id: '', fullName: '', email: '', role: '' }
-        this.sections = this.props.navigation.getParam('sections', null) //EXP: { info: { projectWorkTypes: true } }
+// Pré-remplir les champs
+this.client = this.props.route?.params?.client || { id: '', fullName: '', email: '', role: '', phone: "" };
+this.address = this.props.route?.params?.address || { description: '', place_id: '', marker: { latitude: '', longitude: '' }, error: '' };
+this.comContact = this.props.role.id === "com" && !this.isEdit ? this.props.currentUser : { id: '', fullName: '', email: '', role: '' };
+this.sections = this.props.route?.params?.sections || null; // Exemple : { info: { projectWorkTypes: true } }
+
         //onSubmit, Go back if goBackConditions elements are not null
         const goBackConditions = [this.sections]
         this.isGoBack = !goBackConditions.includes(null)

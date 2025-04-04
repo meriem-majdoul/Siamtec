@@ -82,9 +82,11 @@ let initialState = {
 class CreatePvReception extends Component {
     constructor(props) {
         super(props)
+        const { route } = this.props;
 
-        this.PvReceptionId = this.props.navigation.getParam('PvReceptionId', '')
-        this.project = this.props.navigation.getParam('project', null)
+        // Récupération des paramètres via route?.params
+        this.PvReceptionId = route?.params?.PvReceptionId ?? '';
+        this.project = route?.params?.project ?? null;
         this.pvId = this.project ? this.project.id : `anonyme-${generateId("pv-", 4)}`
         this.clientFullName = this.project ? this.project.client.fullName : ""
         this.clientPhone = this.project ? this.project.client.phone : ""

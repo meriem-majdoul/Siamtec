@@ -27,8 +27,9 @@ export default class ViewMessage extends Component {
     constructor(props) {
         super(props)
         this.currentUser = firebase.auth().currentUser
-        this.MessageId = this.props.navigation.getParam('MessageId', '')
-        //this.message = this.props.navigation.getParam('message', '')
+        const { route } = this.props;
+        this.MessageId = route?.params?.MessageId ?? '';
+        // this.message = route?.params?.message ?? ''; 
         this.fetchMessages = this.fetchMessages.bind(this)
         // this.fetchDocs = fetchDocs.bind(this)
 

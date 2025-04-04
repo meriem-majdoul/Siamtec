@@ -1,58 +1,56 @@
 import * as React from 'react';
-import { Appbar as appbar } from 'react-native-paper';
-import { useNavigation } from '@react-navigation/native';  
-import { FontAwesomeIcon } from 'react-native-vector-icons/FontAwesome5';
-import { faArrowLeft, faTimes, faBars, faRedo, faPaperclip, faEllipsisV, faTrash, faPaperPlane, faPen, faSearch, faCheck } from 'react-native-vector-icons/FontAwesome5';
+import { Appbar } from 'react-native-paper';
+import { useNavigation } from '@react-navigation/native';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
 import Loading from './Loading';
 import * as theme from '../core/theme';
 
-const Appbar = ({
+const AppBarIcon = ({ icon, iconColor, onPress }) => {
+    return <Appbar.Action icon={() => <FontAwesome5 name={icon} size={24} color={iconColor} />} onPress={onPress} />;
+};
+
+const CustomAppbar = ({
     white, appBarColor,
     back, customBackHandler, blackBack, close, title, search, dots, check, send, attach, menu, edit, del, refresh, loading, controller,
     titleText, controllerIcon, iconsColor,
     searchBar,
     handleSearch, handleSubmit, handleSend, handleAttachement, handleMore, handleEdit, handleAction, handleDelete, handleRefresh,
-    style, ...props }) => {
-
-    const navigation = useNavigation(); 
+    style, ...props
+}) => {
+    const navigation = useNavigation();
 
     let navBack = () => navigation.goBack();
     const showMenu = () => navigation.openDrawer();
 
-    const AppBarIcon = ({ icon, iconColor, onPress, style }) => {
-        const faIcon = <FontAwesomeIcon icon={icon} size={24} color={iconColor} />;
-        return <appbar.Action icon={faIcon} onPress={onPress} />;
-    };
-
     if (white) {
         return (
-            <appbar.Header style={[{ backgroundColor: '#ffffff', elevation: 0 }, style]}>
-                <AppBarIcon icon={faArrowLeft} onPress={customBackHandler || navBack} />
-                {title && <appbar.Content title={titleText} titleStyle={theme.customFontMSregular.h3} />}
-            </appbar.Header>
+            <Appbar.Header style={[{ backgroundColor: '#ffffff', elevation: 0 }, style]}>
+                <AppBarIcon icon="arrow-left" onPress={customBackHandler || navBack} />
+                {title && <Appbar.Content title={titleText} titleStyle={theme.customFontMSregular.h3} />}
+            </Appbar.Header>
         );
     }
 
     return (
-        <appbar.Header style={[{ backgroundColor: appBarColor || theme.colors.appBar, elevation: 0 }, style]}>
-            {back && <AppBarIcon icon={faArrowLeft} onPress={customBackHandler || navBack} iconColor={iconsColor || theme.colors.secondary} />}
-            {close && <AppBarIcon icon={faTimes} onPress={customBackHandler || navBack} iconColor={iconsColor || theme.colors.secondary} />}
-            {menu && <AppBarIcon icon={faBars} onPress={showMenu} />}
+        <Appbar.Header style={[{ backgroundColor: appBarColor || theme.colors.appBar, elevation: 0 }, style]}>
+            {back && <AppBarIcon icon="arrow-left" onPress={customBackHandler || navBack} iconColor={iconsColor || theme.colors.secondary} />}
+            {close && <AppBarIcon icon="times" onPress={customBackHandler || navBack} iconColor={iconsColor || theme.colors.secondary} />}
+            {menu && <AppBarIcon icon="bars" onPress={showMenu} />}
             {searchBar}
-            {title && <appbar.Content title={titleText} titleStyle={[theme.customFontMSregular.header, { marginLeft: back || close || menu ? 0 : theme.padding, letterSpacing: 1 }]} />}
-            {refresh && <AppBarIcon icon={faRedo} onPress={handleRefresh} />}
-            {search && <AppBarIcon icon={faSearch} onPress={handleSearch} />}
-            {attach && <AppBarIcon icon={faPaperclip} onPress={handleAttachement} />}
-            {dots && <AppBarIcon icon={faEllipsisV} onPress={handleMore} />}
-            {del && <AppBarIcon icon={faTrash} onPress={handleDelete} />}
+            {title && <Appbar.Content title={titleText} titleStyle={[theme.customFontMSregular.header, { marginLeft: back || close || menu ? 0 : theme.padding, letterSpacing: 1 }]} />}
+            {refresh && <AppBarIcon icon="redo" onPress={handleRefresh} />}
+            {search && <AppBarIcon icon="search" onPress={handleSearch} />}
+            {attach && <AppBarIcon icon="paperclip" onPress={handleAttachement} />}
+            {dots && <AppBarIcon icon="ellipsis-v" onPress={handleMore} />}
+            {del && <AppBarIcon icon="trash" onPress={handleDelete} />}
             {loading && <Loading size='small' color='#fff' style={{ position: 'absolute', right: 15 }} />}
-            {check && <AppBarIcon icon={faCheck} onPress={handleSubmit} iconColor={iconsColor || theme.colors.primary} />}
-            {send && <AppBarIcon icon={faPaperPlane} onPress={handleSend} />}
-            {edit && <AppBarIcon icon={faPen} onPress={handleEdit} iconColor={iconsColor || theme.colors.secondary} />}
-            {controller && <appbar.Action icon={controllerIcon} onPress={handleAction} />}
-        </appbar.Header>
+            {check && <AppBarIcon icon="check" onPress={handleSubmit} iconColor={iconsColor || theme.colors.primary} />}
+            {send && <AppBarIcon icon="paper-plane" onPress={handleSend} />}
+            {edit && <AppBarIcon icon="pen" onPress={handleEdit} iconColor={iconsColor || theme.colors.secondary} />}
+            {controller && <Appbar.Action icon={controllerIcon} onPress={handleAction} />}
+        </Appbar.Header>
     );
 };
 
-export default Appbar;  
+export default CustomAppbar;

@@ -17,11 +17,14 @@ class MyDatePicker extends Component {
         super(props)
         this.handleSubmit = this.handleSubmit.bind(this)
 
-        this.label = this.props.navigation.getParam('label', '')
-        this.showDayPicker = this.props.navigation.getParam('showDayPicker', true)
-        this.showTimePicker = this.props.navigation.getParam('showTimePicker', true)
-        this.isAllDay = this.props.navigation.getParam('isAllDay', false)
-        this.targetField = this.props.navigation.getParam('targetField', '')
+        const { route } = this.props;
+
+        // Récupération des paramètres via route?.params
+        this.label = route?.params?.label ?? '';
+        this.showDayPicker = route?.params?.showDayPicker ?? true;
+        this.showTimePicker = route?.params?.showTimePicker ?? true;
+        this.isAllDay = route?.params?.isAllDay ?? false;
+        this.targetField = route?.params?.targetField ?? '';
 
         this.state = {
             selectedDate: new Date(),

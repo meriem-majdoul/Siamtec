@@ -64,7 +64,8 @@ class CreateRequest extends Component {
         this.requestType = this.props.requestType
         this.isTicket = this.requestType === 'ticket'
 
-        this.RequestId = this.props.navigation.getParam('RequestId', '')
+        this.RequestId = this.props.route?.params?.RequestId ?? '';
+
         this.isEdit = this.RequestId !== ''
         this.RequestId = this.isEdit ? this.RequestId : this.isTicket ? generateId('GS-DTC-') : generateId('GS-DPR-')
 

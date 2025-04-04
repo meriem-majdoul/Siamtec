@@ -34,36 +34,40 @@ const states = [
 class ListProjects extends Component {
     constructor(props) {
         super(props)
+    
         this.onPressProject = this.onPressProject.bind(this)
         this.fetchProjects = this.fetchProjects.bind(this)
-        //this.fetchDocs = fetchDocs.bind(this)
-
-        this.isRoot = this.props.navigation.getParam('isRoot', true)
-        this.titleText = this.props.navigation.getParam('titleText', 'Projets')
-        this.showFAB = this.props.navigation.getParam('showFAB', true) && this.isRoot
-        this.filteredProjects = []
-
+    
+        // Accès aux paramètres de navigation avec React Navigation v5/v6
+        const { route } = this.props;
+    
+        this.isRoot = route?.params?.isRoot ?? true; // Valeur par défaut si non définie
+        this.titleText = route?.params?.titleText ?? 'Projets'; // Valeur par défaut si non définie
+        this.showFAB = route?.params?.showFAB && this.isRoot; // Afficher le FAB seulement si isRoot est true
+        this.filteredProjects = [];
+    
         this.state = {
             projectsList: [],
             projectsCount: 0,
-
+    
             showInput: false,
             searchInput: '',
-
-            //filter fields
+    
+            // Champs de filtre
             step: '',
             state: '',
             client: { id: '', fullName: '' },
             filterOpened: false,
-
-            //view (grid/list)
+    
+            // Vue (grille/liste)
             view: 'list',
             columnCount: 1,
-
+    
             loading: true,
             refreshing: false,
         }
     }
+    
 
 
     componentWillUnmount() {

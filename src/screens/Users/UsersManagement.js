@@ -21,7 +21,11 @@ class UsersManagement extends React.Component {
 
     constructor(props) {
         super(props)
-        this.isRoot = this.props.navigation.getParam('isRoot', true)
+        const { route } = this.props;
+        const { isRoot } = route.params || {};  // Accède à `isRoot` dans les paramètres de navigation
+    
+        // Utilise la valeur par défaut si `isRoot` n'est pas défini
+        this.isRoot = isRoot !== undefined ? isRoot : true;
 
         this.state = {
             index: 0,

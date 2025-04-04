@@ -32,14 +32,16 @@ class NewMessage extends Component {
         super(props)
         this.currentUser = auth.currentUser
 
+        const { route } = this.props;
+        
         //Navigation params
-        this.isReply = this.props.navigation.getParam('isReply', false)
-        this.title = this.isReply ? 'Répondre' : 'Nouveau message'
-        this.messageGroupeId = this.props.navigation.getParam('messageGroupeId', false)
-        this.subject = this.props.navigation.getParam('subject', '')
-        this.tagsSelected = this.props.navigation.getParam('tagsSelected', [])
-        this.oldMessages = this.props.navigation.getParam('oldMessages', [])
-        this.subscribers = this.props.navigation.getParam('subscribers', [])
+        this.isReply = route?.params?.isReply ?? false;
+        this.title = this.isReply ? 'Répondre' : 'Nouveau message';
+        this.messageGroupeId = route?.params?.messageGroupeId ?? false;
+        this.subject = route?.params?.subject ?? '';
+        this.tagsSelected = route?.params?.tagsSelected ?? [];
+        this.oldMessages = route?.params?.oldMessages ?? [];
+        this.subscribers = route?.params?.subscribers ?? [];
 
         //this.fetchDocs = fetchDocs.bind(this)
         this.uploadFiles = uploadFiles.bind(this)

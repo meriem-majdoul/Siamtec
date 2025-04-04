@@ -17,8 +17,11 @@ export default class Address extends Component {
         super(props)
         this.handleSubmit = this.handleSubmit.bind(this)
 
-        this.prevScreen = this.props.navigation.getParam('prevScreen', '')
-        this.userId = this.props.navigation.getParam('userId', '')
+        const { route } = this.props;
+        const { prevScreen, userId } = route.params || {};
+    
+        this.prevScreen = prevScreen || '';
+        this.userId = userId || '';
 
         this.state = {
             address: { description: '', place_id: '', error: '' },

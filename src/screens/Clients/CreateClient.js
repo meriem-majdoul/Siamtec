@@ -53,13 +53,12 @@ class CreateClient extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.refreshAddress = this.refreshAddress.bind(this);
     this.setAddress = setAddress.bind(this);
-    this.prevScreen = this.props.navigation.getParam(
-      'prevScreen',
-      'UsersManagement',
-    );
-    this.ClientId = generateId('GS-CL-');
+    const { route } = this.props;
 
-    this.isProspect = this.props.navigation.getParam('isProspect', false);
+    // Accès aux paramètres via route?.params
+    this.prevScreen = route?.params?.prevScreen ?? 'UsersManagement';
+    this.ClientId = generateId('GS-CL-');
+    this.isProspect = route?.params?.isProspect ?? false;
     this.userType = this.isProspect ? 'prospect' : 'client';
     this.titleText = `${this.userType
       .charAt(0)

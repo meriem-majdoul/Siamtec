@@ -54,20 +54,22 @@ class Profile extends Component {
         this.refreshAddress = refreshAddress.bind(this)
         this.setAddress = setAddress.bind(this)
 
-        this.isRoot = this.props.navigation.getParam('isRoot', false)
+        this.isRoot = this.props.route?.params?.isRoot ?? false;
+
 
         //role
-        this.roleId = this.props.role.id
-        this.userParam = this.props.navigation.getParam('user', { id: firebase.auth().currentUser.uid, roleId: this.roleId }) //default: current user
-        this.isProfileOwner = this.userParam.id === firebase.auth().currentUser.uid
-        this.isClient = this.userParam.roleId === 'client'
-        this.isCurrentUserStaff = staffRoles.includes(this.props.role.id)
+        this.roleId = this.props.role.id;
+        this.userParam = this.props.route?.params?.user || { id: firebase.auth().currentUser.uid, roleId: this.roleId }; //default: current user
+        this.isProfileOwner = this.userParam.id === firebase.auth().currentUser.uid;
+        this.isClient = this.userParam.roleId === 'client';
+        this.isCurrentUserStaff = staffRoles.includes(this.props.role.id);
 
-        this.isEdit = this.props.navigation.getParam("isEdit", false) || this.isProfileOwner
-        this.dataCollection = this.isClient ? 'Clients' : 'Users'
-        this.isProcess = this.props.navigation.getParam('isProcess', false)
-        this.project = this.props.navigation.getParam('project', null)
-        this.initialState = {}
+        this.isEdit = this.props.route?.params?.isEdit || this.isProfileOwner;
+        this.dataCollection = this.isClient ? 'Clients' : 'Users';
+        this.isProcess = this.props.route?.params?.isProcess || false;
+        this.project = this.props.route?.params?.project || null;
+        this.initialState = {};
+
 
         if (this.userParam.roleId === 'com') {
             this.queries = analyticsQueriesBasedOnRole('com', this.userParam.id)

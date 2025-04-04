@@ -18,7 +18,10 @@ class ClientsManagement extends React.Component {
 
     constructor(props) {
         super(props)
-        this.isRoot = this.props.navigation.getParam('isRoot', true)
+        const { route } = this.props;
+
+    // Accès aux paramètres via route?.params
+    this.isRoot = route?.params?.isRoot ?? true;
 
         this.state = {
             index: 0,

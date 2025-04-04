@@ -26,13 +26,15 @@ class ListMandatsMPR extends React.Component {
         this.renderItem = this.renderItem.bind(this)
         this.onPressItem = this.onPressItem.bind(this)
 
-        this.titleText = this.props.navigation.getParam('titleText', 'Simulations')
-        this.isRoot = this.props.navigation.getParam('isRoot', true)
-
-        this.project = this.props.navigation.getParam('project', undefined)
-        this.autoGenPdf = this.props.navigation.getParam('autoGenPdf', false) // For pdf generation
-        this.docType = this.props.navigation.getParam('docType', '') // For pdf generation
-        this.popCount = this.props.navigation.getParam('popCount', 1) // For pdf generation
+        const { route } = this.props;
+        const { titleText, isRoot, project, autoGenPdf, docType, popCount } = route.params || {};
+    
+        this.titleText = titleText || 'Simulations';
+        this.isRoot = isRoot !== undefined ? isRoot : true;
+        this.project = project || undefined;
+        this.autoGenPdf = autoGenPdf || false;
+        this.docType = docType || '';
+        this.popCount = popCount || 1;
 
         this.state = {
             index: 0,
@@ -55,21 +57,26 @@ class ListMandatsMPR extends React.Component {
     }
 
     onPressItem(item) {
-        if (this.isRoot)
-            this.props.navigation.navigate('CreateMandatMPR', {
+        const { navigation, route } = this.props;
+        const { project, DocumentId, onGoBack } = route.params || {}; // Récupère les paramètres si disponibles
+    
+        if (this.isRoot) {
+            navigation.navigate('CreateMandatMPR', {
                 MandatMPRId: item.id
-            })
-
-        else this.props.navigation.navigate('CreateMandatMPR', {
-            MandatMPRId: item.id,
-            autoGenPdf: true,
-            docType: this.docType,
-            project: this.props.navigation.getParam('project', ''),
-            DocumentId: this.props.navigation.getParam('DocumentId', ''),
-            popCount: this.popCount,
-            onGoBack: this.props.navigation.getParam('onGoBack', null)
-        })
+            });
+        } else {
+            navigation.navigate('CreateMandatMPR', {
+                MandatMPRId: item.id,
+                autoGenPdf: true,
+                docType: this.docType,
+                project: project || '', // Valeur par défaut ''
+                DocumentId: DocumentId || '',
+                popCount: this.popCount,
+                onGoBack: onGoBack || null
+            });
+        }
     }
+    
 
     render() {
         const { index, searchInput, showInput } = this.state

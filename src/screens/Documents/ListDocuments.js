@@ -61,7 +61,9 @@ class ListDocuments extends Component {
         this.fetchSynergysDocuments = this.fetchSynergysDocuments.bind(this)
         this.onPressDocument = this.onPressDocument.bind(this)
 
-        this.isRoot = this.props.navigation.getParam('isRoot', true)
+        const { route } = this.props;
+        this.isRoot = route?.params?.isRoot ?? true;
+
 
         this.state = {
             documentsList: [],

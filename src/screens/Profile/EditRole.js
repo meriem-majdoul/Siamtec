@@ -23,10 +23,11 @@ class EditRole extends Component {
         this.handleSubmit = this.handleSubmit.bind(this)
         this.setCustomClaim = this.setCustomClaim.bind(this)
 
-        this.prevScreen = this.props.navigation.getParam('prevScreen', '')
-        this.userId = this.props.navigation.getParam('userId', '')
-        this.currentRole = this.props.navigation.getParam('currentRole', '')
-        this.dataCollection = this.props.navigation.getParam('dataCollection', 'Users')
+        this.prevScreen = this.props.route?.params?.prevScreen ?? '';
+        this.userId = this.props.route?.params?.userId ?? '';
+        this.currentRole = this.props.route?.params?.currentRole ?? '';
+        this.dataCollection = this.props.route?.params?.dataCollection ?? 'Users';
+        
 
         this.state = {
             role: '',

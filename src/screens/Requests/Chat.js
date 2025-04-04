@@ -43,7 +43,8 @@ class Chat extends Component {
     constructor(props) {
         super(props)
         this.currentUser = firebase.auth().currentUser
-        this.chatId = this.props.navigation.getParam('chatId', '')
+        this.chatId = this.props.route?.params?.chatId ?? '';
+
         this.videoPlayer = null
 
         this.fetchMessages = this.fetchMessages.bind(this)

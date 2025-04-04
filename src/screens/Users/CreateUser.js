@@ -53,7 +53,11 @@ class CreateUser extends Component {
     this.refreshAddress = this.refreshAddress.bind(this)
     this.setAddress = setAddress.bind(this)
 
-    this.prevScreen = this.props.navigation.getParam('prevScreen', 'UsersManagement')
+    const { route } = this.props;
+    const { prevScreen } = route.params || {};
+
+    // Assignation de prevScreen avec une valeur par défaut
+    this.prevScreen = prevScreen || 'UsersManagement';
     this.title = 'Créer un utilisateur'
     this.role = this.props.role.id
     this.userId = generateId('GS-US-')

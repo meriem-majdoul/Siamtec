@@ -7,14 +7,16 @@ import * as theme from '../../../core/theme'
 export default class Progression extends Component {
 
   constructor(props) {
-    super(props)
-    this.process = this.props.navigation.getParam('process', '')
-    this.project = this.props.navigation.getParam('project', '')
-    this.clientId = this.props.navigation.getParam('clientId', '')
-    this.step = this.props.navigation.getParam('step', '')
-    this.canUpdate = this.props.navigation.getParam('canUpdate', '')
-    this.role = this.props.navigation.getParam('role', '')
-  }
+    super(props);
+    const { route } = this.props;
+    this.process = route.params?.process ?? '';
+    this.project = route.params?.project ?? '';
+    this.clientId = route.params?.clientId ?? '';
+    this.step = route.params?.step ?? '';
+    this.canUpdate = route.params?.canUpdate ?? '';
+    this.role = route.params?.role ?? '';
+}
+
 
   render() {
 

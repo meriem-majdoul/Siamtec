@@ -28,14 +28,16 @@ class ListFormsContainer extends Component {
         super(props)
         this.fetchItems = this.fetchItems.bind(this)
 
-        this.isRoot = this.props.navigation.getParam('isRoot', true)
-        this.autoGenPdf = this.props.navigation.getParam('autoGenPdf', false) // For pdf generation
-        this.docType = this.props.navigation.getParam('docType', '') // For pdf generation
-        this.popCount = this.props.navigation.getParam('popCount', 1) // For pdf generation
+        const { route } = this.props;
 
-        //filters
-        // this.project = this.props.navigation.getParam('project', undefined) // For pdf generation
-        this.showFAB = this.props.navigation.getParam('showFAB', true) && this.isRoot
+        this.isRoot = route?.params?.isRoot ?? true;
+        this.autoGenPdf = route?.params?.autoGenPdf ?? false;
+        this.docType = route?.params?.docType ?? '';
+        this.popCount = route?.params?.popCount ?? 1;
+
+// filters
+// this.project = route?.params?.project ?? undefined; // For pdf generation
+this.showFAB = (route?.params?.showFAB ?? true) && this.isRoot;
         this.filteredItems = []
 
         this.state = {

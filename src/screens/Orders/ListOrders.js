@@ -35,39 +35,42 @@ const states = [
 
 class ListOrders extends Component {
     constructor(props) {
-        super(props)
-        this.onPressOrder = this.onPressOrder.bind(this) //#edit
-        this.fetchOrders = this.fetchOrders.bind(this) //#edit
-
-        this.isRoot = this.props.navigation.getParam('isRoot', true)
-        this.autoGenPdf = this.props.navigation.getParam('autoGenPdf', false) // For pdf generation
-        this.docType = this.props.navigation.getParam('docType', '') // For pdf generation
-        this.popCount = this.props.navigation.getParam('popCount', 1) // For pdf generation
-
-        //filters
-        this.project = this.props.navigation.getParam('project', undefined) // For pdf generation
-
-        this.titleText = this.props.navigation.getParam('titleText', 'Commandes')
-        this.showFAB = this.props.navigation.getParam('showFAB', true) && this.isRoot
-        this.filteredOrders = []
-
+        super(props);
+        this.onPressOrder = this.onPressOrder.bind(this); //#edit
+        this.fetchOrders = this.fetchOrders.bind(this); //#edit
+    
+        const { route } = this.props;
+    
+        this.isRoot = route?.params?.isRoot ?? true;
+        this.autoGenPdf = route?.params?.autoGenPdf ?? false; // For pdf generation
+        this.docType = route?.params?.docType ?? ''; // For pdf generation
+        this.popCount = route?.params?.popCount ?? 1; // For pdf generation
+    
+        // filters
+        this.project = route?.params?.project ?? undefined; // For pdf generation
+    
+        this.titleText = route?.params?.titleText ?? 'Commandes';
+        this.showFAB = (route?.params?.showFAB ?? true) && this.isRoot;
+        this.filteredOrders = [];
+    
         this.state = {
             ordersList: [],
             ordersCount: 0,
-
+    
             showInput: false,
             searchInput: '',
-
-            //filters
+    
+            // filters
             state: '',
             project: { id: '', name: '' },
             client: { id: '', fullName: '' },
             filterOpened: false,
-
+    
             loading: true,
             refreshing: false
-        }
+        };
     }
+    
 
     async componentDidMount() {
         await this.fetchOrders()
@@ -100,22 +103,30 @@ class ListOrders extends Component {
         return <OrderItem order={order} onPress={() => this.onPressOrder(order)} />
     }
 
-    onPressOrder(order) {//#edit
-        if (this.isRoot)
-            this.props.navigation.navigate('CreateOrder', {
+    onPressOrder(order) { //#edit
+        const { route, navigation } = this.props;
+        const { isRoot, docType, popCount } = this;
+    
+        if (isRoot) {
+            navigation.navigate('CreateOrder', {
                 OrderId: order.id,
-                onGoBack: () => this.fetchOrders(2000)
-            })
-
-        else this.props.navigation.navigate('CreateOrder', {
-            OrderId: order.id,
-            autoGenPdf: true,
-            docType: this.docType,
-            DocumentId: this.props.navigation.getParam('DocumentId', ''),
-            popCount: this.popCount,
-            onGoBack: this.props.navigation.getParam('onGoBack', null)
-        })
+                onGoBack: () => this.fetchOrders(2000),
+            });
+        } else {
+            const documentId = route?.params?.DocumentId ?? '';
+            const onGoBack = route?.params?.onGoBack ?? null;
+    
+            navigation.navigate('CreateOrder', {
+                OrderId: order.id,
+                autoGenPdf: true,
+                docType: docType,
+                DocumentId: documentId,
+                popCount: popCount,
+                onGoBack: onGoBack,
+            });
+        }
     }
+    
 
     renderSearchBar() {
         let { state, project, client, filterOpened } = this.state

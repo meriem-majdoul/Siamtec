@@ -75,13 +75,16 @@ const statuses = [
 class Agenda2 extends Component {
     constructor(props) {
         super(props)
-        this.isAgenda = this.props.navigation.getParam('isAgenda', false) //#task: set it to true
-        this.isRoot = this.props.navigation.getParam('isRoot', true) //#task: set it to true
-        this.loadItems = this.loadItems.bind(this)
-        this.refreshItems = this.refreshItems.bind(this)
-        this.handleFilter = this.handleFilter.bind(this)
-        this.togglePlanningTabs = this.togglePlanningTabs.bind(this)
-        this.projectFilter = this.props.navigation.getParam('projectFilter', { id: '', name: '' })
+        const { route } = this.props;
+
+        this.isAgenda = route?.params?.isAgenda ?? false; // #task: set it to true
+        this.isRoot = route?.params?.isRoot ?? true; // #task: set it to true
+        this.projectFilter = route?.params?.projectFilter ?? { id: '', name: '' };
+    
+        this.loadItems = this.loadItems.bind(this);
+        this.refreshItems = this.refreshItems.bind(this);
+        this.handleFilter = this.handleFilter.bind(this);
+        this.togglePlanningTabs = this.togglePlanningTabs.bind(this);
 
         const lowRoles = ['com', 'poseur']
         const currentRole = this.props.role.id

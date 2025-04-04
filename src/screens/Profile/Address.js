@@ -30,7 +30,9 @@ class MarkerTypes extends React.Component {
         this.onRegionChange = this.onRegionChange.bind(this)
         this.onChangePosition = this.onChangePosition.bind(this)
         this.handleSubmit = this.handleSubmit.bind(this)
-        this.currentAddress = this.props.navigation.getParam('currentAddress', null)
+
+        this.currentAddress = this.props.route?.params?.currentAddress ?? null;
+
 
         this.state = {
             region: {

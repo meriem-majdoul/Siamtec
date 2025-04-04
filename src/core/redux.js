@@ -6,9 +6,11 @@ const dispatchAction = (main, type, value) => {
 }
 
 //App Toast
-export const setAppToast = (main, value) => {
-    dispatchAction(main, "TOAST", value)
-}
+export const setAppToast = (toast) => ({
+    type: 'SET_APP_TOAST',
+    payload: toast,
+  });
+  
 
 //CurrentUser
 export const setStatusBarColor = (main, statusBarProps) => {

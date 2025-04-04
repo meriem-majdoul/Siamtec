@@ -42,8 +42,10 @@ class AddItem extends Component {
     this.refreshProduct = this.refreshProduct.bind(this);
     this.addItem = this.addItem.bind(this);
 
-    this.orderLine = this.props.navigation.getParam('orderLine', null);
-    this.orderKey = this.props.navigation.getParam('orderKey', '');
+    const { route } = this.props;
+
+    this.orderLine = route?.params?.orderLine ?? null;
+    this.orderKey = route?.params?.orderKey ?? '';
     this.isEdit = this.orderLine ? true : false;
 
     this.state = {

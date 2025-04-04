@@ -115,13 +115,17 @@ export default class PdfGeneration extends Component {
   constructor(props) {
     super(props);
     this.savePdfBase64 = this.savePdfBase64.bind(this);
-    this.project = this.props.navigation.getParam('project', '');
-    this.order = this.props.navigation.getParam('order', '');
-    this.docType = this.props.navigation.getParam('docType', ''); //Offre précontractuelle ou Facture (Proposal or Bill)
-    this.isQuote = this.docType === 'Devis' || this.docType === 'Offre précontractuelle'
-    this.DocumentId = this.props.navigation.getParam('DocumentId', '');
-    this.isConversion = this.props.navigation.getParam('isConversion', false); //Conversion from Offre précontractuelle  to Facture
-    this.popCount = this.props.navigation.getParam('popCount', 1); //Conversion from Offre précontractuelle  to Facture
+    const { route } = this.props;
+
+    // Accès aux paramètres via route?.params
+    this.project = route?.params?.project ?? '';
+    this.order = route?.params?.order ?? '';
+    this.docType = route?.params?.docType ?? ''; // Offre précontractuelle ou Facture (Proposal or Bill)
+    
+    this.isQuote = this.docType === 'Devis' || this.docType === 'Offre précontractuelle';
+    this.DocumentId = route?.params?.DocumentId ?? '';
+    this.isConversion = route?.params?.isConversion ?? false; // Conversion from Offre précontractuelle to Facture
+    this.popCount = route?.params?.popCount ?? 1;//Conversion from Offre précontractuelle  to Facture
 
     const masculins = ['Devis', 'Bon de commande', 'Dossier CEE'];
     this.titleText = `Génération ${articles_fr(

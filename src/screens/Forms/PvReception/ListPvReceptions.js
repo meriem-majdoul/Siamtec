@@ -24,13 +24,15 @@ class ListPvReceptions extends React.Component {
         this.renderItem = this.renderItem.bind(this)
         this.onPressItem = this.onPressItem.bind(this)
 
-        this.titleText = this.props.navigation.getParam('titleText', 'PV Réception')
-        this.isRoot = this.props.navigation.getParam('isRoot', true)
+        const { route } = this.props;
 
-        this.project = this.props.navigation.getParam('project', undefined)
-        this.autoGenPdf = this.props.navigation.getParam('autoGenPdf', false) // For pdf generation
-        this.docType = this.props.navigation.getParam('docType', '') // For pdf generation
-        this.popCount = this.props.navigation.getParam('popCount', 1) // For pdf generation
+        // Récupération des paramètres via route?.params
+        this.titleText = route?.params?.titleText ?? 'PV Réception';
+        this.isRoot = route?.params?.isRoot ?? true;
+        this.project = route?.params?.project ?? undefined;
+        this.autoGenPdf = route?.params?.autoGenPdf ?? false;  // Pour la génération de PDF
+        this.docType = route?.params?.docType ?? '';  // Pour la génération de PDF
+        this.popCount = route?.params?.popCount ?? 1;  // Pour la génération de PDF
 
         this.state = {
             index: 0,
@@ -53,21 +55,25 @@ class ListPvReceptions extends React.Component {
     }
 
     onPressItem(item) {
-        if (this.isRoot)
-            this.props.navigation.navigate('CreatePvReception', {
-                PvReceptionId: item.id
-            })
-
-        else this.props.navigation.navigate('CreatePvReception', {
-            PvReceptionId: item.id,
-            autoGenPdf: true,
-            docType: this.docType,
-            project: this.props.navigation.getParam('project', ''),
-            DocumentId: this.props.navigation.getParam('DocumentId', ''),
-            popCount: this.popCount,
-            onGoBack: this.props.navigation.getParam('onGoBack', null)
-        })
+        const { navigation, route } = this.props;
+    
+        if (this.isRoot) {
+            navigation.navigate('CreatePvReception', {
+                PvReceptionId: item.id,
+            });
+        } else {
+            navigation.navigate('CreatePvReception', {
+                PvReceptionId: item.id,
+                autoGenPdf: true,
+                docType: this.docType,
+                project: route.params?.project ?? '',
+                DocumentId: route.params?.DocumentId ?? '',
+                popCount: this.popCount,
+                onGoBack: route.params?.onGoBack ?? null,
+            });
+        }
     }
+    
 
     render() {
         const { index, searchInput, showInput } = this.state

@@ -1,29 +1,30 @@
 //Icons: Back
-const navOptionsBack = ({ navigation }) => ({
-    title: navigation.getParam('title', ''),
-    //Theme options
+const navOptionsBack = ({ route }) => ({
+    title: route.params?.title ?? '', // Utilisation de route.params pour accéder au paramètre
+    // Theme options
     headerTintColor: '#333',
     headerTitleStyle: [theme.customFontMSmedium.title],
     headerStyle: {
         backgroundColor: '#fff',
         elevation: 0
     },
-})
+});
+
 
 //Icons: Back
-const navOptionsBackColor = ({ navigation }) => ({
-    title: navigation.getParam('title', ''),
-    //Theme options
+const navOptionsBackColor = ({ route }) => ({
+    title: route.params?.title ?? '', // Utilisation de route.params pour accéder au paramètre
+    // Theme options
     headerTintColor: '#fff',
     headerTitleStyle: [theme.customFontMSmedium.title],
     headerStyle: {
         backgroundColor: theme.colors.primary,
         elevation: 0
     },
-})
+});
 
 //Icons: Menu
-const navOptionsMenu = ({ navigation }) => ({
+const navOptionsMenu = ({ navigation, route }) => ({
     headerLeft: (
         <View style={{ marginLeft: constants.ScreenWidth * 0.025 }}>
             <Icon
@@ -34,20 +35,21 @@ const navOptionsMenu = ({ navigation }) => ({
             />
         </View>
     ),
-    title: navigation.getParam('title', ''),
-    //Theme options
+    title: route.params?.title ?? '', // Utilisation de route.params pour accéder au paramètre
+    // Theme options
     headerTintColor: '#fff',
     headerTitleStyle: [theme.customFontMSmedium.title],
     headerStyle: {
         backgroundColor: theme.colors.primary,
         elevation: 0
     },
-})
+});
+
 
 //2 Icons: Back + controllers
-const navOptionsBackCheck = ({ navigation }) => ({
-    headerRight: (navigation.getParam('rightmenu', '')),
-    title: navigation.getParam('title', ''),
+const navOptionsBackCheck = ({ route }) => ({
+    headerRight: route.params?.rightmenu || '', // Utilisation de route.params pour récupérer le paramètre 'rightmenu'
+    title: route.params?.title || '', // Utilisation de route.params pour récupérer le paramètre 'title'
     //Theme options
     headerTintColor: '#fff',
     headerTitleStyle: [theme.customFontMSmedium.title],
@@ -55,7 +57,8 @@ const navOptionsBackCheck = ({ navigation }) => ({
         backgroundColor: theme.colors.primary,
         elevation: 0
     },
-})
+});
+
 
 //2 Icons: Cross + Check
 const navOptionsCrossCheck = ({ navigation }) => ({
@@ -70,16 +73,17 @@ const navOptionsCrossCheck = ({ navigation }) => ({
                 name="check"
                 size={24}
                 color='#fff'
-                onPress={navigation.getParam('submit')}
+                onPress={route.params?.submit} // Accès au paramètre via route.params
             />
         </View>
     ),
-    title: navigation.getParam('title', ''),
-    //Theme options
+    title: route.params?.title ?? '',
+    // Theme options
     headerTintColor: '#fff',
     headerTitleStyle: [theme.customFontMSmedium.title],
     headerStyle: {
         backgroundColor: theme.colors.primary,
         elevation: 0
     },
+    
 })

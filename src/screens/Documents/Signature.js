@@ -65,22 +65,22 @@ class Signature extends Component {
   constructor(props) {
     super(props);
     this.currentUser = firebase.auth().currentUser;
-    this.initMode = this.props.navigation.getParam('initMode', '');
+    const { route } = this.props;
 
-    //Storage ref url
-    this.ProjectId = this.props.navigation.getParam('ProjectId', '');
-    this.DocumentId = this.props.navigation.getParam('DocumentId', '');
-    this.DocumentType = this.props.navigation.getParam('DocumentType', '');
-    this.fileName = this.props.navigation.getParam('fileName', '');
-    this.sourceUrl = this.props.navigation.getParam('url', '');
+    // Accès aux paramètres via route?.params
+    this.initMode = route?.params?.initMode ?? '';
+
+    // Storage ref url
+    this.ProjectId = route?.params?.ProjectId ?? '';
+    this.DocumentId = route?.params?.DocumentId ?? '';
+    this.DocumentType = route?.params?.DocumentType ?? '';
+    this.fileName = route?.params?.fileName ?? '';
+    this.sourceUrl = route?.params?.url ?? '';
     this.originalFilePath = `${downloadDir}/Synergys/Documents/${this.fileName}`;
 
-    this.onSignaturePop = this.props.navigation.getParam('onSignaturePop', ''); //Navigation pop times when  signature is done
-    this.attachmentSource = this.props.navigation.getParam(
-      'attachmentSource',
-      '',
-    ); //Navigation pop times when  signature is done
-    this.canSign = this.props.navigation.getParam('canSign', false);
+    this.onSignaturePop = route?.params?.onSignaturePop ?? ''; // Navigation pop times when signature is done
+    this.attachmentSource = route?.params?.attachmentSource ?? ''; // Navigation pop times when signature is done
+    this.canSign = route?.params?.canSign ?? false;
 
     this.onAcceptTerms = this.onAcceptTerms.bind(this);
     this.init = this.init.bind(this);

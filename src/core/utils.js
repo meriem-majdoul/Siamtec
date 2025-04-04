@@ -139,37 +139,7 @@ export const formatSpaces = (str) => {
   return str
 }
 
-// //Get zip code + city
-// export const getAddressDetails = async (lat, lng) => {
 
-//   var addressDetails = {
-//     zipCode: "",
-//     city: ""
-//   }
-
-//   if (lat === "" || lng === "" || lat === null || lng === null)
-//     return addressDetails
-
-//   addressDetails = await Geocoder.from(lat, lng)
-//     .then(json => {
-//       const addressComponent = json.results[0]
-//       const { address_components } = addressComponent
-
-//       for (const component of address_components) {
-//         const isPostalCode = component.types.includes('postal_code')
-//         const isCity = component.types.includes('locality')
-//         if (isPostalCode)
-//           addressDetails.zipCode = component.long_name
-//         else if (isCity)
-//           addressDetails.city = component.long_name
-//       }
-
-//       return addressDetails
-//     })
-//     .catch(e => { throw new Error(e) })
-
-//   return addressDetails
-// }
 
 //We suppose that firstName can be composed of many strings. And lastName only one string.
 export const retrieveFirstAndLastNameFromFullName = (fullName) => {
@@ -419,11 +389,9 @@ export const isEditOffline = (isEdit, isConnected) => {
 }
 
 export const generateId = (suffix, length = 4) => {
-  const options = { length }
-  const uid = new ShortUniqueId(options)
-  const customId = suffix + uid()
-  return customId
-}
+  const uid = new ShortUniqueId({ length }).randomUUID();
+  return suffix + uid;
+};
 
 export const uuidGenerator = async () => {
   const uuid = await UUIDGenerator.getRandomUUID()
@@ -545,7 +513,6 @@ export const saveFile = async (file, fileName, encoding) => {
   }
 }
 
-
 //##INFO UI
 export const setToast = (main, type, toastMessage) => {
   let toastType = ''
@@ -566,7 +533,6 @@ export const load = (main, bool) => {
 export const loadLog = (main, bool, message) => {
   main.setState({ loading: bool, loadingMessage: message })
 }
-
 //##PDF
 export const base64ToArrayBuffer = (base64) => {
   const binary_string = atob(base64);
@@ -689,7 +655,6 @@ export const chunk = (str, n) => {
   return ret
 }
 
-
 const lineBreaker2 = (dataArray, font, size, linesWidths, maxNumberOflLines) => {
 
   let dataArrayFormated = []
@@ -743,7 +708,6 @@ const lineBreaker2 = (dataArray, font, size, linesWidths, maxNumberOflLines) => 
 
   return dataArrayFormated
 }
-
 
 async function mergePDFDocuments(documents) {
 

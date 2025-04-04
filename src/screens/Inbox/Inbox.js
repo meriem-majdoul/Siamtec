@@ -15,7 +15,10 @@ class Inbox extends React.Component {
 
     constructor(props) {
         super(props)
-        this.isRoot = this.props.navigation.getParam('isRoot', true) //#task: set it to true
+        const { route } = this.props;
+
+        // Récupération du paramètre isRoot
+        this.isRoot = route?.params?.isRoot ?? true;  // Définir la valeur par défaut à true
 
         this.state = {
             index: 0,

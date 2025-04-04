@@ -18,12 +18,14 @@ class ListClients extends Component {
     constructor(props) {
         super(props)
         this.getClient = this.getClient.bind(this)
+        const { route } = this.props;
 
-        this.prevScreen = this.props.navigation.getParam('prevScreen', '')
-        this.onGoBack = this.props.navigation.getParam('onGoBack', undefined)
-        this.isRoot = this.props.navigation.getParam('isRoot', true)
-        // this.titleText = this.props.navigation.getParam('titleText', '')
-        this.showButton = this.props.navigation.getParam('showButton', true)
+        // Accès aux paramètres via route?.params
+        this.prevScreen = route?.params?.prevScreen ?? '';
+        this.onGoBack = route?.params?.onGoBack ?? undefined;
+        this.isRoot = route?.params?.isRoot ?? true;
+        // this.titleText = route?.params?.titleText ?? '';  // Si tu veux l'ajouter
+        this.showButton = route?.params?.showButton ?? true;
 
         this.state = {
             index: 0,

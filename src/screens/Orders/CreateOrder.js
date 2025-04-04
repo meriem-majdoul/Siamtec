@@ -115,12 +115,13 @@ class CreateOrder extends Component {
     this.isHighrole = highRoles.includes(this.props.role.id);
 
     //Generate pdf
-    this.autoGenPdf = this.props.navigation.getParam('autoGenPdf', false);
-    this.docType = this.props.navigation.getParam('docType', '');
-    this.popCount = this.props.navigation.getParam('popCount', 1); // For pdf generation
+    const { route } = this.props;
+    this.autoGenPdf = route?.params?.autoGenPdf ?? false;
+    this.docType = route?.params?.docType ?? '';
+    this.popCount = route?.params?.popCount ?? 1; // Pour la génération de PDF
 
-    this.titleText = this.props.navigation.getParam('titleText', '');
-    this.OrderId = this.props.navigation.getParam('OrderId', '');
+    this.titleText = route?.params?.titleText ?? '';
+    this.OrderId = route?.params?.OrderId ?? '';
     this.isEdit = this.OrderId !== '' ? true : false;
     this.OrderId = this.isEdit ? this.OrderId : generateId('GS-CO-');
     const docTypelabel = docType_LabelValueMap(this.docType)
@@ -132,7 +133,7 @@ class CreateOrder extends Component {
         : 'Nouvelle commande';
 
     //Params (order properties)
-    this.project = this.props.navigation.getParam('project', undefined);
+    this.project = route?.params?.project ?? undefined;
 
     this.state = {
       //Screens
@@ -352,18 +353,22 @@ class CreateOrder extends Component {
       );
   }
 
-  //PDF GEN
-  generatePdf(order, docType) {
-    const navParams = {
+// PDF GEN
+generatePdf(order, docType) {
+  const { route } = this.props;
+
+  const navParams = {
       order,
       docType,
       project: this.state.project,
       popCount: this.popCount,
-      DocumentId: this.props.navigation.getParam('DocumentId', ''),
-      onGoBack: this.props.navigation.getParam('onGoBack', null),
-    };
-    this.props.navigation.navigate('PdfGeneration', navParams);
-  }
+      DocumentId: route?.params?.DocumentId ?? '',
+      onGoBack: route?.params?.onGoBack ?? null,
+  };
+
+  this.props.navigation.navigate('PdfGeneration', navParams);
+}
+
 
   //Helpers
   refreshOrderLine(orderLine, overwriteIndex) {

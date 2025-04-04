@@ -60,9 +60,10 @@ let initialState = {
 class CreateMandatSynergys extends Component {
     constructor(props) {
         super(props)
-        this.MandatSynergysId = this.props.navigation.getParam('MandatSynergysId', '')
-        
-        this.project = this.props.navigation.getParam('project', null)
+        const { route } = this.props;
+
+        this.MandatSynergysId = route.params?.MandatSynergysId || '';
+        this.project = route.params?.project ?? null;
         this.clientFullName = this.project ? this.project.client.fullName : ""
         this.clientAddress = this.project ? this.project.address : ""
         this.clientPhone = this.project ? this.project.client.phone : ""

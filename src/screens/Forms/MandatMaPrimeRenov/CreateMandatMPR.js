@@ -42,9 +42,11 @@ let initialState = {
 class CreateMandatMPR extends Component {
     constructor(props) {
         super(props)
-        this.MandatMPRId = this.props.navigation.getParam('MandatMPRId', '')
+        const { route } = this.props;
 
-        this.project = this.props.navigation.getParam('project', null)
+        // Récupération des paramètres via route?.params
+        this.MandatMPRId = route?.params?.MandatMPRId ?? '';
+        this.project = route?.params?.project ?? null;
         const clientFullName = this.project ? this.project.client.fullName : ""
         const clientAddress = this.project ? this.project.address : ""
         const clientPhone = this.project ? this.project.client.phone : ""

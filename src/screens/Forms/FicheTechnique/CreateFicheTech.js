@@ -45,8 +45,11 @@ class CreateFicheTech extends Component {
     constructor(props) {
         super(props)
 
-        this.VisiteTechId = this.props.navigation.getParam('VisiteTechId', '')
-        this.project = this.props.navigation.getParam('project', null)
+        const { route } = this.props;
+
+        // Récupération des paramètres via route?.params
+        this.VisiteTechId = route?.params?.VisiteTechId ?? '';
+        this.project = route?.params?.project ?? null;
 
         //Travaux du projet
         this.workTypes = this.project ? this.project.workTypes : []

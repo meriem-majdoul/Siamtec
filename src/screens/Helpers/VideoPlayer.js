@@ -14,7 +14,10 @@ moment.locale('fr')
 export default class VideoPlayer extends Component {
     constructor(props) {
         super(props)
-        this.videoUrl = this.props.navigation.getParam('videoUrl', '')
+        const { route } = this.props;
+
+        // Récupération du paramètre videoUrl
+        this.videoUrl = route?.params?.videoUrl ?? '';
 
         this.state = {
             toastMessage: '',

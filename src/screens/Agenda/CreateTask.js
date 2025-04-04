@@ -70,16 +70,18 @@ class CreateTask extends Component {
         this.initialState = {}
         this.isInit = true
 
-        this.isProcess = this.props.navigation.getParam('isProcess', false)
+        const { route } = this.props;
 
-        //Params (task properties)
-        this.taskType = this.props.navigation.getParam('taskType', "Normale") //User cannot create this task type if not added dynamiclly (useful for process progression)
-        this.dynamicType = this.props.navigation.getParam('dynamicType', false) //User cannot create this task type if not added dynamiclly (useful for process progression)
-        this.taskType = this.props.navigation.getParam('taskType', undefined) //Not editable
-        this.project = this.props.navigation.getParam('project', undefined)
-
-        this.prevScreen = this.props.navigation.getParam('prevScreen', '')
-        this.TaskId = this.props.navigation.getParam('TaskId', '')
+        this.isProcess = route?.params?.isProcess ?? false;
+        
+        // Params (task properties)
+        this.taskType = route?.params?.taskType ?? "Normale"; // User cannot create this task type if not added dynamically
+        this.dynamicType = route?.params?.dynamicType ?? false; // User cannot create this task type if not added dynamically
+        this.taskType = route?.params?.taskType; // Not editable
+        this.project = route?.params?.project;
+        
+        this.prevScreen = route?.params?.prevScreen ?? "";
+        this.TaskId = route?.params?.TaskId ?? "";
 
         this.isEdit = this.TaskId ? true : false
         this.TaskId = this.isEdit ? this.TaskId : generateId('GS-TC-')
@@ -207,9 +209,9 @@ class CreateTask extends Component {
         const { type } = this.state
         const isComAndVT = this.props.role.id === "com" && type === "Visite technique"
         const isInstallation = type === "Installation"
-        //this.hideAssignedTo = this.props.navigation.getParam('hideAssignedTo', false) || (this.isProcess && (isComAndVT || isInstallation))
+        //this.hideAssignedTo = route?.params?.hideAssignedTo ?? (this.isProcess && (isComAndVT || isInstallation));
         this.hideAssignedTo = false
-        this.hideHours = this.props.navigation.getParam('hideTimeslots', false) || isComAndVT
+        this.hideHours = route?.params?.hideTimeslots ?? isComAndVT;
     }
 
     async initEditMode() {

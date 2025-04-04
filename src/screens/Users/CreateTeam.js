@@ -25,15 +25,18 @@ class CreateTeam extends Component {
         super(props);
         this.validateInputs = this.validateInputs.bind(this)
         this.handleSubmit = this.handleSubmit.bind(this)
-
-        this.teamId = this.props.navigation.getParam('teamId', '')
-        this.isEdit = this.teamId ? true : false
-        this.teamId = this.isEdit ? this.teamId : generateId('GS-EQ-')
-
-        this.existingMembers = this.props.navigation.getParam('existingMembers', '')
-        this.name = this.props.navigation.getParam('nom', '')
-        this.description = this.props.navigation.getParam('description', '')
-        this.title = this.props.navigation.getParam('title', 'Créer une équipe')
+        const { route } = this.props;
+        const { teamId, existingMembers, nom, description, title } = route.params || {};
+    
+        // Vérification si c'est une édition ou une création
+        this.teamId = teamId || generateId('GS-EQ-');
+        this.isEdit = !!teamId; // Si teamId existe, on est en mode édition
+    
+        // Assignation des autres paramètres
+        this.existingMembers = existingMembers || [];
+        this.name = nom || '';
+        this.description = description || '';
+        this.title = title || 'Créer une équipe';
 
         this.state = {
             name: { value: this.name, error: '' },

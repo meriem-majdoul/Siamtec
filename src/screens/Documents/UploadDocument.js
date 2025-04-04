@@ -115,20 +115,23 @@ class UploadDocument extends Component {
         this.isInit = true
 
         //Params
-        this.DocumentId = this.props.navigation.getParam('DocumentId', '')
-        this.isEdit = this.DocumentId !== ''
-        this.DocumentId = this.isEdit ? this.DocumentId : generateId('GS-DOC-')
+        const { route } = this.props;
 
-        //Navigation goBack behaviours
-        this.onSignaturePop = this.props.navigation.getParam('onSignaturePop', 1)
-
-        //Process params
-        this.isProcess = this.props.navigation.getParam('isProcess', false)
-        this.isSignature = this.props.navigation.getParam('isSignature', false)
-        this.dynamicType = this.props.navigation.getParam('dynamicType', false)
-        this.documentType = this.props.navigation.getParam('documentType', undefined) //Not editable
-        this.project = this.props.navigation.getParam('project', undefined) //Not editable
-        this.onGoBack = this.props.navigation.getParam('onGoBack', undefined) //Not editable
+        // Récupération des paramètres via route?.params
+        this.DocumentId = route?.params?.DocumentId ?? '';
+        this.isEdit = this.DocumentId !== '';
+        this.DocumentId = this.isEdit ? this.DocumentId : generateId('GS-DOC-');
+    
+        // Navigation goBack behaviours
+        this.onSignaturePop = route?.params?.onSignaturePop ?? 1;
+    
+        // Process params
+        this.isProcess = route?.params?.isProcess ?? false;
+        this.isSignature = route?.params?.isSignature ?? false;
+        this.dynamicType = route?.params?.dynamicType ?? false;
+        this.documentType = route?.params?.documentType;
+        this.project = route?.params?.project;
+        this.onGoBack = route?.params?.onGoBack;
 
         this.currentRole = this.props.role.id
         this.isHighrole = highRoles.includes(this.currentRole)
