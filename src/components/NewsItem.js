@@ -14,7 +14,7 @@ const NewsItem = ({ title, uri, overview, onPress, style, ...props }) => {
             <Card.Cover source={{ uri }} />
             <Card.Content>
                 <Text style={[theme.customFontMSregular.body, { paddingTop: theme.padding }]}>{title}</Text>
-                {/* <Paragraph>{overview}</Paragraph> */}
+                <Paragraph>{overview}</Paragraph>
             </Card.Content>
         </Card>
     )
