@@ -20,19 +20,16 @@ import { getRoleIdFromValue } from "../../core/utils";
 class UsersManagement extends React.Component {
 
     constructor(props) {
-        super(props)
-        const { route } = this.props;
-        const { isRoot } = route.params || {};  // Accède à `isRoot` dans les paramètres de navigation
+        super(props);
+        this.isRoot = this.props.route?.params?.isRoot ?? true;
     
-        // Utilise la valeur par défaut si `isRoot` n'est pas défini
-        this.isRoot = isRoot !== undefined ? isRoot : true;
-
         this.state = {
             index: 0,
             showInput: false,
             searchInput: ''
-        }
+        };
     }
+    
 
 
     viewProfile(user) {
@@ -56,7 +53,7 @@ class UsersManagement extends React.Component {
 
         return (
             <View style={{ flex: 1 }}>
-                <SearchBar
+                {/* <SearchBar
                     menu={this.isRoot}
                     main={this}
                     title={!this.state.showInput}
@@ -65,7 +62,7 @@ class UsersManagement extends React.Component {
                     handleSearch={() => this.setState({ searchInput: '', showInput: !this.state.showInput })}
                     searchInput={this.state.searchInput}
                     searchUpdated={(searchInput) => this.setState({ searchInput })}
-                />
+                /> */}
 
                 <TabView
                     navigationState={{ index, routes }}

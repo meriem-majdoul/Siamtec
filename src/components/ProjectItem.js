@@ -17,7 +17,8 @@ const ProjectItem = ({ project, onPress, ...props }) => {
 
     const { id, step, name, description, address, state, client, editedAt, editedBy } = project;
     let { processVersion } = project;
-    processVersion = processVersion.replace("version", "") || "";
+    processVersion = (processVersion?.replace("version", "")) || "";
+
 
     const setStateColor = (state) => {
         switch (state) {

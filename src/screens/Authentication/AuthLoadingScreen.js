@@ -175,98 +175,93 @@ class AuthLoadingScreen extends Component {
 
   //Auth Listener & Navigation Rooter
   onAuthStateChanged() {
-
     firebase.auth().onAuthStateChanged(async user => {
-
       try {
-
-        const { type, isConnected } = await NetInfo.fetch()
-
+        const { type, isConnected } = await NetInfo.fetch();
+  
         if (user) {
-          if (isConnected) {
-
-            //0. Get idTokenResult
-            const idTokenResult = await user.getIdTokenResult()
-            console.log(".......", idTokenResult.claims)
-
-            if (!idTokenResult) {
-              throw new Error("ID Token Invalide, veuillez contacter un admin.")
-            }
-
-            console.log("erreur !!....", idTokenResult.claims)
-
-            //1. Set role
-            for (const r of roles) {
-              if (idTokenResult.claims[r.id]) {
-                var role = r
-                var roleValue = role.value
-                console.log("5", roleValue)
-              }
-            }
-
-
-            //2. Set currentUser
-            const currentUser = {
-              id: user.uid,
-              fullName: user.displayName,
-              email: user.email,
-              role: roleValue,
-            }
-
-            //3. Set fcm token
-            const enabled = await this.requestUserPermission() //iOS only
-            await this.configureFcmToken()
-
-            //4. Set role/permissions/currentUser on redux:
-            const action1 = { type: "ROLE", value: role }
-            const action2 = { type: "SET_PERMISSIONS", value: privilleges[roleValue] }
-            const action3 = { type: "CURRENTUSER", value: currentUser }
-
-            this.props.dispatch(action1)
-            this.props.dispatch(action2)
-            this.props.dispatch(action3)
+          if (!isConnected) {
+            throw new Error("Pas de connexion internet.");
           }
-
-
-          //5. Navigation
-          const { initialNotification } = this.state //Notification
-          const { params } = this.props.navigation.state //Dynamic link
-
-          //Dynamic link (email)
+  
+          // 0. Récupérer les claims
+          const idTokenResult = await user.getIdTokenResult();
+  
+          if (!idTokenResult || !idTokenResult.claims) {
+            throw new Error("ID Token invalide, veuillez contacter un administrateur.");
+          }
+  
+          console.log("Claims récupérés :", idTokenResult.claims);
+  
+          // 1. Déterminer le rôle
+          let role = null;
+          let roleValue = null;
+  
+          for (const r of roles) {
+            if (idTokenResult.claims[r.id]) {
+              role = r;
+              roleValue = r.value;
+              console.log("Rôle détecté :", roleValue);
+              break;
+            }
+          }
+  
+          if (!role || !roleValue) {
+            throw new Error("Aucun rôle valide trouvé pour cet utilisateur.");
+          }
+  
+          // 2. Créer l’objet currentUser
+          const currentUser = {
+            id: user.uid,
+            fullName: user.displayName,
+            email: user.email,
+            role: roleValue,
+          };
+  
+          // 3. Notifications push
+          const enabled = await this.requestUserPermission(); // iOS uniquement
+          await this.configureFcmToken();
+  
+          // 4. Dispatch Redux : rôle, permissions et currentUser
+          this.props.dispatch({ type: "ROLE", value: role });
+          this.props.dispatch({ type: "SET_PERMISSIONS", value: privilleges[roleValue] });
+          this.props.dispatch({ type: "CURRENTUSER", value: currentUser });
+  
+          // 5. Navigation
+          const { initialNotification } = this.state;
+          const { params } = this.props.navigation.state || {};
+  
+          let routeName = "App";
+          let routeParams = {};
+  
           if (params && params.routeName) {
-            var { routeName, ...routeParams } = params
+            routeName = params.routeName;
+            routeParams = { ...params };
+            delete routeParams.routeName;
+          } else if (initialNotification) {
+            routeName = this.state.routeName;
+            routeParams = this.state.routeParams || {};
+          } else {
+            const isExternal = ["Client", "Équipe technique", "Bureau d'étude"].includes(roleValue);
+            routeName = isExternal ? "ProjectsStack" : "App";
           }
-
-          //Dynamic link (notification)
-          else if (initialNotification) {
-            var { routeName, routeParams } = this.state
-          }
-
-          //Default
-          else {
-            const isExternalEntity = roleValue === 'Client' || roleValue === "Équipe technique" || roleValue === "Bureau d'étude"
-            var routeName = isExternalEntity ? "ProjectsStack" : "App"
-            var routeParams = {}
-          }
+  
+          this.props.navigation.navigate(routeName, routeParams);
+        } else {
+          // Utilisateur non connecté
+          resetState(this);
+          const network = { type, isConnected };
+          setNetwork(this, network);
+          this.props.navigation.navigate("Guest");
         }
-
-        else {
-          resetState(this)
-          const network = { type, isConnected }
-          setNetwork(this, network)
-          var routeName = "Guest"
-          var routeParams = {}
-        }
-
-        this.props.navigation.navigate(routeName, routeParams)
+  
+      } catch (e) {
+        console.log("Erreur onAuthStateChanged :", e);
+        displayError({ message: e.message });
       }
-
-      catch (e) {
-        displayError({ message: e.message })
-      }
-
-    })
+    });
   }
+  
 
   //FCM token configuration
   async requestUserPermission() {

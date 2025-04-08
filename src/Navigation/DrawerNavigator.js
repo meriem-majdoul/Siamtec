@@ -17,7 +17,12 @@ const Tab = createBottomTabNavigator();
 const AppDrawer = () => (
   <Drawer.Navigator
     drawerContent={(props) => <DrawerMenu {...props} />}
-    screenOptions={{ drawerLockMode: 'locked-closed', drawerStyle: { width: constants.ScreenWidth * 0.83 } }}
+    screenOptions={{ drawerLockMode: 'locked-closed', drawerStyle: { width: constants.ScreenWidth * 0.83 },
+    drawerLabelStyle: {
+      color: 'blue', 
+      fontSize: 16, 
+    },
+    drawerInactiveTintColor: 'gray', }}
   >
     <Drawer.Screen name="App" component={AppStack} />
   </Drawer.Navigator>

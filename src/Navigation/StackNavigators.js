@@ -1,4 +1,3 @@
-import React from 'react';
 import { Text } from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -88,9 +87,9 @@ import ViewNews from '../screens/News/ViewNews';
 // Others
 import Chat from '../screens/Requests/Chat';
 import Profile from '../screens/Profile/Profile';
-// import EditEmail from '../screens/Profile/EditEmail';
-// import EditRole from '../screens/Profile/EditRole';
-//import Address from '../screens/Profile/Address';
+import EditEmail from '../screens/Profile/EditEmail';
+import EditRole from '../screens/Profile/EditRole';
+import Address from '../screens/Profile/Address';
 import VideoPlayer from '../screens/Helpers/VideoPlayer';
 
 import { constants, isTablet } from '../core/constants';
@@ -118,9 +117,9 @@ const DashboardStack = () => (
 const ProfileStack = () => (
   <Stack.Navigator screenOptions={hideHeader}>
     <Stack.Screen name="Profile" component={Profile} />
-    {/* <Stack.Screen name="EditEmail" component={EditEmail} />
-    <Stack.Screen name="EditRole" component={EditRole} /> */}
-    {/* <Stack.Screen name="Address" component={Address} /> */}
+    <Stack.Screen name="EditEmail" component={EditEmail} />
+    <Stack.Screen name="EditRole" component={EditRole} /> 
+    <Stack.Screen name="Address" component={Address} />
   </Stack.Navigator>
 );
 
@@ -276,14 +275,12 @@ const GuestTab = () => (
 
         return <CustomIcon icon={iconName} size={size} color={color} />;
       },
-    })}
-    screenOptions={{
-      activeTintColor: theme.colors.primary,
-      inactiveTintColor: theme.colors.gray_dark,
-      labelStyle: {
+      tabBarActiveTintColor: theme.colors.primary,
+      tabBarInactiveTintColor: theme.colors.gray_dark,
+      tabBarLabelStyle: {
         fontSize: isTablet ? 22 : undefined,
       },
-    }}
+    })}
     initialRouteName="Auth"
   >
     <Tab.Screen name="Simulation" component={SimulatorStackGuest} />

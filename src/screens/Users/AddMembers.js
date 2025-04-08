@@ -23,7 +23,7 @@ import { load } from "../../core/utils"
 
 import SearchInput, { createFilter } from 'react-native-search-filter'
 import { handleFirestoreError } from '../../core/exceptions'
-import { faUsers, faUser } from 'react-native-vector-icons/FontAwesome5'
+// import { faUsers, faUser } from 'react-native-vector-icons/FontAwesome5'
 
 const KEYS_TO_FILTERS = ['id', 'fullName', 'nom', 'prenom', 'denom']
 
@@ -230,7 +230,8 @@ export default class AddMembers extends Component {
                         style={{ paddingHorizontal: theme.padding, paddingTop: theme.padding }}
                         contentContainerStyle={{ paddingBottom: constants.ScreenHeight * 0.12 }} />
                     :
-                    <EmptyList icon={faUser} header='Aucun membre disponible' description='Veuillez libérer des membres de leurs équipes, ou ajoutez de nouveaux utilisateurs.' />
+                    <EmptyList  header='Aucun membre disponible' description='Veuillez libérer des membres de leurs équipes, ou ajoutez de nouveaux utilisateurs.' />
+                    // <EmptyList icon={faUser} header='Aucun membre disponible' description='Veuillez libérer des membres de leurs équipes, ou ajoutez de nouveaux utilisateurs.' />
                 }
                 <Toast message={error} onDismiss={() => this.setState({ error: '' })} containerStyle={{ bottom: constants.ScreenHeight * 0.05 }} />
 

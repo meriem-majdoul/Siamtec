@@ -152,34 +152,34 @@ class ListDocuments extends Component {
         let { type, state, project, filterOpened } = this.state
         let { searchInput, showInput } = this.state
 
-        return (
-            <SearchBar
-                menu={this.isRoot}
-                main={this}
-                title={!showInput}
-                titleText='Documents'
-                placeholder='Rechercher un document'
-                showBar={showInput}
-                handleSearch={() => this.setState({ searchInput: '', showInput: !showInput })}
-                searchInput={searchInput}
-                searchUpdated={(searchInput) => this.setState({ searchInput })}
-                filterComponent={
-                    <Filter
-                        isAppBar
-                        main={this}
-                        opened={filterOpened}
-                        toggleFilter={() => toggleFilter(this)}
-                        setFilter={(field, value) => setFilter(this, field, value)}
-                        resetFilter={() => this.setState({ type: '', state: '', project: { id: '', name: '' } })}
-                        options={[
-                            { id: 0, type: 'picker', title: "Type", values: types, value: type, field: 'type' },
-                            { id: 1, type: 'picker', title: "État", values: states, value: state, field: 'state' },
-                            { id: 2, type: 'screen', title: "Projet", value: project.name, field: 'project', screen: 'ListProjects', titleText: 'Filtre par projet' },
-                        ]}
-                    />
-                }
-            />
-        )
+        // return (
+        //     <SearchBar
+        //         menu={this.isRoot}
+        //         main={this}
+        //         title={!showInput}
+        //         titleText='Documents'
+        //         placeholder='Rechercher un document'
+        //         showBar={showInput}
+        //         handleSearch={() => this.setState({ searchInput: '', showInput: !showInput })}
+        //         searchInput={searchInput}
+        //         searchUpdated={(searchInput) => this.setState({ searchInput })}
+        //         filterComponent={
+        //             <Filter
+        //                 isAppBar
+        //                 main={this}
+        //                 opened={filterOpened}
+        //                 toggleFilter={() => toggleFilter(this)}
+        //                 setFilter={(field, value) => setFilter(this, field, value)}
+        //                 resetFilter={() => this.setState({ type: '', state: '', project: { id: '', name: '' } })}
+        //                 options={[
+        //                     { id: 0, type: 'picker', title: "Type", values: types, value: type, field: 'type' },
+        //                     { id: 1, type: 'picker', title: "État", values: states, value: state, field: 'state' },
+        //                     { id: 2, type: 'screen', title: "Projet", value: project.name, field: 'project', screen: 'ListProjects', titleText: 'Filtre par projet' },
+        //                 ]}
+        //             />
+        //         }
+        //     />
+        // )
     }
 
     render() {

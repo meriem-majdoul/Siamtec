@@ -13,7 +13,7 @@ import CustomIcon from './CustomIcon'
 const Menu = ({ options, functions, menuTrigger, ...props }) => (
   <PopupMenu>
     <MenuTrigger style={{ padding: 5 }}>
-      {menuTrigger || <CustomIcon icon={faEllipsisV} style={{ paddingLeft: 4 }} />}
+      {menuTrigger || <CustomIcon  style={{ paddingLeft: 4 }} />}
     </MenuTrigger>
 
     <MenuOptions>

@@ -132,34 +132,34 @@ class ListOrders extends Component {
         let { state, project, client, filterOpened } = this.state
         let { searchInput, showInput } = this.state
 
-        return (
-            <SearchBar
-                menu={this.isRoot}
-                main={this}
-                title={!this.state.showInput}
-                titleText={this.titleText}
-                placeholder='Rechercher une commande'
-                showBar={showInput}
-                handleSearch={() => this.setState({ searchInput: '', showInput: !showInput })}
-                searchInput={searchInput}
-                searchUpdated={(searchInput) => this.setState({ searchInput })}
-                filterComponent={
-                    <Filter
-                        isAppBar
-                        main={this}
-                        opened={filterOpened}
-                        toggleFilter={() => toggleFilter(this)}
-                        setFilter={(field, value) => setFilter(this, field, value)}
-                        resetFilter={() => this.setState({ state: '', client: { id: '', fullName: '' }, project: { id: '', name: '' } })}
-                        options={[
-                            { id: 1, type: 'picker', title: "État", values: states, value: state, field: 'state' },
-                            // { id: 2, type: 'screen', title: "Client", value: client.fullName, field: 'client', screen: 'ListClients', titleText: 'Filtre par client' },
-                            { id: 2, type: 'screen', title: "Projet", value: project.name, field: 'project', screen: 'ListProjects', titleText: 'Filtre par projet', disabled: this.project },
-                        ]}
-                    />
-                }
-            />
-        )
+        // return (
+        //     <SearchBar
+        //         menu={this.isRoot}
+        //         main={this}
+        //         title={!this.state.showInput}
+        //         titleText={this.titleText}
+        //         placeholder='Rechercher une commande'
+        //         showBar={showInput}
+        //         handleSearch={() => this.setState({ searchInput: '', showInput: !showInput })}
+        //         searchInput={searchInput}
+        //         searchUpdated={(searchInput) => this.setState({ searchInput })}
+        //         filterComponent={
+        //             <Filter
+        //                 isAppBar
+        //                 main={this}
+        //                 opened={filterOpened}
+        //                 toggleFilter={() => toggleFilter(this)}
+        //                 setFilter={(field, value) => setFilter(this, field, value)}
+        //                 resetFilter={() => this.setState({ state: '', client: { id: '', fullName: '' }, project: { id: '', name: '' } })}
+        //                 options={[
+        //                     { id: 1, type: 'picker', title: "État", values: states, value: state, field: 'state' },
+        //                     // { id: 2, type: 'screen', title: "Client", value: client.fullName, field: 'client', screen: 'ListClients', titleText: 'Filtre par client' },
+        //                     { id: 2, type: 'screen', title: "Projet", value: project.name, field: 'project', screen: 'ListProjects', titleText: 'Filtre par projet', disabled: this.project },
+        //                 ]}
+        //             />
+        //         }
+        //     />
+        // )
     }
 
     render() {

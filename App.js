@@ -29,6 +29,7 @@ import NetworkStatus from './src/NetworkStatus';
 import RootController from './src/Navigation/DrawerNavigator';
 import { NavigationContainer } from '@react-navigation/native';
 
+
 import firebase from './src/firebase';
 import Store from './src/Store/configureStore';
 import { fontsConfig } from './fontConfig';

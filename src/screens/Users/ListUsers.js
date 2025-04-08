@@ -26,7 +26,7 @@ const ListUsers = (props) => {
   const [loading, setLoading] = useState(true)
   const [refreshing, setRefreshing] = useState(false)
 
-  const myAlert = myAlert.bind(this)
+  // const myAlert = myAlert.bind(this)
   
   useEffect(() => {
     fetchUsers()

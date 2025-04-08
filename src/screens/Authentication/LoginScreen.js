@@ -176,6 +176,7 @@ const styles = StyleSheet.create({
     marginVertical: 0,
     backgroundColor: theme.colors.background,
     color: theme.colors.gray_dark,
+    text: '#000000',
   },
   forgotPassword: {
     width: "100%",

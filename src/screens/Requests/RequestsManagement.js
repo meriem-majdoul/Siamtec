@@ -49,7 +49,7 @@ class RequestsManagement extends React.Component {
 
         return (
             <View style={{ flex: 1 }}>
-                <SearchBar
+                {/* <SearchBar
                     menu={this.isRoot}
                     main={this}
                     title={!showInput}
@@ -59,7 +59,7 @@ class RequestsManagement extends React.Component {
                     handleSearch={() => this.setState({ searchInput: '', showInput: !this.state.showInput })}
                     searchInput={this.state.searchInput}
                     searchUpdated={(searchInput) => this.setState({ searchInput })}
-                />
+                /> */}
 
                 {showTabs ?
                     <TabView

@@ -195,7 +195,8 @@ const styles = StyleSheet.create({
   menuContainer: {
     flex: 0.87,
     justifyContent: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: "#000",
+    color:'#000',
   },
   footerContainer: {
     flex: 1,

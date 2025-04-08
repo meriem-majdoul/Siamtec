@@ -3,11 +3,11 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, Alert, FlatList, ScrollView } from 'react-native';
 import { List, Card, Title, Paragraph, IconButton } from 'react-native-paper';
-import { faPen, faUserPlus } from 'react-native-vector-icons/FontAwesome5'
+// import { faPen, faUserPlus } from 'react-native-vector-icons/FontAwesome5'
 
 import { db } from '../../firebase'
 import * as theme from '../../core/theme';
-import { constants } from '../../core/constants';
+import { constants } from '../../core/constants';                                                                     
 import { checkPlural, getRoleIdFromValue, load, myAlert, setToast } from '../../core/utils';
 
 // import { deleteTeam } from '../../api/firestore-api';
@@ -17,7 +17,7 @@ import ListItem from '../../components/ListItem';
 import EmptyList from '../../components/EmptyList';
 import Loading from '../../components/Loading';
 import Toast from '../../components/Toast';
-import CustomIcon from '../../components/CustomIcon';
+// import CustomIcon from '../../components/CustomIcon';
 import MyFAB from '../../components/MyFAB';
 
 export default class ViewTeam extends Component {
@@ -97,16 +97,16 @@ export default class ViewTeam extends Component {
                         title={member.isPro ? member.denom : member.prenom + ' ' + member.nom}
                         description={member.role}
                         iconRightName='dots-horizontal'
-                        left={props => {
-                            if (member.role === 'Admin')
-                                return <List.Icon {...props} icon="account-cog" />
+                        // left={props => {
+                        //     if (member.role === 'Admin')
+                        //         return <List.Icon {...props} icon="account-cog" />
 
-                            else if (member.isPro)
-                                return <List.Icon {...props} icon="briefcase" />
+                        //     else if (member.isPro)
+                        //         return <List.Icon {...props} icon="briefcase" />
 
-                            else if (!member.isPro && member.role !== 'Admin')
-                                return <List.Icon {...props} icon="account" />
-                        }}
+                        //     else if (!member.isPro && member.role !== 'Admin')
+                        //         return <List.Icon {...props} icon="account" />
+                        // }}
                         menu
                         options={[
                             { id: 0, title: 'Voir le profil' },
@@ -194,7 +194,7 @@ export default class ViewTeam extends Component {
                         <Card.Content>
                             <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
                                 <Title style={theme.customFontMSbold.header}>Informations générales</Title>
-                                <CustomIcon icon={faPen} color={theme.colors.primary} />
+                                {/* <CustomIcon icon={faPen} color={theme.colors.primary} /> */}
                             </View>
                             <Paragraph style={theme.customFontMSsemibold.body}>{this.state.team.name}</Paragraph>
                             <Paragraph style={theme.customFontMSregular.body}>{this.state.team.description}</Paragraph>

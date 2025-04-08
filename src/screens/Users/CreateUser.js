@@ -23,7 +23,7 @@ import * as theme from "../../core/theme";
 import { constants, errorMessages, roles as allRoles } from "../../core/constants";
 import { nameValidator, emailValidator, passwordValidator, generateId, updateField, setToast, load, setAddress, displayError } from "../../core/utils"
 import { checkEmailExistance } from "../../api/auth-api";
-import { faMagic } from "react-native-vector-icons/FontAwesome5";
+// import { faMagic } from "react-native-vector-icons/FontAwesome5";
 import { validateUserInputs, formatNewUser, createUser } from "../../api/firestore-api";
 import { setAppToast } from "../../core/redux";
 
@@ -324,16 +324,16 @@ class CreateUser extends Component {
                 errorText={password.error}
                 autoCapitalize="none"
                 // secureTextEntry={!password.show}
-                right={
-                  <TextInput.Icon
-                    name={<CustomIcon icon={faMagic} color={theme.colors.inpuIcon} />}
-                    color={theme.colors.secondary}
-                    onPress={() => {
-                      const password = { value: generateId('', 6), error: "" }
-                      this.setState({ password })
-                    }}
-                  />
-                }
+                // right={
+                //   <TextInput.Icon
+                //     name={<CustomIcon icon={faMagic} color={theme.colors.inpuIcon} />}
+                //     color={theme.colors.secondary}
+                //     onPress={() => {
+                //       const password = { value: generateId('', 6), error: "" }
+                //       this.setState({ password })
+                //     }}
+                //   />
+                // }
                 editable={false}
               />
 

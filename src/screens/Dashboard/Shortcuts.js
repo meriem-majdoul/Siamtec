@@ -14,7 +14,7 @@ import { constants, isTablet, ScreenWidth } from '../../core/constants'
 import { load } from '../../core/utils'
 
 import { ModalForm } from '../../components/ModalOptions'
-
+ 
 import { Appbar, CustomIcon, Section, EmptyList, NotificationItem, TaskItem, Loading } from '../../components'
 //import crashlytics, { firebase } from '@react-native-firebase/crashlytics';
 
@@ -107,32 +107,37 @@ class Shortcuts extends Component {
         return shortcuts
     }
 
+    handleSelectElement = (element, index) => {
+    const { screen, params } = element.navigation;
+    const { navigation } = this.props; // Récupérer navigation des props
+
+    navigation.navigate('UsersManagementStack', {
+        screen: screen,
+        params: params, // Inclure les paramètres si nécessaires
+    });
+};
+
 
     render() {
         const { loading } = this.state
         // const { isConnected } = this.props.network
 
-        const elementSize = isTablet ?
-            ScreenWidth * 0.29
-            :
+        const elementSize = isTablet ? 
+            ScreenWidth * 0.29 
+            : 
             ScreenWidth * 0.435
-
-        const handleSelectElement = (element, index) => {
-            const { screen, params } = element.navigation
-            this.props.navigation.navigate(screen, params)
-        }
 
         return (
             <View style={styles.container}>
-                {loading ?
-                    <Loading />
-                    :
+                {loading ? 
+                    <Loading /> 
+                    : 
                     <View style={{ paddingVertical: 5 }}>
                         <ModalForm
                             elements={this.shortcuts}
                             elementSize={elementSize}
                             model='Element2'
-                            handleSelectElement={handleSelectElement}
+                            handleSelectElement={this.handleSelectElement}  // Utilisation de la méthode
                             autoValidation={true}
                             isReview={false}
                         />
@@ -154,8 +159,6 @@ const mapStateToProps = (state) => {
 
 export default connect(mapStateToProps)(Shortcuts)
 
-
-
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -165,4 +168,3 @@ const styles = StyleSheet.create({
         backgroundColor: theme.colors.white
     },
 });
-
