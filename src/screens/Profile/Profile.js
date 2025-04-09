@@ -793,6 +793,8 @@ class Profile extends Component {
                                                             autoCapitalize="none"
                                                             editable={false}
                                                             disabled
+                                                            
+                                                            
                                                         />
 
                                                         <MyInput
@@ -1004,6 +1006,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: theme.colors.background,
+        color:"#000",
     },
     avatar: {
         width: isTablet ? 167 : 130,

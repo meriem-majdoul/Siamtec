@@ -51,6 +51,7 @@ const paperTheme = {
     disabled: theme.colors.gray_medium,
     placeholder: theme.colors.gray_dark,
     backdrop: theme.colors.white,
+    input: theme.colors.gray_dark,
   },
 };
 

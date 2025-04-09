@@ -35,7 +35,7 @@ class Dashboard extends Component {
     render() {
         return (
             <View style={styles.container}>
-                <Appbar menu title titleText="Accueil" />
+                <Appbar menu title="Accueil" titleText="Accueil" />
                 <DashboardMenu navigation={this.props.navigation} />
             </View>
         )
@@ -58,7 +58,9 @@ export default connect(mapStateToProps)(Dashboard)
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: theme.colors.white
+        backgroundColor: theme.colors.white,
+        color:theme.colors.gray_dark,
     }
+    
 })
 

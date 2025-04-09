@@ -150,6 +150,7 @@ const styles = StyleSheet.create({
         marginLeft: 7,
         borderBottomWidth: StyleSheet.hairlineWidth,
         borderBottomColor: theme.colors.gray_extraLight,
+        
     },
     containerStyle: {
         minWidth: 200,

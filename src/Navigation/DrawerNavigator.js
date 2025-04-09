@@ -32,8 +32,9 @@ const MyApp = () => (
   <NavigationContainer>
     <Stack.Navigator initialRouteName="AuthLoading">
       <Stack.Screen name="AuthLoading" component={AuthLoadingScreen} options={{ headerShown: false }} />
-      <Stack.Screen name="App" component={AppDrawer} options={{ headerShown: false }} />
+      <Stack.Screen name="App" component={AppDrawer}  options={{ headerShown: false }}/>
       <Stack.Screen name="Guest" component={GuestTab} options={{ headerShown: false }} />
+      <Stack.Screen name="AppStack" component={AppStack} options={{ headerShown: false }} />
     </Stack.Navigator>
   </NavigationContainer>
 );

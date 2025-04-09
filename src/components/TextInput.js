@@ -16,11 +16,12 @@ const TextInput = ({ errorText, disabled, whiteTheme, link, maxLength, right, ..
         underlineColor={theme.colors.gray_extraLight}
         maxLength={maxLength}
         right={right}
+       
         theme={
           {
             colors: {
-              placeholder: theme.colors.secondary,
-              text: (disabled && !props.editable) ? theme.colors.placeholder : link ? 'green' : theme.colors.gray_dark,
+              onSurface: "#000", 
+              text: (disabled && !props.editable) ? "#000" : link ? 'green' : theme.colors.gray_dark,
               error: theme.colors.error
             },
           }
@@ -37,6 +38,7 @@ const styles = StyleSheet.create({
   container: {
     width: "100%",
     paddingTop: 5,
+    color:"#F1F2F7",
     // marginBottom: 10,
     // backgroundColor: 'yellow'
   },
@@ -50,10 +52,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 0,
     textAlign: 'auto',
     height: isTablet ? 85 : undefined,
-    //    backgroundColor: 'pink'
+    backgroundColor: 'pink',
     textAlignVertical: "center",
     paddingTop: 0,
-    paddingBottom: 0
+    placeholder:"#aaa",
+    color:"#F1F2F7",
+    paddingBottom: 0,
+    primary:"#000"
 
   },
   error: {

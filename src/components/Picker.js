@@ -124,6 +124,7 @@ const styles = StyleSheet.create({
         color: theme.colors.gray_dark,
         //height: 40,
         //alignItems: 'flex-start',
+        backgroundColor:'gray',
     },
     error: {
         paddingHorizontal: 4,

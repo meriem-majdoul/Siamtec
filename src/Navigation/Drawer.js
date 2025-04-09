@@ -195,7 +195,7 @@ const styles = StyleSheet.create({
   menuContainer: {
     flex: 0.87,
     justifyContent: 'center',
-    backgroundColor: "#000",
+    backgroundColor: theme.colors.background,
     color:'#000',
   },
   footerContainer: {
@@ -223,5 +223,6 @@ const styles = StyleSheet.create({
   },
   menuText: {
     marginHorizontal: constants.ScreenWidth * 0.05,
+    color:'#000',
   },
 });

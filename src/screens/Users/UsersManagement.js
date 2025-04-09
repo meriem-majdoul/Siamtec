@@ -35,7 +35,7 @@ class UsersManagement extends React.Component {
     viewProfile(user) {
         const { id, role } = user
         const roleId = getRoleIdFromValue(role)
-        this.props.navigation.navigate('Profile', { user: { id, roleId } })
+        this.props.navigation.navigate('ProfileStack','Profile', { user: { id, roleId } })
     }
 
     render() {

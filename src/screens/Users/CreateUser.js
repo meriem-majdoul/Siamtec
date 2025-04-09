@@ -217,6 +217,7 @@ class CreateUser extends Component {
                 value={this.userId}
                 editable={false}
                 disabled
+              
               />
 
               {roles &&
