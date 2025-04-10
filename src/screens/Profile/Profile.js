@@ -53,10 +53,7 @@ class Profile extends Component {
         this.refreshMonthlyGoals = this.refreshMonthlyGoals.bind(this)
         this.refreshAddress = refreshAddress.bind(this)
         this.setAddress = setAddress.bind(this)
-
         this.isRoot = this.props.route?.params?.isRoot ?? false;
-
-
         //role
         this.roleId = this.props.role.id;
         this.userParam = this.props.route?.params?.user || { id: firebase.auth().currentUser.uid, roleId: this.roleId }; //default: current user
@@ -70,11 +67,9 @@ class Profile extends Component {
         this.project = this.props.route?.params?.project || null;
         this.initialState = {};
 
-
         if (this.userParam.roleId === 'com') {
             this.queries = analyticsQueriesBasedOnRole('com', this.userParam.id)
         }
-
         this.state = {
             id: this.userParam.id, //Not editable
             isPro: false,
@@ -120,7 +115,6 @@ class Profile extends Component {
             deleted: false
         }
     }
-
     //##task: add Billing tab
 
     componentWillUnmount() {

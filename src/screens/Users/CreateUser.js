@@ -231,6 +231,7 @@ class CreateUser extends Component {
                   onValueChange={(role) => this.setState({ role })}
                   title="Type d'utilisateur *"
                   elements={roles}
+              
                 />
               }
 

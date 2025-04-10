@@ -25,20 +25,20 @@ const CustomAppbar = ({
 
     if (white) {
         return (
-            <Appbar.Header style={[{ backgroundColor: '#ffffff', elevation: 0 }, style]}>
+            <Appbar.Header style={[{ backgroundColor: '#ffffff', elevation: 0, color: '#000' }, style]}>
                 <AppBarIcon icon="arrow-left" onPress={customBackHandler || navBack} />
-                {title && <Appbar.Content title={titleText} titleStyle={theme.customFontMSregular.h3} />}
+                {title && <Appbar.Content title={titleText}  titleStyle={theme.customFontMSregular.h3} />}
             </Appbar.Header>
         );
     }
 
     return (
-        <Appbar.Header style={[{ backgroundColor: appBarColor || theme.colors.appBar, elevation: 0 }, style]}>
+        <Appbar.Header style={[{ backgroundColor: appBarColor || theme.colors.appBar, elevation: 0 , color: '#000'}, style]}>
             {back && <AppBarIcon icon="arrow-left" onPress={customBackHandler || navBack} iconColor={iconsColor || theme.colors.secondary} />}
             {close && <AppBarIcon icon="times" onPress={customBackHandler || navBack} iconColor={iconsColor || theme.colors.secondary} />}
             {menu && <AppBarIcon icon="bars" onPress={showMenu} />}
             {searchBar}
-            {title && <Appbar.Content title={titleText} titleStyle={[theme.customFontMSregular.header, { marginLeft: back || close || menu ? 0 : theme.padding, letterSpacing: 1 }]} />}
+            {title && <Appbar.Content title={titleText} titleStyle={[theme.customFontMSregular.header, { color: '#000', marginLeft: back || close || menu ? 0 : theme.padding, letterSpacing: 1 }]} />}
             {refresh && <AppBarIcon icon="redo" onPress={handleRefresh} />}
             {search && <AppBarIcon icon="search" onPress={handleSearch} />}
             {attach && <AppBarIcon icon="paperclip" onPress={handleAttachement} />}

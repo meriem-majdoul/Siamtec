@@ -24,7 +24,7 @@ const shortcutsModel = {
         value: '',
         icon: faClipboardUser,
         colors: { primary: '#ff6968', secondary: '#fe8280' },
-        navigation: { screen: 'CreateClient', params: { prevScreen: 'Dashboard', isProspect: true } }
+        navigation: { Drawer:'ClientsManagementStack',screen: 'CreateClient', params: { prevScreen: 'Dashboard', isProspect: true } }
     },
     // createClient: {
     //     label: 'Nouveau client',
@@ -41,35 +41,35 @@ const shortcutsModel = {
         value: '',
         icon: faUserAlt,
         colors: { primary: '#ff8f61', secondary: '#fea879' },
-        navigation: { screen: 'CreateUser', params: { prevScreen: 'Dashboard' } }
+        navigation: { Drawer:'UsersManagementStack',screen: 'CreateUser', params: { prevScreen: 'Dashboard' } }
     },
     createProject: {
         label: 'Nouveau projet',
         value: '',
         icon: faConstruction,
         colors: { primary: '#2ac3ff', secondary: '#38d3ff' },
-        navigation: { screen: 'ClientsManagement', params: { isRoot: false, prevScreen: 'Dashboard' } }
+        navigation: { Drawer:'ProjectsStack',screen: 'CreateProject', params: { isRoot: false, prevScreen: 'Dashboard' } }
     },
     createTask: {
         label: 'Nouvelle tâche',
         value: '',
         icon: faCalendarAlt,
         colors: { primary: '#5a65ff', secondary: '#717bff' },
-        navigation: { screen: 'CreateTask', params: { prevScreen: 'Dashboard' } }
+        navigation: { Drawer:'AgendaStack',screen: 'CreateTask', params: { prevScreen: 'Dashboard' } }
     },
     createDocument: {
         label: 'Nouveau document',
         value: '',
         icon: faFolder,
         colors: { primary: '#96da45', secondary: '#ace558' },
-        navigation: { screen: 'UploadDocument', params: { prevScreen: 'Dashboard' } }
+        navigation: { Drawer:'DocumentsStack',screen: 'UploadDocument', params: { prevScreen: 'Dashboard' } }
     },
     createSimulation: {
         label: 'Nouvelle simulation',
         value: '',
         icon: faVials,
         colors: { primary: theme.colors.primary, secondary: '#35E999' },
-        navigation: { screen: 'CreateSimulation', params: { prevScreen: 'Dashboard' } }
+        navigation: { Drawer:'SimulatorStack',screen: 'CreateSimulation', params: { prevScreen: 'Dashboard' } }
     }
 }
 
@@ -108,10 +108,10 @@ class Shortcuts extends Component {
     }
 
     handleSelectElement = (element, index) => {
-    const { screen, params } = element.navigation;
+    const { Drawer,screen, params } = element.navigation;
     const { navigation } = this.props; // Récupérer navigation des props
 
-    navigation.navigate('UsersManagementStack', {
+    navigation.navigate(Drawer, {
         screen: screen,
         params: params, // Inclure les paramètres si nécessaires
     });

@@ -27,6 +27,7 @@ const MyPicker = ({ containerStyle, style, pickerContainerStyle, elements, title
         return (
             <Picker
                 //style={[styles.input]}
+                style={{color:'#000'}}
                 enabled={enabled}
                 dropdownIconColor={theme.colors.gray_dark}
                 {...props}
@@ -119,6 +120,7 @@ const styles = StyleSheet.create({
     pickerContainer: {
         borderBottomWidth: Platform.OS === "android" ? StyleSheet.hairlineWidth * 3 : 0,
         borderBottomColor: theme.colors.gray_extraLight,
+      
     },
     input: {
         color: theme.colors.gray_dark,

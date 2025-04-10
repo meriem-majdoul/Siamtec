@@ -56,9 +56,9 @@ const ProjectItem = ({ project, onPress, ...props }) => {
             <Card.Content style={styles.content}>
                 <View style={{ flex: 1, alignSelf: 'flex-start' }}>
                     <Title style={[theme.customFontMSmedium.body]} numberOfLines={1}>{name}</Title>
-                    <View style={{ alignItems: 'flex-start', marginBottom: 20 }}>
-                        {address.description !== '' && <Text numberOfLines={2} style={theme.customFontMSregular.caption}>à {address.description}</Text>}
-                        <Text numberOfLines={1} style={theme.customFontMSregular.caption}>chez <Text style={[theme.customFontMSregular.caption, { textDecorationLine: 'underline' }]} onPress={viewClientProfile}>{client.fullName}</Text></Text>
+                    <View style={{ alignItems: 'flex-start', marginBottom: 20}}>
+                        {address.description !== '' && <Text numberOfLines={2} style={theme.customFontMSregular.caption,{color:'#000'}}>à {address.description}</Text>}
+                        <Text numberOfLines={1} style={theme.customFontMSregular.caption,{color:'#000'}}>chez <Text style={[theme.customFontMSregular.caption, { textDecorationLine: 'underline' }]} onPress={viewClientProfile}>{client.fullName}</Text></Text>
                     </View>
                     <View style={styles.footer}>
                         <Text style={[theme.customFontMSregular.caption, { color: theme.colors.gray_dark }]}>{lastUpdate}</Text>
@@ -98,7 +98,10 @@ const styles = StyleSheet.create({
     content: {
         flex: 1,
         flexDirection: 'row',
-        paddingTop: isTablet ? 15 : 5
+        paddingTop: isTablet ? 15 : 5,
+        backgroundColor:'#ffffff',
+        borderBottomLeftRadius: 10, 
+        borderBottomRightRadius: 10, 
     },
     stepContainer: {
         height: isTablet ? 49 : 33,

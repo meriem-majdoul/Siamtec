@@ -7,8 +7,8 @@ import * as theme from '../core/theme';
 const RadioButton = ({ firstChoice, secondChoice, checked, onPress1, onPress2, textRight = false, isRow = true, style, ...props }) => {
     // const [checked, setChecked] = React.useState('first');
 
-    const firstTitle = () => <Text style={theme.customFontMSregular.body} onPress={onPress1}>{firstChoice.title}</Text>
-    const secondTitle = () => <Text style={theme.customFontMSregular.body} onPress={onPress2}>{secondChoice.title}</Text>
+    const firstTitle = () => <Text style={theme.customFontMSregular.body,{color:"#8D8D8D"}} onPress={onPress1}>{firstChoice.title}</Text>
+    const secondTitle = () => <Text style={theme.customFontMSregular.body,{color:"#8D8D8D"}} onPress={onPress2}>{secondChoice.title}</Text>
     
     return (
         <View style={[isRow ? styles.container : {}, style]}>
@@ -18,7 +18,8 @@ const RadioButton = ({ firstChoice, secondChoice, checked, onPress1, onPress2, t
                     value={firstChoice.value}
                     status={checked === 'first' ? 'checked' : 'unchecked'}
                     onPress={onPress1}
-                    color={theme.colors.primary} />
+                    color={theme.colors.primary}
+                     />
                 {textRight && firstTitle()}
             </View>
 
@@ -44,7 +45,7 @@ const styles = StyleSheet.create({
     row: {
         flexDirection: 'row',
         alignItems: 'center',
-    },
+    }
 })
 
 

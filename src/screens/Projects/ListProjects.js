@@ -70,10 +70,10 @@ class ListProjects extends Component {
     
 
 
-    componentWillUnmount() {
-        if (this.willFocusSubscription)
-            this.willFocusSubscription.remove()
-    }
+    // componentWillUnmount() {
+    //     if (this.willFocusSubscription)
+    //         this.willFocusSubscription.remove()
+    // }
 
     async componentDidMount() {
         await this.fetchProjects()
@@ -216,7 +216,7 @@ class ListProjects extends Component {
                                 numColumns={columnCount}
                                 key={columnCount}
                                 columnWrapperStyle={columnCount > 1 && styles.columnWrapperStyle}
-                                contentContainerStyle={{ paddingBottom: constants.ScreenHeight * 0.12, paddingHorizontal: theme.padding, paddingTop: 10 }}
+                                contentContainerStyle={{ paddingBottom: constants.ScreenHeight * 0.12, paddingHorizontal: theme.padding, paddingTop: 10  }}
                                 refreshControl={
                                     <RefreshControl
                                         refreshing={this.state.refreshing}
@@ -240,11 +240,13 @@ class ListProjects extends Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: theme.colors.background
+        // backgroundColor: theme.colors.background,
+        backgroundColor: 'pink'
     },
     columnWrapperStyle: {
         justifyContent: 'space-between',
-        zIndex: 10
+        zIndex: 10,
+
     },
     invisibleItem: { //Same shape of ProjectItem2
         width: constants.ScreenWidth * 0.24,

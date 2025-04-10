@@ -21,6 +21,7 @@ const TextInput = ({ errorText, disabled, whiteTheme, link, maxLength, right, ..
           {
             colors: {
               onSurface: "#000", 
+              onSurfaceVariant:"#8D8D8D",
               text: (disabled && !props.editable) ? "#000" : link ? 'green' : theme.colors.gray_dark,
               error: theme.colors.error
             },
@@ -52,7 +53,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 0,
     textAlign: 'auto',
     height: isTablet ? 85 : undefined,
-    backgroundColor: 'pink',
+    // backgroundColor: 'pink',
     textAlignVertical: "center",
     paddingTop: 0,
     placeholder:"#aaa",

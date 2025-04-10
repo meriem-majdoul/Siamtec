@@ -8,7 +8,7 @@ import moment from 'moment';
 import 'moment/locale/fr'
 moment.locale('fr')
 
-import OfflineBar from './components/OffLineBar'
+// import OfflineBar from './components/OffLineBar'
 
 import { setNetwork } from './core/redux'
 
@@ -45,7 +45,7 @@ class NetworkStatus extends Component {
 
         return (
             <View style={styles.container}>
-                {!isConnected && <OfflineBar />}
+                {/* {!isConnected && <OfflineBar />} */}
                 {this.props.children}
             </View>
         )
