@@ -85,10 +85,10 @@ const App = () => {
             <MyStatusBar>
               {/* {progressView}
               <Text>{this.state.syncMessage || ""}</Text> */}
-              <NetworkStatus>
+              {/* <NetworkStatus> */}
                 <RootController />
                 <AppToast />
-              </NetworkStatus>
+              {/* </NetworkStatus> */}
             </MyStatusBar>
           </MenuProvider>
         </PaperProvider>

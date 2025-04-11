@@ -150,6 +150,7 @@ class StepsForm extends Component {
         const darkStatusBarStyle = {
           backgroundColor: '#003250',
           barStyle: 'light-content',
+         
         };
         setStatusBarColor(this, darkStatusBarStyle);
       },
@@ -160,6 +161,7 @@ class StepsForm extends Component {
         const lightStatusBarStyle = {
           backgroundColor: '#fff',
           barStyle: 'dark-content',
+          
         };
         setStatusBarColor(this, lightStatusBarStyle);
       },
