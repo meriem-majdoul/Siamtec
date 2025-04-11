@@ -336,7 +336,7 @@ class CreateUser extends Component {
                 //     }}
                 //   />
                 // }
-                // editable={false}
+                editable={false}
               />
 
               <Toast

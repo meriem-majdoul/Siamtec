@@ -1,6 +1,8 @@
 import React from 'react';
+import { Text, View } from 'react-native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
 
 import AuthLoadingScreen from '../screens/Authentication/AuthLoadingScreen';
@@ -10,21 +12,17 @@ import { constants } from '../core/constants';
 
 const Drawer = createDrawerNavigator();
 const Stack = createNativeStackNavigator();
+const Tab = createBottomTabNavigator();
 
 const AppDrawer = () => (
   <Drawer.Navigator
     drawerContent={(props) => <DrawerMenu {...props} />}
-    screenOptions={{
-      drawerStyle: {
-        width: constants.ScreenWidth * 0.83,
-      },
-      drawerLabelStyle: {
-        color: 'blue',
-        fontSize: 16,
-      },
-      drawerInactiveTintColor: 'gray',
-      swipeEnabled: false, // Désactive le swipe pour ouvrir le tiroir
-    }}
+    screenOptions={{ drawerLockMode: 'locked-closed', drawerStyle: { width: constants.ScreenWidth * 0.83 },
+    drawerLabelStyle: {
+      color: 'blue', 
+      fontSize: 16, 
+    },
+    drawerInactiveTintColor: 'gray', }}
   >
     <Drawer.Screen name="App" component={AppStack} />
   </Drawer.Navigator>
@@ -32,16 +30,11 @@ const AppDrawer = () => (
 
 const MyApp = () => (
   <NavigationContainer>
-    <Stack.Navigator
-      initialRouteName="AuthLoading"
-      screenOptions={{
-        headerShown: false, // Appliquer par défaut
-      }}
-    >
-      <Stack.Screen name="AuthLoading" component={AuthLoadingScreen} />
-      <Stack.Screen name="App" component={AppDrawer} />
-      <Stack.Screen name="Guest" component={GuestTab} />
-      <Stack.Screen name="AppStack" component={AppStack} />
+    <Stack.Navigator initialRouteName="AuthLoading">
+      <Stack.Screen name="AuthLoading" component={AuthLoadingScreen} options={{ headerShown: false }} />
+      <Stack.Screen name="App" component={AppDrawer}  options={{ headerShown: false }}/>
+      <Stack.Screen name="Guest" component={GuestTab} options={{ headerShown: false }} />
+      <Stack.Screen name="AppStack" component={AppStack} options={{ headerShown: false }} />
     </Stack.Navigator>
   </NavigationContainer>
 );

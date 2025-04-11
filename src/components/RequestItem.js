@@ -49,7 +49,7 @@ const RequestItem = ({ request, requestType, chatId, ...props }) => {
     };
 
     return (
-        <Card style={{ backgroundColor:'white', margin: 5, paddingVertical: isTablet ? 15 : 0 }} onPress={() => navigation.navigate(nextScreen, params)}>
+        <Card style={{ margin: 5, paddingVertical: isTablet ? 15 : 0 }} onPress={() => navigation.navigate(nextScreen, params)}>
             <Card.Content style={{ flex: 1, flexDirection: 'row' }}>
                 <View style={{ flex: 1 }}>
                     <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>

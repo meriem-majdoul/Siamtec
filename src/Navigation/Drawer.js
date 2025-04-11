@@ -28,7 +28,7 @@ const menuPrivilleges = {
 const menuItems = [
   { id: 'home', name: 'Accueil', icon: faHomeLgAlt, color: theme.colors.miHome, navScreen: 'DashboardStack' },
   { id: 'inbox', name: 'Boite de réception', icon: faInbox, color: '#EF6C00', navScreen: 'InboxStack' },
-  { id: 'projects', name: 'Projets', icon: faConstruction, color: '#3F51B5', navScreen: 'ListProjects' },
+  { id: 'projects', name: 'Projets', icon: faConstruction, color: '#3F51B5', navScreen: 'ProjectsStack' },
   { id: 'planning', name: 'Planning', icon: faCalendarAlt, color: theme.colors.miPlanning, navScreen: 'AgendaStack' },
   { id: 'users', name: 'Utilisateurs', icon: faUserFriends, color: theme.colors.miUsers, navScreen: 'UsersManagementStack' },
   { id: 'clients', name: 'Clients/Prospects', icon: faAddressCard, color: theme.colors.miClients, navScreen: 'ClientsManagementStack' },
@@ -158,9 +158,7 @@ const DrawerMenu = ({ role, currentUser }) => {
   const navigateToScreen = (screenName, screenParams) => {
     navigation.navigate(screenName, screenParams);
   };
-  const navigateToScreen2 = (drawer,{screenName, screenParams}) => {
-    navigation.navigate(screenName, screenParams);
-  };
+
   return (
     <View style={styles.container}>
       {currentUser && renderHeader()}
