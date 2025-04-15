@@ -291,23 +291,25 @@ const GuestTab = () => (
 );
 
 const AppStack = () => (
-  <Drawer.Navigator initialRouteName="DashboardStack">
-    <Drawer.Screen name="DashboardStack" component={DashboardStack} />
-    <Drawer.Screen name="ProjectsStack" component={ProjectsStack} />
-    <Drawer.Screen name="ProfileStack" component={ProfileStack} />
-    <Drawer.Screen name="UsersManagementStack" component={UsersManagementStack} />
-    <Drawer.Screen name="ClientsManagementStack" component={ClientsManagementStack} />
-    <Drawer.Screen name="RequestsManagementStack" component={RequestsManagementStack} />
-    <Drawer.Screen name="InboxStack" component={InboxStack} />
-    <Drawer.Screen name="AgendaStack" component={AgendaStack} />
-    <Drawer.Screen name="DocumentsStack" component={DocumentsStack} />
-    <Drawer.Screen name="OrdersStack" component={OrdersStack} />
-    <Drawer.Screen name="SimulatorStack" component={SimulatorStack} />
-    <Drawer.Screen name="MandatMPRStack" component={MandatMPRStack} />
-    <Drawer.Screen name="MandatSynergysStack" component={MandatSynergysStack} />
-    <Drawer.Screen name="NewsStack" component={NewsStack} />
-    <Drawer.Screen name="SettingsStack" component={SettingsStack} />
-  </Drawer.Navigator>
+  <Stack.Navigator   screenOptions={{
+    headerShown: false, // Masque les en-têtes pour tous les écrans
+  }} initialRouteName="DashboardStack">
+    <Stack.Screen name="DashboardStack" component={DashboardStack} />
+    <Stack.Screen name="ProjectsStack" component={ProjectsStack} />
+    <Stack.Screen name="ProfileStack" component={ProfileStack} />
+    <Stack.Screen name="UsersManagementStack" component={UsersManagementStack} />
+    <Stack.Screen name="ClientsManagementStack" component={ClientsManagementStack} />
+    <Stack.Screen name="RequestsManagementStack" component={RequestsManagementStack} />
+    <Stack.Screen name="InboxStack" component={InboxStack} />
+    <Stack.Screen name="AgendaStack" component={AgendaStack} />
+    <Stack.Screen name="DocumentsStack" component={DocumentsStack} />
+    <Stack.Screen name="OrdersStack" component={OrdersStack} />
+    <Stack.Screen name="SimulatorStack" component={SimulatorStack} />
+    <Stack.Screen name="MandatMPRStack" component={MandatMPRStack} />
+    <Stack.Screen name="MandatSynergysStack" component={MandatSynergysStack}  />
+    <Stack.Screen name="NewsStack" component={NewsStack} />
+    <Stack.Screen name="SettingsStack" component={SettingsStack} />
+  </Stack.Navigator>
 );
 
 export { GuestTab, AppStack };

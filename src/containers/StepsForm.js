@@ -150,6 +150,7 @@ class StepsForm extends Component {
         const darkStatusBarStyle = {
           backgroundColor: '#003250',
           barStyle: 'light-content',
+         
         };
         setStatusBarColor(this, darkStatusBarStyle);
       },
@@ -160,6 +161,7 @@ class StepsForm extends Component {
         const lightStatusBarStyle = {
           backgroundColor: '#fff',
           barStyle: 'dark-content',
+          
         };
         setStatusBarColor(this, lightStatusBarStyle);
       },
@@ -1524,7 +1526,7 @@ class StepsForm extends Component {
             }}
           />
 
-          <EEBPack packs={packs} isPV={isPVElligible} colorCat={colorCat} />
+          {/* <EEBPack packs={packs} isPV={isPVElligible} colorCat={colorCat} /> */}
 
           <View style={{ flex: 1, padding: theme.padding }}>
             {/* <Text style={[theme.customFontMSsemibold.body, { opacity: 0.8, marginBottom: 16 }]}>{message3}</Text>
@@ -1690,34 +1692,35 @@ class StepsForm extends Component {
   async savePdfBase64(pdfBase64, isProcess) {
     const now = moment().format('DD-MM-YYYY HHmmss');
     const pdfName = `Scan généré ${now}.pdf`;
-    if (!isProcess)
-      this.setState({
-        toastMessageModal: 'Début du téléchargement...',
-        toastTypeModal: 'info',
-      });
-
+  
     saveFile(pdfBase64, pdfName, 'base64')
       .then((destPath) => {
         if (isProcess) {
           const { params } = this.props.route;
-if (params?.onGoBack) {
-  params.onGoBack({
-    pdfBase64Path: destPath,
-    pdfName,
-    DocumentId: this.DocumentId,
-  });
-} else {
-  console.log('onGoBack function is not defined in params');
-}
-
+          if (params?.onGoBack) {
+            params.onGoBack({
+              pdfBase64Path: destPath,
+              pdfName,
+              DocumentId: this.DocumentId,
+            });
+          } else {
+            console.log('onGoBack function is not defined in params');
+          }
+  
           this.props.navigation.pop(this.popCount);
-        } else FileViewer.open(destPath, { showOpenWithDialog: true });
+        } else {
+          // Mettre à jour l'état pour afficher le fichier PDF
+          this.setState({ pdfPath: destPath });
+        }
       })
       .catch((e) => {
-        Alert.alert('', e.message);
+        Alert.alert('Erreur', e.message);
         return;
       });
   }
+  
+  
+  
 
   renderBottomRightButton(title, onPress) {
     return (

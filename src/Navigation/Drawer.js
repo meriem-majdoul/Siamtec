@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View, FlatList } from 'react-native';
 import { faHomeLgAlt, faInbox, faConstruction, faCalendarAlt, faUserFriends, faAddressCard, faTicketAlt, faFileInvoice, faFolder, faNewspaper, faSignOutAlt, faVials, faCogs } from 'react-native-vector-icons/FontAwesome5';
@@ -26,19 +25,19 @@ const menuPrivilleges = {
 };
 
 const menuItems = [
-  { id: 'home', name: 'Accueil', icon: faHomeLgAlt, color: theme.colors.miHome, navScreen: 'DashboardStack' },
-  { id: 'inbox', name: 'Boite de réception', icon: faInbox, color: '#EF6C00', navScreen: 'InboxStack' },
-  { id: 'projects', name: 'Projets', icon: faConstruction, color: '#3F51B5', navScreen: 'ProjectsStack' },
-  { id: 'planning', name: 'Planning', icon: faCalendarAlt, color: theme.colors.miPlanning, navScreen: 'AgendaStack' },
-  { id: 'users', name: 'Utilisateurs', icon: faUserFriends, color: theme.colors.miUsers, navScreen: 'UsersManagementStack' },
-  { id: 'clients', name: 'Clients/Prospects', icon: faAddressCard, color: theme.colors.miClients, navScreen: 'ClientsManagementStack' },
-  { id: 'requests', name: 'Demandes', icon: faTicketAlt, color: theme.colors.miRequests, navScreen: 'RequestsManagementStack' },
-  { id: 'orders', name: 'Commandes', icon: faFileInvoice, color: theme.colors.miOrders, navScreen: 'OrdersStack' },
-  { id: 'documents', name: 'Documents', icon: faFolder, color: theme.colors.miDocuments, navScreen: 'DocumentsStack' },
-  { id: 'simulator', name: 'Simulateur', icon: faVials, color: theme.colors.miSimulator, navScreen: 'SimulatorStack' },
-  { id: 'news', name: 'Actualités', icon: faNewspaper, color: theme.colors.miNews, navScreen: 'NewsStack' },
-  { id: 'settings', name: 'Paramètres', icon: faCogs, color: theme.colors.miSettings, navScreen: 'SettingsStack' },
-  { id: 'logout', name: 'Se déconnecter', icon: faSignOutAlt, color: theme.colors.miLogout, navScreen: 'LoginScreen' },
+  { id: 'home', name: 'Accueil', icon: faHomeLgAlt, color: theme.colors.miHome, navScreen: 'Dashboard', drawer: 'DashboardStack' },
+  { id: 'inbox', name: 'Boite de réception', icon: faInbox, color: '#EF6C00', navScreen: 'Inbox', drawer: 'InboxStack' },
+  { id: 'projects', name: 'Projets', icon: faConstruction, color: '#3F51B5', navScreen: 'ListProjects', drawer: 'ProjectsStack' },
+  { id: 'planning', name: 'Planning', icon: faCalendarAlt, color: theme.colors.miPlanning, navScreen: 'Agenda', drawer: 'AgendaStack' },
+  { id: 'users', name: 'Utilisateurs', icon: faUserFriends, color: theme.colors.miUsers, navScreen: 'UsersManagement', drawer: 'UsersManagementStack' },
+  { id: 'clients', name: 'Clients/Prospects', icon: faAddressCard, color: theme.colors.miClients, navScreen: 'ClientsManagement', drawer: 'ClientsManagementStack' },
+  { id: 'requests', name: 'Demandes', icon: faTicketAlt, color: theme.colors.miRequests, navScreen: 'RequestsManagement', drawer: 'RequestsManagementStack' },
+  { id: 'orders', name: 'Commandes', icon: faFileInvoice, color: theme.colors.miOrders, navScreen: 'ListOrders', drawer: 'OrdersStack' },
+  { id: 'documents', name: 'Documents', icon: faFolder, color: theme.colors.miDocuments, navScreen: 'ListDocuments', drawer: 'DocumentsStack' },
+  { id: 'simulator', name: 'Simulateur', icon: faVials, color: theme.colors.miSimulator, navScreen: 'ListSimulations', drawer: 'SimulatorStack' },
+  { id: 'news', name: 'Actualités', icon: faNewspaper, color: theme.colors.miNews, navScreen: 'ListNews', drawer: 'NewsStack' },
+  { id: 'settings', name: 'Paramètres', icon: faCogs, color: theme.colors.miSettings, navScreen: 'Settings', drawer: 'SettingsStack' },
+  { id: 'logout', name: 'Se déconnecter', icon: faSignOutAlt, color: theme.colors.miLogout, navScreen: 'LoginScreen', drawer: 'AuthStack' },
 ];
 
 const DrawerMenu = ({ role, currentUser }) => {
@@ -79,7 +78,7 @@ const DrawerMenu = ({ role, currentUser }) => {
     const showChatIcon = !role.isClient && (role.isHighRole || role.isLowRole); // Employees only
 
     return (
-      <TouchableOpacity style={styles.headerContainer} onPress={() => navigateToScreen('Profile', { isRoot: false })}>
+      <TouchableOpacity style={styles.headerContainer} onPress={() => navigateToScreen2('ProfileStack','Profile', { isRoot: false })}>
         <View style={{ flex: 0.22, justifyContent: 'center', alignItems: 'center' }}>
           <AvatarText size={isTablet ? 90 : 45} label={currentUser.fullName.charAt(0)} labelStyle={{ color: theme.colors.white }} />
         </View>
@@ -132,7 +131,7 @@ const DrawerMenu = ({ role, currentUser }) => {
       );
     } else {
       return (
-        <TouchableOpacity onPress={() => navigateToScreen(item.navScreen)} style={styles.menuItem}>
+        <TouchableOpacity onPress={() => navigateToScreen2(item.drawer, item.navScreen)} style={styles.menuItem}>
           <CustomIcon icon={item.icon} color={item.color} />
           {item.id === 'inbox' ? (
             <View style={{ flexDirection: 'row', alignItems: "center" }}>
@@ -157,6 +156,10 @@ const DrawerMenu = ({ role, currentUser }) => {
 
   const navigateToScreen = (screenName, screenParams) => {
     navigation.navigate(screenName, screenParams);
+  };
+
+  const navigateToScreen2 = (drawer, screenName, screenParams) => {
+    navigation.navigate(drawer, { screenName, screenParams });
   };
 
   return (

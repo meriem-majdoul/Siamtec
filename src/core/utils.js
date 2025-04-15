@@ -503,6 +503,7 @@ export const setDestPath = async (fileName) => {
 
 export const saveFile = async (file, fileName, encoding) => {
   try {
+    console.log('test')
     const destPath = await setDestPath(fileName)
     await RNFS.writeFile(destPath, file, encoding)
     return destPath
