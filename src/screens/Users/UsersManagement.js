@@ -33,14 +33,19 @@ class UsersManagement extends React.Component {
 
 
     viewProfile(user) {
-        const { id, role } = user
-        const roleId = getRoleIdFromValue(role)
-        this.props.navigation.navigate('ProfileStack','Profile', { user: { id, roleId } })
+        const { id, role } = user;
+        const roleId = getRoleIdFromValue(role);
+    
+        // Navigation vers le profil avec les paramètres de l'utilisateur
+        this.props.navigation.navigate('ProfileStack', {
+            screen: 'Profile', // Spécifiez l'écran cible si vous utilisez un navigator imbriqué
+            params: { user: { id, roleId } }, // Passez les paramètres ici
+        });
     }
+    
 
     render() {
-        const queryUsers = db.collection('Users').where('deleted', '==', false)
-
+        const queryUsers = db.collection('Users').where('deleted', '==', false);
         const routes = [
             { key: 'first', title: 'UTILISATEURS' },
             { key: 'second', title: 'ÉQUIPES' },
@@ -66,7 +71,7 @@ class UsersManagement extends React.Component {
 
                 <TabView
                     navigationState={{ index, routes }}
-                    onIndexChange={(index) => this.setState({ index, searchInput: '', showInput: false })}
+                    onIndexChange={(index) => this.setState({ index, searchInput: 'test', showInput: false })}
                     icon1={faUser}
                     icon2={faUsers}
                     Tab1={
@@ -79,7 +84,7 @@ class UsersManagement extends React.Component {
                             permissions={permissionsUsers}
                             query={queryUsers}
                             showButton
-                            onPress={this.viewProfile.bind(this)}
+                            onPress={(user) => this.viewProfile(user)}
                             emptyListHeader='Aucun utilisateur'
                             emptyListDesc='Gérez les utilisateurs. Appuyez sur le boutton, en bas à droite, pour en créer un nouveau.'
                         />}

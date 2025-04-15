@@ -55,10 +55,7 @@ class Profile extends Component {
         this.setAddress = setAddress.bind(this)
         this.isRoot = this.props.route?.params?.isRoot ?? false;
         //role
-        this.roleId = this.props.role.id;
-        console.log('props: ' + JSON.stringify(this.props.route, null, 2));
-
-        
+        this.roleId = this.props.role.id;        
         
         this.userParam = this.props.route?.params?.user || { id: firebase.auth().currentUser.uid, roleId: this.roleId }; //default: current user
         this.isProfileOwner = this.userParam.id === firebase.auth().currentUser.uid;
