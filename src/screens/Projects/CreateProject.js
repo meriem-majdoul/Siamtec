@@ -137,18 +137,18 @@ class CreateProject extends Component {
         this.isCurrentHighRole = highRoles.includes(this.props.role.id)
         this.isClient = this.props.role.id === 'client'
 
-       // Accès aux paramètres de navigation avec React Navigation v5/v6
-this.projectParam = this.props.route?.params?.project || '';
-this.ProjectId = this.props.route?.params?.ProjectId || this.projectParam.id || "";
-this.isEdit = this.ProjectId !== "";
-this.ProjectId = this.isEdit ? this.ProjectId : generateId('GS-PR-');
-this.title = this.isEdit ? 'Modifier le projet' : 'Nouveau projet';
+        // Accès aux paramètres de navigation avec React Navigation v5/v6
+        this.projectParam = this.props.route?.params?.project || '';
+        this.ProjectId = this.props.route?.params?.ProjectId || this.projectParam.id || "";
+        this.isEdit = this.ProjectId !== "";
+        this.ProjectId = this.isEdit ? this.ProjectId : generateId('GS-PR-');
+        this.title = this.isEdit ? 'Modifier le projet' : 'Nouveau projet';
 
-// Pré-remplir les champs
-this.client = this.props.route?.params?.client || { id: '', fullName: '', email: '', role: '', phone: "" };
-this.address = this.props.route?.params?.address || { description: '', place_id: '', marker: { latitude: '', longitude: '' }, error: '' };
-this.comContact = this.props.role.id === "com" && !this.isEdit ? this.props.currentUser : { id: '', fullName: '', email: '', role: '' };
-this.sections = this.props.route?.params?.sections || null; // Exemple : { info: { projectWorkTypes: true } }
+        // Pré-remplir les champs
+        this.client = this.props.route?.params?.client || { id: '', fullName: '', email: '', role: '', phone: "" };
+        this.address = this.props.route?.params?.address || { description: '', place_id: '', marker: { latitude: '', longitude: '' }, error: '' };
+        this.comContact = this.props.role.id === "com" && !this.isEdit ? this.props.currentUser : { id: '', fullName: '', email: '', role: '' };
+        this.sections = this.props.route?.params?.sections || null; // Exemple : { info: { projectWorkTypes: true } }
 
         //onSubmit, Go back if goBackConditions elements are not null
         const goBackConditions = [this.sections]
@@ -441,14 +441,14 @@ this.sections = this.props.route?.params?.sections || null; // Exemple : { info:
         //const techContactError = isStepTech ? nameValidator(techContact.id, '"Contact technique"') : ''
         const addressError = '' //Address optional on offline mode
         //var addressError = isConnected ? nameValidator(address.description, '"Emplacemment"') : '' //Address optional on offline mode
-        const hasPriorTechVisitError = this.isEdit ? "" : hasPriorTechVisit ? "" : "La création d'une visite technique préalable est obligatoire."
+       // const hasPriorTechVisitError = this.isEdit ? "" : hasPriorTechVisit ? "" : "La création d'une visite technique préalable est obligatoire."
 
-        if (clientError || nameError || addressError || comContactError || hasPriorTechVisitError) {
+        if (clientError || nameError || addressError || comContactError) {
             client.error = clientError
             comContact.error = comContactError
             // techContact.error = techContactError
             address.error = addressError
-            this.setState({ client, nameError, address, comContact, techContact, hasPriorTechVisitError, loading: false })
+            this.setState({ client, nameError, address, comContact, techContact, loading: false })
             const toast = { message: errorMessages.invalidFields, type: "error" }
             setAppToast(this, toast)
             return false
@@ -629,8 +629,15 @@ this.sections = this.props.route?.params?.sections || null; // Exemple : { info:
                     //         isRoot: false
                     //     }
                     // )
-                    this.props.navigation.navigate('ClientsManagementStack',('ListClients',
-                        {onGoBack: this.refreshClient,prevScreen: 'CreateProject',isRoot: false}))
+
+                    this.props.navigation.navigate('ClientsManagementStack', {
+                        screen: 'ListClients',
+                        params: {
+                            onGoBack: this.refreshClient,
+                            prevScreen: 'CreateProject',
+                            isRoot: false
+                        }
+                    })
                 }}
                 label='Client concerné *'
                 value={client.fullName}
@@ -659,13 +666,20 @@ this.sections = this.props.route?.params?.sections || null; // Exemple : { info:
         const { comContact } = this.state
         return (
             <ItemPicker
-                onPress={() => navigateToScreen(this, 'ListEmployees', {
-                    onGoBack: this.refreshComContact,
-                    prevScreen: 'CreateProject',
-                    isRoot: false,
-                    titleText: 'Choisir un commercial',
-                    query: db.collection('Users').where('role', '==', "Chargé d'affaires").where('deleted', '==', false)
-                })
+                onPress={() =>
+                    this.props.navigation.navigate('AgendaStack', {
+                        screen: 'ListEmployees',
+                        params: {
+                            onGoBack: this.refreshComContact,
+                            prevScreen: 'CreateProject',
+                            isRoot: false,
+                            titleText: 'Choisir un commercial',
+                            queryFilters: [
+                                { filter: 'role', operation: '==', value: "Chargé d'affaires" },
+                                { filter: 'deleted', operation: '==', value: false }
+                            ]
+                        }
+                    })
                 }
                 label="Contact commercial *"
                 value={comContact.fullName || ''}
@@ -1410,9 +1424,9 @@ this.sections = this.props.route?.params?.sections || null; // Exemple : { info:
                     this.renderDocumentsSection(sections["documents"].fields, sections["documents"].isExpanded, canWrite)
                 }
 
-                {showTasksSection &&
+                {/* {showTasksSection &&
                     this.renderTasksSection(sections["tasks"].fields, sections["tasks"].isExpanded, showTasksSection)
-                }
+                } */}
 
                 {sections["billing"].show &&
                     this.renderBillingSection(sections["billing"].fields, sections["billing"].isExpanded, bill, canWrite)
@@ -1577,29 +1591,29 @@ const styles = StyleSheet.create({
 })
 
 
-    //Delete Images from STORAGE //#RULE: NEVER DELETE FILES
-    // async deleteAttachments(allImages, currentImage) {
-    //     let urls = []
+//Delete Images from STORAGE //#RULE: NEVER DELETE FILES
+// async deleteAttachments(allImages, currentImage) {
+//     let urls = []
 
-    //     if (allImages)
-    //         urls = this.initialState.attachments.map(image => image.downloadURL) //Delete all images
+//     if (allImages)
+//         urls = this.initialState.attachments.map(image => image.downloadURL) //Delete all images
 
-    //     else
-    //         urls = [this.initialState.attachments[currentImage].downloadURL] //Delete single image
+//     else
+//         urls = [this.initialState.attachments[currentImage].downloadURL] //Delete single image
 
-    //     const promises = []
-    //     for (let i = 0; i < urls.length; i++) {
-    //         const deletion = firebase.storage().refFromURL(urls[i]).delete()
-    //         promises.push(deletion)
-    //     }
+//     const promises = []
+//     for (let i = 0; i < urls.length; i++) {
+//         const deletion = firebase.storage().refFromURL(urls[i]).delete()
+//         promises.push(deletion)
+//     }
 
-    //     await Promise.all(promises)
-    //         .then(() => console.log('All images were deleted from STORAGE'))
-    //         .catch(e => Alert.alert(e))
+//     await Promise.all(promises)
+//         .then(() => console.log('All images were deleted from STORAGE'))
+//         .catch(e => Alert.alert(e))
 
-    //     if (allImages)
-    //         this.props.navigation.goBack()
+//     if (allImages)
+//         this.props.navigation.goBack()
 
-    //     // else
-    //     //     this.fetchProject()
-    // }
+//     // else
+//     //     this.fetchProject()
+// }

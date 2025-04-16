@@ -78,9 +78,13 @@ const DrawerMenu = ({ role, currentUser }) => {
     const showChatIcon = !role.isClient && (role.isHighRole || role.isLowRole); // Employees only
 
     return (
-      <TouchableOpacity style={styles.headerContainer} onPress={() => navigateToScreen2('ProfileStack','Profile', { isRoot: false })}>
+      <TouchableOpacity style={styles.headerContainer} onPress={() => navigateToScreen2('ProfileStack', 'Profile', { isRoot: false })}>
         <View style={{ flex: 0.22, justifyContent: 'center', alignItems: 'center' }}>
-          <AvatarText size={isTablet ? 90 : 45} label={currentUser.fullName.charAt(0)} labelStyle={{ color: theme.colors.white }} />
+          <AvatarText
+            size={isTablet ? 90 : 45}
+            label={currentUser && currentUser.fullName ? currentUser.fullName.charAt(0) : '?'}
+            labelStyle={{ color: theme.colors.white }}
+          />
         </View>
 
         <View style={{ flex: 0.78, flexDirection: 'row', marginBottom: 3 }}>
@@ -199,7 +203,7 @@ const styles = StyleSheet.create({
     flex: 0.87,
     justifyContent: 'center',
     backgroundColor: theme.colors.background,
-    color:'#000',
+    color: '#000',
   },
   footerContainer: {
     flex: 1,
@@ -226,6 +230,6 @@ const styles = StyleSheet.create({
   },
   menuText: {
     marginHorizontal: constants.ScreenWidth * 0.05,
-    color:'#000',
+    color: '#000',
   },
 });

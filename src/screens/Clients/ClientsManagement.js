@@ -28,7 +28,7 @@ class ClientsManagement extends React.Component {
             showInput: false,
             searchInput: ''
         }
-    }
+    } 
 
 
     viewProfile(user) {

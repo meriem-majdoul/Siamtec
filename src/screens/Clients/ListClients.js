@@ -5,7 +5,7 @@ import { List, FAB } from 'react-native-paper'
 import { TouchableOpacity } from 'react-native'
 import { connect } from 'react-redux'
 
-import SearchBar from '../../components/SearchBar'
+// import SearchBar from '../../components/SearchBar'
 
 import { db } from '../../firebase'
 import * as theme from '../../core/theme'
@@ -35,8 +35,10 @@ class ListClients extends Component {
     }
 
     getClient(user) {
-        this.props.navigation.state.params.onGoBack(user)
-        this.props.navigation.goBack()
+        if (this.onGoBack) {
+            this.onGoBack(user);
+        }
+        this.props.navigation.goBack();
     }
 
     render() {
@@ -47,7 +49,7 @@ class ListClients extends Component {
 
         return (
             <View style={{ flex: 1 }}>
-                <SearchBar
+                {/* <SearchBar
                     menu={this.isRoot}
                     main={this}
                     title={!showInput}
@@ -57,7 +59,7 @@ class ListClients extends Component {
                     handleSearch={() => this.setState({ searchInput: '', showInput: !showInput })}
                     searchInput={searchInput}
                     searchUpdated={(searchInput) => this.setState({ searchInput })}
-                />
+                /> */}
 
                 <ListUsers
                     searchInput={searchInput}

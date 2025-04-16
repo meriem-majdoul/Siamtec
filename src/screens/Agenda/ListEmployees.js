@@ -7,7 +7,7 @@ import { db } from '../../firebase'
 import { withNavigation } from 'react-navigation'
 
 import TwoTabs from '../../components/TwoTabs'
-import SearchBar from '../../components/SearchBar'
+// import SearchBar from '../../components/SearchBar'
 import TabView from '../../components/TabView'
 
 import ListUsers from '../Users/ListUsers'
@@ -47,8 +47,9 @@ class ListEmployees extends React.Component {
     }
 
     getEmployee(user) {
-        this.props.navigation.state.params.onGoBack(user)
-        this.props.navigation.goBack()
+        const { onGoBack } = this.props.route.params || {};
+        if (onGoBack) onGoBack(user);
+        this.props.navigation.goBack();
     }
 
     updateEmployee(user) {
@@ -77,13 +78,15 @@ class ListEmployees extends React.Component {
 
     render() {
         const queryUsers = this.query || this.formatQuery() || db.collection('Users').where('deleted', '==', false)
+        console.log("queryUsers", queryUsers)
+     //   console.log("queryUsers", queryUsers)
         const { searchInput, showInput } = this.state
         const permissions = this.props.permissions.users
         const { isConnected } = this.props.network
 
         return (
             <View style={{ flex: 1 }}>
-                <SearchBar
+                {/* <SearchBar
                     menu={this.isRoot}
                     main={this}
                     title={!showInput}
@@ -93,7 +96,7 @@ class ListEmployees extends React.Component {
                     handleSearch={() => this.setState({ searchInput: '', showInput: !showInput })}
                     searchInput={searchInput}
                     searchUpdated={(searchInput) => this.setState({ searchInput })}
-                />
+                /> */}
 
                 <ListUsers
                     searchInput={searchInput}

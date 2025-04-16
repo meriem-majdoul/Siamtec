@@ -2,7 +2,7 @@ import React, { Component } from "react"
 import { View, StyleSheet, Alert, Linking } from "react-native"
 import firebase, { db, auth } from '../../../firebase'
 import _ from 'lodash'
-import { withNavigation } from 'react-navigation'
+// import { withNavigation } from 'react-navigation'
 import { connect } from 'react-redux'
 
 import CommentDialog from '../../../components/CommentDialog'
@@ -838,4 +838,4 @@ const mapStateToProps = (state) => {
     }
 }
 
-export default withNavigation(connect(mapStateToProps)(ProcessAction))
+export default connect(mapStateToProps)(ProcessAction)

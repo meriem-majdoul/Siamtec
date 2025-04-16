@@ -60,7 +60,7 @@ class Process extends Component {
                 project.id = doc.id
                 project = _.pick(project, ['id', 'name', 'client', 'step', 'comContact', 'techContact', 'intervenant', 'address', 'workTypes'])
                 resolve(project)
-            })
+            }) 
         })
     }
 
@@ -111,6 +111,8 @@ class Process extends Component {
     renderStandardView(canWrite) {
         const { project, process } = this.state
         const showProcessAction = project && process
+        
+        console.log("process", process)
         const isNotDesignOffice = this.props.role.id !== "designoffice"
         return (
             <KeyboardAvoidingView
