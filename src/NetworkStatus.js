@@ -1,70 +1,79 @@
-import React, { Component } from 'react'
-import { StyleSheet, View, Alert, StatusBar } from 'react-native'
-import NetInfo from "@react-native-community/netinfo"
-import { connect } from 'react-redux'
-import _ from 'lodash'
-
+import React, { Component } from 'react';
+import { StyleSheet, View, Alert } from 'react-native';
+import NetInfo from '@react-native-community/netinfo';
+import { connect } from 'react-redux';
 import moment from 'moment';
-import 'moment/locale/fr'
-moment.locale('fr')
+import 'moment/locale/fr';
 
-// import OfflineBar from './components/OffLineBar'
+import { setNetwork } from './core/redux';
 
-import { setNetwork } from './core/redux'
+moment.locale('fr');
 
 class NetworkStatus extends Component {
-    constructor(props) {
-        super(props)
-        this.alertDisplayed = false
-        this.networkListener = this.networkListener.bind(this)
+  constructor(props) {
+    super(props);
+    this.alertDisplayed = false;
+    this.unsubscribeNetwork = null;
+  }
+
+  componentDidMount() {
+    this.networkListener();
+  }
+
+  networkListener = () => {
+    this.unsubscribeNetwork = NetInfo.addEventListener(state => {
+      const { type, isConnected } = state;
+      const network = { type, isConnected };
+
+    //   console.log('Network state:', network);
+
+      if (!isConnected && !this.alertDisplayed) {
+        Alert.alert(
+          'Mode Hors-Ligne',
+          "L'application risque de ne pas fonctionner de façon optimale en mode hors-ligne. Veuillez rétablir votre connexion réseau.",
+          [{ text: 'OK', onPress: () => (this.alertDisplayed = false) }]
+        );
+        this.alertDisplayed = true;
+      }
+
+      // Mise à jour du state Redux
+      this.props.setNetwork(network);
+    });
+  };
+
+  componentWillUnmount() {
+    if (this.unsubscribeNetwork) {
+      this.unsubscribeNetwork();
     }
+  }
 
-    componentDidMount() {
-        this.networkListener()
-    }
+  render() {
+    const { isConnected } = this.props.network || {};
 
-   async networkListener() {
-        this.unsubscribeNetwork = NetInfo.addEventListener(async state => {
-            const { type, isConnected } = state
-            const network = { type, isConnected }
-            if (!isConnected && !this.alertDisplayed) Alert.alert('Mode Hors-Ligne', "L'application risque de ne pas fonctionner de façon optimale en mode hors-ligne. Veuillez rétablir votre connection réseau.")
-            this.alertDisplayed = true
-            setNetwork(this, network)
-        })
-    }
+    console.log('Is connected:', isConnected);
 
-    componentWillUnmount() {
-        this.unsubscribeNetwork && this.unsubscribeNetwork()
-    }
-
-    render() {
-        const { network } = this.props
-        const { isConnected } = network
-
-        console.log("is connected::::", isConnected)
-
-        return (
-            <View style={styles.container}>
-                {/* {!isConnected && <OfflineBar />} */}
-                {this.props.children}
-            </View>
-        )
-    }
+    return (
+      <View style={styles.container}>
+        {/* {!isConnected && <OfflineBar />} */}
+        {this.props.children}
+      </View>
+    );
+  }
 }
 
-const mapStateToProps = (state) => {
-    return {
-        role: state.roles.role,
-        network: state.network,
-        //fcmToken: state.fcmtoken
-    }
-}
+const mapStateToProps = state => ({
+  role: state.roles.role,
+  network: state.network,
+});
 
-export default connect(mapStateToProps)(NetworkStatus)
+const mapDispatchToProps = {
+  setNetwork,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(NetworkStatus);
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-    },
-})
-
+  container: {
+    flex: 1,
+  },
+});

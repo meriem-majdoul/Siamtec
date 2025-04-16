@@ -36,7 +36,7 @@ export default class TermsConditionsModal extends Component {
                         color={theme.colors.primary}
                         style={{ padding: 15 }}
                     />
-                    <Text style={[theme.customFontMSsemibold.body, { color: theme.colors.primary }]}>Télécharger</Text>
+                    <Text style={[theme.customFontMSsemibold.body, { color: theme.colors.primary }]}>Télécharger </Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                     onPress={this.props.toggleTerms}

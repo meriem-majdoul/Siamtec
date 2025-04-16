@@ -620,15 +620,17 @@ this.sections = this.props.route?.params?.sections || null; // Exemple : { info:
         return (
             <ItemPicker
                 onPress={() => {
-                    navigateToScreen(
-                        this,
-                        'ListClients',
-                        {
-                            onGoBack: this.refreshClient,
-                            prevScreen: 'CreateProject',
-                            isRoot: false
-                        }
-                    )
+                    // navigateToScreen(
+                    //     this,
+                    //     'ListClients',
+                    //     {
+                    //         onGoBack: this.refreshClient,
+                    //         prevScreen: 'CreateProject',
+                    //         isRoot: false
+                    //     }
+                    // )
+                    this.props.navigation.navigate('ClientsManagementStack',('ListClients',
+                        {onGoBack: this.refreshClient,prevScreen: 'CreateProject',isRoot: false}))
                 }}
                 label='Client concerné *'
                 value={client.fullName}

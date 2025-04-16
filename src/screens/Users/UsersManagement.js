@@ -55,6 +55,7 @@ class UsersManagement extends React.Component {
         const permissionsUsers = this.props.permissions.users
         const permissionsTeams = this.props.permissions.teams
         const { isConnected } = this.props.network
+        
 
         return (
             <View style={{ flex: 1 }}>

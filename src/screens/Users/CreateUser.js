@@ -55,6 +55,8 @@ class CreateUser extends Component {
 
     const { route } = this.props;
     const { prevScreen } = route.params || {};
+    console.log('props'+JSON.stringify(this.props, null, 2))
+
 
     // Assignation de prevScreen avec une valeur par défaut
     this.prevScreen = prevScreen || 'UsersManagement';
@@ -136,43 +138,45 @@ class CreateUser extends Component {
   }
 
   async handleSubmit(uid, overWrite) {
-    Keyboard.dismiss()
-
-    this.setState({ loadingDialog: true })
-
+    Keyboard.dismiss();
+  
+    this.setState({ loadingDialog: true });
+  
     //1. Verify
-    const { isValid, updateErrors } = validateUserInputs(this.state) //#readyToExternalize
+    const { isValid, updateErrors } = validateUserInputs(this.state); //#readyToExternalize
     if (!isValid) {
-      this.setState(updateErrors)
-      setToast(this, 'e', 'Erreur de saisie, veuillez verifier les champs.')
-      return
+      this.setState(updateErrors);
+      setToast(this, 'e', 'Erreur de saisie, veuillez verifier les champs.');
+      return;
     }
-
+  
     //2. Format user
-    const user = formatNewUser(this.state)
-    const { isConnected } = this.props.network
-
+    const user = formatNewUser(this.state);
+    const { isConnected } = this.props.network;
+  
     //3. Create user doc
-    const response = await createUser(user, isConnected) //#readyToExternalize
-    const { error } = response
-
+    const response = await createUser(user, isConnected); //#readyToExternalize
+    const { error } = response;
+  
     if (error) {
-      this.setState({ loadingDialog: false })
-      displayError(error)
-    }
-
-    else {
-      const { navigation } = this.props
-      if (navigation.state.params && navigation.state.params.onGoBack) {
-        navigation.state.params.onGoBack()
+      this.setState({ loadingDialog: false });
+      displayError(error);
+    } else {
+      const { navigation, route } = this.props; // Assurez-vous que route est passé en prop
+      const onGoBack = route?.params?.onGoBack; // Accédez aux paramètres en toute sécurité
+  
+      if (onGoBack) {
+        onGoBack();
       }
+  
       this.setState({ loadingDialog: false }, () => {
-        const toast = { message: "L'utilisateur a été crée !", type: "info" }
-        setAppToast(this, toast)
-        navigation.navigate(this.prevScreen)
-      })
+        const toast = { message: "L'utilisateur a été crée !", type: "info" };
+        setAppToast(this, toast);
+        navigation.navigate(this.prevScreen); // Redirigez vers l'écran précédent
+      });
     }
   }
+  
 
   refreshAddress(address) {
     this.setState({ address, addressError: '' })

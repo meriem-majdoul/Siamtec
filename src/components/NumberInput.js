@@ -1,19 +1,19 @@
 
 import React from "react";
-import { View, StyleSheet, TouchableOpacity, Text, Image, TextInput } from "react-native";
+import { View, StyleSheet, TouchableOpacity, Text, Image } from "react-native";
 
 import CustomIcon from './CustomIcon'
 
 import * as theme from "../core/theme";
 import { constants, isTablet } from "../core/constants";
-//import TextInput from "./TextInput";
+import TextInput from "./TextInput";
 import { faMinus, faPlus } from "react-native-fontawesome";
 
 const NumberInput = ({ number, changeValue, error, ...props }) => {
 
     const controller = (icon, operation) => {
         return (
-            <TouchableOpacity style={styles.controller} onPress={() => changeValue(operation)}>
+            <TouchableOpacity style={styles.controller}  onPress={() => changeValue(operation)}>
                 <CustomIcon icon={icon} color={theme.colors.primary} />
             </TouchableOpacity>
         )
@@ -30,6 +30,7 @@ const NumberInput = ({ number, changeValue, error, ...props }) => {
                         textAlign={'center'}
                         style={{ fontSize: isTablet ? 38 : undefined }}
                         {...props}
+                        
                     />
                 </View>
                 {controller(faPlus, "add")}
@@ -47,7 +48,8 @@ const styles = StyleSheet.create({
         borderRadius: 25,
         borderColor: theme.colors.primary,
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        
     }
 })
 

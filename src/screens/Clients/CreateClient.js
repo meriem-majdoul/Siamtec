@@ -104,36 +104,41 @@ class CreateClient extends Component {
 
   handleSubmit = async () => {
     Keyboard.dismiss();
-
+  
     this.setState({ loadingDialog: true });
-
+  
     //1. Verify
     const { isValid, updateErrors } = validateUserInputs(this.state); //#readyToExternalize
     if (!isValid) {
       this.setState(updateErrors);
-      setToast(this, 'e', 'Erreur de saisie, veuillez verifier les champs.');
+      setToast(this, 'e', 'Erreur de saisie, veuillez vérifier les champs.');
       return;
     }
-
+  
     //2. Format user
     const user = formatNewUser(this.state); //#readyToExternalize
     const { isConnected } = this.props.network;
-
+  
     //3. Create user doc
     const response = await createUser(user, isConnected); //#readyToExternalize
     const { error } = response;
-
+  
     if (error) {
       this.setState({ loadingDialog: false });
       displayError(error);
     } else {
-      const { navigation } = this.props;
-      if (navigation.state.params && navigation.state.params.onGoBack) {
-        navigation.state.params.onGoBack(user);
+      const { navigation, route } = this.props; // Utilisation de `route` pour accéder aux paramètres
+      const onGoBack = route?.params?.onGoBack; // Vérification de l'existence de `onGoBack`
+  
+      if (onGoBack) {
+        onGoBack(user); // Appel de la fonction de rappel avec les données utilisateur
       }
-      var navScreen =
+  
+      const navScreen =
         this.prevScreen === 'CreateProject' ? this.prevScreen : 'Profile';
-      var navParams =
+        const drawer = this.prevScreen === 'CreateProject' ? 'ProjectsStack' : 'ProfileStack';
+
+      const navParams =
         this.prevScreen === 'CreateProject'
           ? {}
           : {
@@ -141,11 +146,13 @@ class CreateClient extends Component {
             isClient: true,
             isEdit: false,
           };
+  
       this.setState({ loadingDialog: false }, () => {
-        this.props.navigation.replace(navScreen, navParams);
+        navigation.replace(drawer,{navScreen, navParams}); // Utilisation de `replace` pour naviguer
       });
     }
   };
+  
 
   refreshAddress(address) {
     this.setState({ address, addressError: '' });
@@ -329,7 +336,7 @@ class CreateClient extends Component {
                     }}
                   />
                 }
-                editable={false}
+                // editable={false}
               />
 
               <Toast

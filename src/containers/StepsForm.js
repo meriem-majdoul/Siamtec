@@ -1,5 +1,8 @@
 import { faTimes } from 'react-native-vector-icons/FontAwesome5';
 import React, { Component } from 'react';
+import RNFS from 'react-native-fs';
+import { PermissionsAndroid,Linking } from 'react-native';
+
 import {
   KeyboardAvoidingView,
   StyleSheet,
@@ -1688,39 +1691,59 @@ class StepsForm extends Component {
   toggleModal() {
     this.setState({ isPdfModalVisible: !this.state.isPdfModalVisible });
   }
+  
+  requestStoragePermission = async () => {
+    try {
+        const granted = await PermissionsAndroid.request(
+            PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+            {
+                title: 'Permission de stockage',
+                message: 'L\'application a besoin d\'accéder au stockage pour enregistrer le fichier PDF.',
+                buttonNeutral: 'Plus tard',
+                buttonNegative: 'Annuler',
+                buttonPositive: 'OK',
+            }
+        );
+        return granted === PermissionsAndroid.RESULTS.GRANTED;
+    } catch (err) {
+        console.warn(err);
+        return false;
+    }
+};
 
-  async savePdfBase64(pdfBase64, isProcess) {
-    const now = moment().format('DD-MM-YYYY HHmmss');
-    const pdfName = `Scan généré ${now}.pdf`;
-  
-    saveFile(pdfBase64, pdfName, 'base64')
-      .then((destPath) => {
-        if (isProcess) {
-          const { params } = this.props.route;
-          if (params?.onGoBack) {
-            params.onGoBack({
-              pdfBase64Path: destPath,
-              pdfName,
-              DocumentId: this.DocumentId,
-            });
-          } else {
-            console.log('onGoBack function is not defined in params');
-          }
-  
-          this.props.navigation.pop(this.popCount);
-        } else {
-          // Mettre à jour l'état pour afficher le fichier PDF
-          this.setState({ pdfPath: destPath });
-        }
-      })
-      .catch((e) => {
-        Alert.alert('Erreur', e.message);
-        return;
+
+savePdfBase64 = async (base64Data) => {
+  try {
+      const hasPermission = await this.requestStoragePermission();
+      if (!hasPermission) {
+          this.setState({
+              toastMessageModal: 'Permission refusée',
+              toastTypeModal: 'error',
+          });
+          return;
+      }
+
+      const path = `${RNFS.DownloadDirectoryPath}/generated_file.pdf`;
+
+      await RNFS.writeFile(path, base64Data, 'base64');
+      console.log(`Fichier enregistré dans : ${path}`);
+
+      this.setState({
+          toastMessageModal: `Fichier enregistré dans : ${path}`,
+          toastTypeModal: 'success',
+      });
+
+      return path;
+  } catch (error) {
+      console.error('Erreur lors de la sauvegarde du fichier PDF :', error);
+
+      this.setState({
+          toastMessageModal: 'Erreur lors de la sauvegarde',
+          toastTypeModal: 'error',
       });
   }
-  
-  
-  
+};
+
 
   renderBottomRightButton(title, onPress) {
     return (
