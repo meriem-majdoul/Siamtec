@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
-import { faBell } from 'react-native-vector-icons/FontAwesome5'
+import { faBell } from '@fortawesome/free-solid-svg-icons'
 import { connect } from 'react-redux'
 
 import moment from 'moment';

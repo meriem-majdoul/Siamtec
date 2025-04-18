@@ -3,7 +3,7 @@ import { View, StyleSheet, Text, TouchableOpacity, TouchableWithoutFeedback, Act
 import firebase, { db, auth } from '../firebase'
 import _ from 'lodash'
 import { faCheckCircle, faExclamationCircle, faInfoCircle, faRedo, faTimesCircle } from 'react-native-fontawesome'
-import { faCheckCircle as faSolidCheckCircle, faEye } from 'react-native-vector-icons/FontAwesome5'
+import { faCheckCircle as faSolidCheckCircle, faEye } from '@fortawesome/free-solid-svg-icons'
 import { withNavigation } from 'react-navigation'
 import { connect } from 'react-redux'
 

@@ -1,13 +1,43 @@
 import * as React from 'react';
 import { Appbar } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import {
+    faArrowLeft,
+    faTimes,
+    faBars,
+    faRedo,
+    faSearch,
+    faPaperclip,
+    faEllipsisV,
+    faTrash,
+    faCheck,
+    faPaperPlane,
+    faPen
+} from '@fortawesome/free-solid-svg-icons';
 
 import Loading from './Loading';
 import * as theme from '../core/theme';
 
+// Map string names to icon objects
+const iconMap = {
+    "arrow-left": faArrowLeft,
+    "times": faTimes,
+    "bars": faBars,
+    "redo": faRedo,
+    "search": faSearch,
+    "paperclip": faPaperclip,
+    "ellipsis-v": faEllipsisV,
+    "trash": faTrash,
+    "check": faCheck,
+    "paper-plane": faPaperPlane,
+    "pen": faPen,
+};
+
 const AppBarIcon = ({ icon, iconColor, onPress }) => {
-    return <Appbar.Action icon={() => <FontAwesome5 name={icon} size={24} color={iconColor} />} onPress={onPress} />;
+    const iconObj = iconMap[icon];
+    if (!iconObj) return null;
+    return <Appbar.Action icon={() => <FontAwesomeIcon icon={iconObj} color={iconColor} size={24} />} onPress={onPress} />;
 };
 
 const CustomAppbar = ({
@@ -27,13 +57,13 @@ const CustomAppbar = ({
         return (
             <Appbar.Header style={[{ backgroundColor: '#ffffff', elevation: 0, color: '#000' }, style]}>
                 <AppBarIcon icon="arrow-left" onPress={customBackHandler || navBack} />
-                {title && <Appbar.Content title={titleText}  titleStyle={theme.customFontMSregular.h3} />}
+                {title && <Appbar.Content title={titleText} titleStyle={theme.customFontMSregular.h3} />}
             </Appbar.Header>
         );
     }
 
     return (
-        <Appbar.Header style={[{ backgroundColor: appBarColor || theme.colors.appBar, elevation: 0 , color: '#000'}, style]}>
+        <Appbar.Header style={[{ backgroundColor: appBarColor || theme.colors.appBar, elevation: 0, color: '#000' }, style]}>
             {back && <AppBarIcon icon="arrow-left" onPress={customBackHandler || navBack} iconColor={iconsColor || theme.colors.secondary} />}
             {close && <AppBarIcon icon="times" onPress={customBackHandler || navBack} iconColor={iconsColor || theme.colors.secondary} />}
             {menu && <AppBarIcon icon="bars" onPress={showMenu} />}

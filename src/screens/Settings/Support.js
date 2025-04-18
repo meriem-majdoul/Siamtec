@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, Keyboard } from 'react-native'
-import { faInfoCircle } from 'react-native-vector-icons/FontAwesome5'
+import { faInfoCircle } from '@fortawesome/free-solid-svg-icons'
 import _ from 'lodash'
 import { connect } from 'react-redux'
 

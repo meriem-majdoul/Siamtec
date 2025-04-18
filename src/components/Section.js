@@ -1,8 +1,7 @@
 import React from "react"
 import { StyleSheet, View, Text, TouchableOpacity } from "react-native"
 import { Title } from 'react-native-paper'
-import { FontAwesomeIcon } from 'react-native-vector-icons/FontAwesome5'
-
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { CustomIcon } from './CustomIcon'
 
 import * as theme from "../core/theme"

@@ -3,7 +3,7 @@
 import React, { Children, Component } from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, } from 'react-native';
 import { List } from 'react-native-paper';
-import { faAddressCard, faUsers, faUserTie, faUser, faUserShield, faUserCog } from 'react-native-vector-icons/FontAwesome5';
+import { faAddressCard, faUsers, faUserTie, faUser, faUserShield, faUserCog } from '@fortawesome/free-solid-svg-icons';
 
 import * as theme from '../core/theme';
 import { constants, isTablet } from '../core/constants';

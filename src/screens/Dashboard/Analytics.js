@@ -19,7 +19,7 @@ import { analyticsQueriesBasedOnRole, initTurnoverObjects, setTurnoverArr, setMo
 import { Picker, TurnoverGoal, Loading, CustomIcon } from '../../components'
 import Tooltip from '../../components/Tooltip'
 import TurnoverGoalsContainer from '../../containers/TurnoverGoalsContainer'
-import { faChevronDown } from 'react-native-vector-icons/FontAwesome5';
+import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 
 class Analytics extends Component {
     constructor(props) {

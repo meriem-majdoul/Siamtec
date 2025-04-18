@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, FlatList, RefreshControl } from 'react-native';
 import { connect } from 'react-redux'
-import { faConstruction } from 'react-native-vector-icons/FontAwesome5'
-import { faThLarge, faList } from 'react-native-vector-icons/FontAwesome5'
+import { faConstruction } from '@fortawesome/free-solid-svg-icons'
+import { faThLarge, faList } from '@fortawesome/free-solid-svg-icons'
 import _ from 'lodash'
 
 

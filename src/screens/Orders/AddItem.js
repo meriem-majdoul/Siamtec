@@ -30,7 +30,7 @@ import {
   load,
 } from '../../core/utils';
 import { fetchDocs, fetchDocuments } from '../../api/firestore-api';
-import { faPlusCircle, faTimes } from 'react-native-vector-icons/FontAwesome5';
+import { faPlusCircle, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { CustomIcon } from '../../components';
 
 class AddItem extends Component {

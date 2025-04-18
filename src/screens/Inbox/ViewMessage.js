@@ -3,7 +3,7 @@
 import React, { Component } from 'react'
 import { StyleSheet, Text, View, ScrollView, Image, TouchableOpacity } from 'react-native'
 import { List, Headline } from 'react-native-paper'
-import { faArrowAltToBottom, faReply, faShare } from 'react-native-vector-icons/FontAwesome5'
+import { faArrowAltToBottom, faReply, faShare } from '@fortawesome/free-solid-svg-icons'
 import Entypo from 'react-native-vector-icons/Entypo'
 
 import firebase, { db, functions } from '../../firebase'

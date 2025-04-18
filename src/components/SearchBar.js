@@ -7,7 +7,7 @@ import * as theme from "../core/theme";
 import { constants, isTablet } from '../core/constants';
 import { useNavigation } from '@react-navigation/native';  // Remplacer withNavigation par useNavigation
 
-import { FontAwesomeIcon } from 'react-native-vector-icons/FontAwesome5';
+import { FontAwesomeIcon } from '@fortawesome/free-solid-svg-icons';
 import { faFilter } from 'react-native-fontawesome';
 
 const SearchBar = ({

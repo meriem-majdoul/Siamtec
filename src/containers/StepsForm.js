@@ -1,4 +1,4 @@
-import { faTimes } from 'react-native-vector-icons/FontAwesome5';
+import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import React, { Component } from 'react';
 import RNFS from 'react-native-fs';
 import { PermissionsAndroid,Linking } from 'react-native';

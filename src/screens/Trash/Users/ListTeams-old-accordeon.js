@@ -18,7 +18,7 @@ import { List } from 'react-native-paper';
 
 import { Button } from 'native-base';
 import Icon1 from 'react-native-vector-icons/MaterialCommunityIcons';
-import Icon2 from 'react-native-vector-icons/FontAwesome5';
+import Icon2 from '@fortawesome/free-solid-svg-icons';
 import Icon3 from 'react-native-vector-icons/Entypo';
 import Icon4 from 'react-native-vector-icons/Feather';
 import * as theme from '../../../core/theme';

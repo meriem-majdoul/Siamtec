@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { StyleSheet, Text, View, FlatList, ScrollView } from 'react-native'
-import { faUserAlt, faAddressCard, faClipboardUser, faConstruction, faCalendarAlt, faFolder, faVials } from 'react-native-vector-icons/FontAwesome5'
+import { faUserAlt, faAddressCard, faClipboardUser, faConstruction, faCalendarAlt, faFolder, faVials } from '@fortawesome/free-solid-svg-icons'
 import { connect } from 'react-redux'
 import _ from "lodash"
 
@@ -96,6 +96,7 @@ class Shortcuts extends Component {
         const { clients, users, projects, tasks, documents } = this.props.permissions
         const { createProspect, createUser, createProject, createTask, createDocument, createSimulation } = shortcutsModel
 
+        console.log('createProspect:', createProspect)
         if (clients.canCreate) shortcuts.push(createProspect)
         // if (clients.canCreate) shortcuts.push(createClient)
         if (users.canCreate) shortcuts.push(createUser)

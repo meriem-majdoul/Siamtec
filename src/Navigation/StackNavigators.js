@@ -4,7 +4,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
 import * as theme from '../core/theme';
-import { faArrowToRight, faInfo, faNewspaper, faVials } from 'react-native-vector-icons/FontAwesome5';
+import { faArrowToRight, faInfo, faNewspaper, faVials } from '@fortawesome/free-solid-svg-icons';
 import { CustomIcon } from '../components';
 
 // Import screens
@@ -234,6 +234,12 @@ const SettingsStack = () => (
   </Stack.Navigator>
 );
 
+const ChatStack = () => (
+  <Stack.Navigator screenOptions={hideHeader}>
+    <Stack.Screen name="Chat" component={Chat} />
+  </Stack.Navigator>
+);
+
 const AuthStack = () => (
   <Stack.Navigator screenOptions={hideHeader}>
     <Stack.Screen name="LoginScreen" component={LoginScreen} />
@@ -308,6 +314,7 @@ const AppStack = () => (
     <Stack.Screen name="MandatMPRStack" component={MandatMPRStack} />
     <Stack.Screen name="MandatSynergysStack" component={MandatSynergysStack}  />
     <Stack.Screen name="NewsStack" component={NewsStack} />
+    <Stack.Screen name="ChatStack" component={ChatStack} />
     <Stack.Screen name="SettingsStack" component={SettingsStack} />
   </Stack.Navigator>
 );

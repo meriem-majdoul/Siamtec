@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, FlatList, RefreshControl } from 'react-native';
-import { faBell } from 'react-native-vector-icons/FontAwesome5';
+import { faBell } from '@fortawesome/free-solid-svg-icons';
 
 import * as theme from '../../core/theme';
 import { constants } from '../../core/constants';

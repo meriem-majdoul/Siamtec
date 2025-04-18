@@ -5,7 +5,7 @@ Path: D:\Github\Groupe-Synergys\node_modules\react-native-paper\src\components\I
  Update:
  else if (typeof s === "object") {
     return s 
-  }
+  } 
  
 2. scale Textinput label size for iPad
 Path: /Users/mac/Documents/GitHub/Synergys/node_modules/react-native-paper/src/components/TextInput/constants.tsx

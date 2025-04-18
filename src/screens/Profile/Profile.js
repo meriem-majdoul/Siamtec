@@ -1,12 +1,16 @@
 import React, { Component } from 'react'
 import { StyleSheet, ScrollView, TouchableOpacity, View, Text, Keyboard, FlatList, Alert, RefreshControl } from 'react-native'
 import { TextInput } from 'react-native-paper'
-import TextInputMask from 'react-native-text-input-mask'
-import NetInfo from "@react-native-community/netinfo"
+
 import _ from 'lodash'
-import { faUser, faUserSlash } from 'react-native-vector-icons/FontAwesome5'
-import { faPlusCircle } from 'react-native-vector-icons/FontAwesome5'
-import { faBullseyeArrow, faCheck, faConstruction, faInfo, faLock, faMoneyBill, faRedo, faTimes } from 'react-native-vector-icons/FontAwesome5'
+import {
+    faUser,
+    faUserSlash,
+    faBullseye,
+    faInfo,
+    faLock,
+    faRedo,
+  } from '@fortawesome/free-solid-svg-icons'
 import { connect } from 'react-redux'
 
 import moment from 'moment';
@@ -625,7 +629,7 @@ class Profile extends Component {
             <View>
                 <FormSection
                     sectionTitle='Objectifs'
-                    sectionIcon={faBullseyeArrow}
+                    sectionIcon={faBullseye}
                     isExpanded={sectionsExpansion["turnoverGoals"]}
                     onPressSection={() => this.toggleSection("turnoverGoals")}
                     form={

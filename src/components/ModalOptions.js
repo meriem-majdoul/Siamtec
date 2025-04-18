@@ -106,6 +106,7 @@ export const ModalForm = ({
       ...theme.style.shadow
     };
 
+
     const iconSize = element.icon && element.icon.iconName === "user-alt" ? elementSize * 0.13 : elementSize * 0.16;
 
     const iconContainer = {

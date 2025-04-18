@@ -1,7 +1,22 @@
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View, FlatList } from 'react-native';
-import { faHomeLgAlt, faInbox, faConstruction, faCalendarAlt, faUserFriends, faAddressCard, faTicketAlt, faFileInvoice, faFolder, faNewspaper, faSignOutAlt, faVials, faCogs } from 'react-native-vector-icons/FontAwesome5';
-import { faCommentDots, faCog } from "react-native-vector-icons/FontAwesome5";
+import {
+  faHomeLgAlt,
+  faInbox,
+  faPersonDigging,      // replaces faConstruction
+  faCalendarAlt,
+  faUserFriends,
+  faAddressCard,
+  faTicketAlt,
+  faFileInvoice,
+  faFolderClosed,       // replaces faFolder
+  faNewspaper,
+  faRightFromBracket,   // replaces faSignOutAlt
+  faVials,
+  faCogs
+} from '@fortawesome/free-solid-svg-icons';
+
+import { faCommentDots, faCog } from "@fortawesome/free-solid-svg-icons";
 import { connect } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
 
@@ -13,31 +28,33 @@ import { constants, isTablet } from '../core/constants';
 import { setStatusBarColor } from '../core/redux';
 import firebase, { db } from '../firebase';
 
+//I removed 'planning' as the tasks feature is not used anymore
 const menuPrivilleges = {
-  backoffice: ['home', 'inbox', 'projects', 'planning', 'users', 'clients', 'requests', 'orders', 'simulator', 'documents', 'news', "settings", 'logout'],
-  admin: ['home', 'inbox', 'projects', 'planning', 'users', 'clients', 'requests', 'orders', 'simulator', 'documents', 'news', "settings", 'logout'],
-  dircom: ['home', 'inbox', 'projects', 'planning', 'users', 'clients', 'requests', 'documents', 'simulator', 'news', "settings", 'logout'],
-  com: ['home', 'inbox', 'projects', 'planning', 'clients', 'requests', 'documents', 'simulator', 'news', "settings", 'logout'],
-  tech: ['home', 'inbox', 'projects', 'planning', 'users', 'clients', 'requests', 'orders', 'documents', 'simulator', 'news', "settings", 'logout'],
-  poseur: ['projects', 'inbox', 'planning', 'requests', 'news', "settings", 'logout'],
+  backoffice: ['home', 'inbox', 'projects', 'users', 'clients', 'requests', 'orders', 'simulator', 'documents', 'news', "settings", 'logout'],
+  admin: ['home', 'inbox', 'projects', , 'users', 'clients', 'requests', 'orders', 'simulator', 'documents', 'news', "settings", 'logout'],
+  dircom: ['home', 'inbox', 'projects', 'users', 'clients', 'requests', 'documents', 'simulator', 'news', "settings", 'logout'],
+  com: ['home', 'inbox', 'projects', 'clients', 'requests', 'documents', 'simulator', 'news', "settings", 'logout'],
+  tech: ['home', 'inbox', 'projects', 'users', 'clients', 'requests', 'orders', 'documents', 'simulator', 'news', "settings", 'logout'],
+  poseur: ['projects', 'inbox', 'requests', 'news', "settings", 'logout'],
   client: ['projects', 'inbox', 'requests', 'documents', 'news', "settings", 'logout'],
   designoffice: ['projects', 'inbox', 'news', "settings", 'logout'],
 };
 
-const menuItems = [
+ // { id: 'planning', name: 'Planning', icon: faCalendarAlt, color: theme.colors.miPlanning, navScreen: 'Agenda', drawer: 'AgendaStack' },
+
+ const menuItems = [
   { id: 'home', name: 'Accueil', icon: faHomeLgAlt, color: theme.colors.miHome, navScreen: 'Dashboard', drawer: 'DashboardStack' },
   { id: 'inbox', name: 'Boite de réception', icon: faInbox, color: '#EF6C00', navScreen: 'Inbox', drawer: 'InboxStack' },
-  { id: 'projects', name: 'Projets', icon: faConstruction, color: '#3F51B5', navScreen: 'ListProjects', drawer: 'ProjectsStack' },
-  { id: 'planning', name: 'Planning', icon: faCalendarAlt, color: theme.colors.miPlanning, navScreen: 'Agenda', drawer: 'AgendaStack' },
+  { id: 'projects', name: 'Projets', icon: faPersonDigging, color: '#3F51B5', navScreen: 'ListProjects', drawer: 'ProjectsStack' }, // changed
   { id: 'users', name: 'Utilisateurs', icon: faUserFriends, color: theme.colors.miUsers, navScreen: 'UsersManagement', drawer: 'UsersManagementStack' },
   { id: 'clients', name: 'Clients/Prospects', icon: faAddressCard, color: theme.colors.miClients, navScreen: 'ClientsManagement', drawer: 'ClientsManagementStack' },
   { id: 'requests', name: 'Demandes', icon: faTicketAlt, color: theme.colors.miRequests, navScreen: 'RequestsManagement', drawer: 'RequestsManagementStack' },
   { id: 'orders', name: 'Commandes', icon: faFileInvoice, color: theme.colors.miOrders, navScreen: 'ListOrders', drawer: 'OrdersStack' },
-  { id: 'documents', name: 'Documents', icon: faFolder, color: theme.colors.miDocuments, navScreen: 'ListDocuments', drawer: 'DocumentsStack' },
+  { id: 'documents', name: 'Documents', icon: faFolderClosed, color: theme.colors.miDocuments, navScreen: 'ListDocuments', drawer: 'DocumentsStack' }, // changed
   { id: 'simulator', name: 'Simulateur', icon: faVials, color: theme.colors.miSimulator, navScreen: 'ListSimulations', drawer: 'SimulatorStack' },
   { id: 'news', name: 'Actualités', icon: faNewspaper, color: theme.colors.miNews, navScreen: 'ListNews', drawer: 'NewsStack' },
   { id: 'settings', name: 'Paramètres', icon: faCogs, color: theme.colors.miSettings, navScreen: 'Settings', drawer: 'SettingsStack' },
-  { id: 'logout', name: 'Se déconnecter', icon: faSignOutAlt, color: theme.colors.miLogout, navScreen: 'LoginScreen', drawer: 'AuthStack' },
+  { id: 'logout', name: 'Se déconnecter', icon: faRightFromBracket, color: theme.colors.miLogout, navScreen: 'LoginScreen', drawer: 'AuthStack' }, // changed
 ];
 
 const DrawerMenu = ({ role, currentUser }) => {
@@ -102,7 +119,7 @@ const DrawerMenu = ({ role, currentUser }) => {
               <CustomIcon
                 icon={faCommentDots}
                 color={theme.colors.primary}
-                onPress={() => navigateToScreen('Chat', { chatId: 'GlobalChat' })}
+                onPress={() => navigateToScreen('ChatStack', { chatId: 'GlobalChat' })}
               />
             }
           </View>
@@ -134,6 +151,7 @@ const DrawerMenu = ({ role, currentUser }) => {
         </TouchableOpacity>
       );
     } else {
+
       return (
         <TouchableOpacity onPress={() => navigateToScreen2(item.drawer, item.navScreen)} style={styles.menuItem}>
           <CustomIcon icon={item.icon} color={item.color} />

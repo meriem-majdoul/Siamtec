@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, FlatList, RefreshControl } from 'react-native';
 import { List } from 'react-native-paper';
-import { faTicketAlt } from 'react-native-vector-icons/FontAwesome5';
+import { faTicketAlt } from '@fortawesome/free-solid-svg-icons';
 import { useNavigation } from '@react-navigation/native';  // Utiliser le hook useNavigation
 import SearchInput, { createFilter } from 'react-native-search-filter';
 

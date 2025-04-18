@@ -3,7 +3,7 @@
 import React from "react"
 import { View } from 'react-native'
 import { connect } from 'react-redux'
-import { faBell, faEnvelope } from 'react-native-vector-icons/FontAwesome5'
+import { faBell, faEnvelope } from '@fortawesome/free-solid-svg-icons'
 
 import TabView from '../../components/TabView'
 import Appbar from '../../components/Appbar'

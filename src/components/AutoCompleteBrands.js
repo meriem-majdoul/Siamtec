@@ -1,7 +1,6 @@
 import React, { useState } from "react"
 import { StyleSheet, Text, View, Image } from "react-native"
 import { Avatar } from 'react-native-paper'
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import AutoTags from "react-native-tag-autocomplete"
 
 import { db } from '../firebase'

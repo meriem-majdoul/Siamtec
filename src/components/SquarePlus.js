@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet, TouchableOpacity, View, Text } from "react-native";
 import { faPlus } from 'react-native-fontawesome'
-import { faCloudUpload, faFileUpload } from 'react-native-vector-icons/FontAwesome5';
+import { faCloudUpload, faFileUpload } from '@fortawesome/free-solid-svg-icons';
 
 import * as theme from "../core/theme";
 import { constants } from "../core/constants";

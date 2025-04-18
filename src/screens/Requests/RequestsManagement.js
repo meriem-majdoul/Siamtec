@@ -5,7 +5,7 @@ import { Text, StyleSheet, TouchableOpacity, View } from 'react-native'
 import { FAB } from 'react-native-paper'
 import Animated from 'react-native-reanimated';
 import { connect } from 'react-redux'
-import { faConstruction, faTicket } from 'react-native-vector-icons/FontAwesome5'
+import { faConstruction, faTicket } from '@fortawesome/free-solid-svg-icons'
 
 import Appbar from '../../components/Appbar'
 import SearchBar from '../../components/SearchBar'
