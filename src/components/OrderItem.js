@@ -42,12 +42,16 @@ const OrderItem = ({ order, onPress, ...props }) => {
         <Text style={[theme.customFontMSregular.small, { color: theme.colors.gray_medium }]}>
           {order.id}
         </Text>
-        <Text style={theme.customFontMSmedium.header}>€ {netPrice}</Text>
+        <Text 
+          style={[theme.customFontMSmedium.header, { color: "#000", fontWeight: '600' }]}
+        >
+          € {netPrice}
+        </Text>
       </View>
 
       <View style={{ marginBottom: 15, marginTop: 3 }}>
         {order.project && (
-          <Text numberOfLines={1} style={[theme.customFontMSmedium.body, { marginBottom: 5 }]}>
+          <Text numberOfLines={1} style={[theme.customFontMSmedium.body, { marginBottom: 5,color: "#000", fontWeight: '600' }]}>
             {order.project.name}
           </Text>
         )}

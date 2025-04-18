@@ -40,7 +40,7 @@ export function fetchDocs(query, MyList, MyCount, MyCallBack) {
 }
 
 export function fetchDocuments(query) {
-  console.log('33333333333333333333333333333333', query)
+  // console.log('33333333333333333333333333333333', query)
   return query.get()
     .then((querySnapshot) => {
       let documents = []
