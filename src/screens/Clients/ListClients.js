@@ -89,5 +89,5 @@ const mapStateToProps = (state) => {
 
 export default connect(mapStateToProps)(ListClients)
 
-const styles = StyleSheet.create({
+const styles = StyleSheet.create({ 
 })

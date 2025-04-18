@@ -33,7 +33,10 @@ class ClientsManagement extends React.Component {
 
     viewProfile(user) {
         const { id } = user
-        this.props.navigation.navigate('Profile', { user: { id, roleId: 'client' }, isClient: true, isEdit: false })
+        this.props.navigation.navigate('ProfileStack', {
+            screen: 'Profile', // Indiquez le nom de l'écran cible dans le stack
+            params: { user: { id, roleId: 'client' }, isClient: true, isEdit: false }
+          });
     }
 
     render() {

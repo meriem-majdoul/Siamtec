@@ -44,6 +44,7 @@ class ListProjects extends Component {
         this.isRoot = route?.params?.isRoot ?? true; // Valeur par défaut si non définie
         this.titleText = route?.params?.titleText ?? 'Projets'; // Valeur par défaut si non définie
         this.showFAB = route?.params?.showFAB && this.isRoot; // Afficher le FAB seulement si isRoot est true
+        console.log('this.showFAB:'+this.showFAB)
         this.filteredProjects = [];
     
         this.state = {
@@ -180,6 +181,7 @@ class ListProjects extends Component {
         let { searchInput, showInput } = this.state
         const { canCreate } = this.props.permissions.projects
         const { isConnected } = this.props.network
+        console.log('canCreate:'+canCreate)
 
         const fields = [{ label: 'step', value: step }, { label: 'state', value: state }, { label: 'client.id', value: client.id }]
         this.filteredProjects = handleFilter(projectsList, this.filteredProjects, fields, searchInput, KEYS_TO_FILTERS)

@@ -88,11 +88,21 @@ const ListUsers = (props) => {
     const { userType, permissions, offLine } = props
     const { canRead, canUpdate, canDelete } = permissions
     const isClient = userType === 'client' || userType === 'prospect'
+    console.log('testtt ' + JSON.stringify(user));
+
 
     var roleId = getRoleIdFromValue(user.role)
 
     const viewProfile = (isEdit) => {
-      navigation.navigate('Profile', { user: { id: user.id, roleId }, isClient, isEdit })
+      navigation.navigate('ProfileStack', {
+        screen: 'Profile', // Indiquez le nom de l'écran cible dans le stack
+        params: { 
+          user: { id: user.id, roleId },
+          isClient,
+          isEdit
+        }
+      });
+      
     }
 
     const viewUser = () => viewProfile(false)

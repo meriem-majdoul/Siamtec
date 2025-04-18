@@ -124,10 +124,10 @@ class Profile extends Component {
     }
     //##task: add Billing tab
 
-    componentWillUnmount() {
-        if (this.willFocusSubscription)
-            this.willFocusSubscription.remove()
-    }
+    // componentWillUnmount() {
+    //     if (this.willFocusSubscription)
+    //         this.willFocusSubscription.remove()
+    // }
 
     //##GET
     async componentDidMount() {
