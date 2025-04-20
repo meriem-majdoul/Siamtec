@@ -8,7 +8,7 @@ import { connect } from 'react-redux'
 import CommentDialog from '../../../components/CommentDialog'
 import ModalOptions from '../../../components/ModalOptions'
 import Loading from '../../../components/Loading'
-
+ 
 import { enableProcessAction } from '../../../core/privileges'
 import { configChoiceIcon, countDown, displayError, load } from '../../../core/utils'
 import * as theme from "../../../core/theme"

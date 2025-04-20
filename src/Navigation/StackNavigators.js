@@ -234,6 +234,12 @@ const SettingsStack = () => (
   </Stack.Navigator>
 );
 
+const ChatStack = () => (
+  <Stack.Navigator screenOptions={hideHeader}>
+    <Stack.Screen name="Chat" component={Chat} />
+  </Stack.Navigator>
+);
+
 const AuthStack = () => (
   <Stack.Navigator screenOptions={hideHeader}>
     <Stack.Screen name="LoginScreen" component={LoginScreen} />
@@ -308,6 +314,7 @@ const AppStack = () => (
     <Stack.Screen name="MandatMPRStack" component={MandatMPRStack} />
     <Stack.Screen name="MandatSynergysStack" component={MandatSynergysStack}  />
     <Stack.Screen name="NewsStack" component={NewsStack} />
+    <Stack.Screen name="ChatStack" component={ChatStack} />
     <Stack.Screen name="SettingsStack" component={SettingsStack} />
   </Stack.Navigator>
 );
