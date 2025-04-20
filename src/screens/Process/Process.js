@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, KeyboardAvoidingView, Platform, TouchableOpacity } from 'react-native';
 import _ from 'lodash'
-import { faTimes } from 'react-native-vector-icons/FontAwesome5'
-import { faArrowAltRight } from "react-native-vector-icons/FontAwesome5"
+import { faTimes } from '@fortawesome/free-solid-svg-icons'
+import { faArrowAltRight } from "@fortawesome/free-solid-svg-icons"
 import { connect } from 'react-redux'
 
 import ProcessAction from './container/ProcessAction'
@@ -104,6 +104,7 @@ class Process extends Component {
                 canUpdate={canWrite}
                 isAllProcess={false}
                 role={this.props.role}
+                navigation={this.props.navigation}
             />
         )
     }

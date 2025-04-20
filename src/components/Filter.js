@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { List, Appbar } from 'react-native-paper';
-import { faFilter, faTimes } from 'react-native-fontawesome'
+import { faFilter, faTimes } from '@fortawesome/free-solid-svg-icons'
 import { MenuProvider, Menu as PopupMenu, MenuOptions, MenuOption, MenuTrigger, renderers } from 'react-native-popup-menu';
 import { useNavigation } from '@react-navigation/native'; // Importez useNavigation
 

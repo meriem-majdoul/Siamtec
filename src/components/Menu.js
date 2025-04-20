@@ -6,14 +6,14 @@ import * as theme from '../core/theme';
 import { constants } from '../core/constants';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Menu as PopupMenu, MenuOptions, MenuOption, MenuTrigger, } from 'react-native-popup-menu'
-import { faEllipsisV } from 'react-native-fontawesome'
+import { faEllipsisV } from '@fortawesome/free-solid-svg-icons'
 
 import CustomIcon from './CustomIcon'
 
 const Menu = ({ options, functions, menuTrigger, ...props }) => (
   <PopupMenu>
     <MenuTrigger style={{ padding: 5 }}>
-      {menuTrigger || <CustomIcon  style={{ paddingLeft: 4 }} />}
+      {menuTrigger || <CustomIcon icon={faEllipsisV} style={{ paddingLeft: 4 }} />}
     </MenuTrigger>
 
     <MenuOptions>

@@ -6,7 +6,7 @@ import {
   faCheckCircle,
   faMars,
   faVenus,
-} from 'react-native-fontawesome';
+} from '@fortawesome/free-solid-svg-icons';
 import moment from 'moment';
 import * as theme from '../../theme';
 

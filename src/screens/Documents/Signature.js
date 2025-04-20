@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import { ProgressBar } from 'react-native-paper';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import FontAwesome5 from '@fortawesome/free-solid-svg-icons';
 //import firebase, { crashlytics, db, functions } from '../../firebase';
 import Dialog from 'react-native-dialog';
 import _ from 'lodash';

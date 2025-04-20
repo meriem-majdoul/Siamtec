@@ -2,8 +2,8 @@ import React, { useState, useEffect, useRef } from "react";
 import { View, StyleSheet, Text, TouchableOpacity, Linking } from "react-native";
 import { Checkbox } from 'react-native-paper'
 import { withNavigation } from 'react-navigation'
-import { faEye, faMapMarkerAlt } from 'react-native-fontawesome'
-import { faWaze } from 'react-native-vector-icons/FontAwesome5'
+import { faEye, faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons'
+import { faWaze } from '@fortawesome/free-solid-svg-icons'
 
 import MyInput from './TextInput'
 import CustomIcon from './CustomIcon'

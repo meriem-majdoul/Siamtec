@@ -2,7 +2,7 @@ import React, { memo } from "react";
 import { View, StyleSheet, TouchableOpacity, Text, ActivityIndicator, Image, ScrollView } from "react-native";
 import Modal from 'react-native-modal'
 import { Title } from 'react-native-paper'
-import { faTimes, faUserAlt } from 'react-native-fontawesome'
+import { faTimes, faUserAlt } from '@fortawesome/free-solid-svg-icons'
 
 import Button from './Button'
 import CustomIcon from './CustomIcon'

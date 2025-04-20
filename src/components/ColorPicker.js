@@ -1,7 +1,7 @@
 import React, { memo, useState } from "react";
 import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
 import Modal from 'react-native-modal'
-import { faTimes, faCheck } from 'react-native-fontawesome'
+import { faTimes, faCheck } from '@fortawesome/free-solid-svg-icons'
 
 import CustomIcon from './CustomIcon'
 import MyFAB from './MyFAB'

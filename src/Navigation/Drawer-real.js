@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View, FlatList } from 'react-native';
-import { faHomeLgAlt, faInbox, faConstruction, faCalendarAlt, faUserFriends, faAddressCard, faTicketAlt, faFileInvoice, faFolder, faNewspaper, faSignOutAlt, faCogs } from 'react-native-fontawesome';
+import { faHomeLgAlt, faInbox, faDraftingCompass, faCalendarAlt, faUserFriends, faAddressCard, faTicketAlt, faFileInvoice, faFolder, faNewspaper, faSignOutAlt, faCogs } from '@fortawesome/free-solid-svg-icons';
 import { faCommentDots, faCog } from "@fortawesome/free-solid-svg-icons";
 
 import firebase, { db } from '../firebase';
@@ -28,7 +28,7 @@ const menuPrivileges = {
 const menuItems = [
   { id: 'home', name: 'Accueil', icon: faHomeLgAlt, color: theme.colors.miHome, navScreen: 'DashboardStack' },
   { id: 'inbox', name: 'Boite de réception', icon: faInbox, color: '#EF6C00', navScreen: 'InboxStack' },
-  { id: 'projects', name: 'Projets', icon: faConstruction, color: '#3F51B5', navScreen: 'ProjectsStack' },
+  { id: 'projects', name: 'Projets', icon: faDraftingCompass, color: '#3F51B5', navScreen: 'ProjectsStack' },
   { id: 'planning', name: 'Planning', icon: faCalendarAlt, color: theme.colors.miPlanning, navScreen: 'AgendaStack' },
   { id: 'users', name: 'Utilisateurs', icon: faUserFriends, color: theme.colors.miUsers, navScreen: 'UsersManagementStack' },
   { id: 'clients', name: 'Clients/Prospects', icon: faAddressCard, color: theme.colors.miClients, navScreen: 'ClientsManagementStack' },

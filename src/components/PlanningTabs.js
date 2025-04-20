@@ -1,7 +1,7 @@
 
 import React from "react";
 import { View, StyleSheet, Text, TouchableOpacity, Alert } from "react-native";
-import { faTasks, faCalendar } from 'react-native-fontawesome'
+import { faTasks, faCalendar } from '@fortawesome/free-solid-svg-icons'
 
 import * as theme from "../core/theme";
 import { constants } from '../core/constants'

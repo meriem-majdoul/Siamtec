@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { Alert, StyleSheet, Text, View, TouchableOpacity, ScrollView, FlatList, RefreshControl } from 'react-native';
 import { Agenda, LocaleConfig } from 'react-native-calendars';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
-import { faCaretDown, faCheckCircle, faTimesCircle, faPauseCircle } from 'react-native-vector-icons/FontAwesome5' 
+import { faCaretDown, faCheckCircle, faTimesCircle, faPauseCircle } from '@fortawesome/free-solid-svg-icons' 
 const XDate = require('xdate')
 
 import dateutils from 'react-native-calendars/src/dateutils'

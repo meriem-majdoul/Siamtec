@@ -4,7 +4,7 @@ import React, { Children, Component } from 'react'
 import { StyleSheet, Text, View, TextInput, TouchableHighlight, Alert, FlatList, TouchableOpacity, ScrollView } from 'react-native'
 
 import Icon from 'react-native-vector-icons/Feather'
-import Icon2 from 'react-native-vector-icons/FontAwesome5'
+import Icon2 from '@fortawesome/free-solid-svg-icons'
 import Icon3 from 'react-native-vector-icons/Entypo'
 import * as theme from '../core/theme'
 import { color } from 'react-native-reanimated'

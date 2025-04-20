@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, ScrollView, TouchableOpacity, Keyboard, FlatList, TextInput, KeyboardAvoidingView, Platform } from 'react-native'
 import { Card, Title, Checkbox } from 'react-native-paper'
-import { faCommentDots, faInfoCircle, faLightbulbSlash, faPen, faRetweet, faTimes } from 'react-native-vector-icons/FontAwesome5'
+import { faCommentDots, faInfoCircle, faLightbulbSlash, faPen, faRetweet, faTimes } from '@fortawesome/free-solid-svg-icons'
 import _ from 'lodash'
 import Modal from 'react-native-modal'
 

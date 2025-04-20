@@ -1,14 +1,14 @@
 import React, { memo } from "react";
 import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
 import { Appbar as appbar } from 'react-native-paper';
-import { faBars, faTimes, faSearch, faArrowLeft, faCheck } from 'react-native-fontawesome';
+import { faBars, faTimes, faSearch, faArrowLeft, faCheck } from '@fortawesome/free-solid-svg-icons';
 import { Searchbar } from "react-native-paper";
 import * as theme from "../core/theme";
 import { constants, isTablet } from '../core/constants';
 import { useNavigation } from '@react-navigation/native';  // Remplacer withNavigation par useNavigation
 
-import { FontAwesomeIcon } from 'react-native-vector-icons/FontAwesome5';
-import { faFilter } from 'react-native-fontawesome';
+import { FontAwesomeIcon } from '@fortawesome/free-solid-svg-icons';
+import { faFilter } from '@fortawesome/free-solid-svg-icons';
 
 const SearchBar = ({
     menu = true, close,

@@ -10,7 +10,7 @@ import ShortUniqueId from 'short-unique-id'
 import UUIDGenerator from 'react-native-uuid-generator'
 import { PDFDocument, degrees, PageSizes, StandardFonts, rgb } from 'pdf-lib'
 import _ from 'lodash'
-import { faCheck, faFlag, faTimes, faClock, faUpload, faFileSignature, faSackDollar, faEnvelopeOpenDollar, faEye, faPen, faBan, faEllipsisH, faPauseCircle, faSave, faUserHardHat } from 'react-native-fontawesome'
+import { faCheck, faFlag, faTimes, faClock, faUpload, faFileSignature, faSackDollar, faEnvelopeOpenDollar, faEye, faPen, faBan, faEllipsisH, faPauseCircle, faSave, faUserHardHat } from '@fortawesome/free-solid-svg-icons'
 //import Geocoder from 'react-native-geocoding';
 
 import moment from 'moment';

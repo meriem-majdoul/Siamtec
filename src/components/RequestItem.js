@@ -5,7 +5,7 @@ import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import { faCommentDots } from 'react-native-fontawesome';
+import { faCommentDots } from '@fortawesome/free-solid-svg-icons';
 
 import moment from 'moment';
 import 'moment/locale/fr';

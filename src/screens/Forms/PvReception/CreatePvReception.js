@@ -1,7 +1,7 @@
 
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, } from 'react-native'
-import { faVials } from 'react-native-vector-icons/FontAwesome5';
+import { faVials } from '@fortawesome/free-solid-svg-icons';
 
 import moment from 'moment';
 import 'moment/locale/fr'

@@ -1,12 +1,16 @@
 import React, { Component } from 'react'
 import { StyleSheet, ScrollView, TouchableOpacity, View, Text, Keyboard, FlatList, Alert, RefreshControl } from 'react-native'
 import { TextInput } from 'react-native-paper'
-import TextInputMask from 'react-native-text-input-mask'
-import NetInfo from "@react-native-community/netinfo"
+
 import _ from 'lodash'
-import { faUser, faUserSlash } from 'react-native-vector-icons/FontAwesome5'
-import { faPlusCircle } from 'react-native-vector-icons/FontAwesome5'
-import { faBullseyeArrow, faCheck, faConstruction, faInfo, faLock, faMoneyBill, faRedo, faTimes } from 'react-native-vector-icons/FontAwesome5'
+import {
+    faUser,
+    faUserSlash,
+    faBullseye,
+    faInfo,
+    faLock,
+    faRedo,
+  } from '@fortawesome/free-solid-svg-icons'
 import { connect } from 'react-redux'
 
 import moment from 'moment';
@@ -625,7 +629,7 @@ class Profile extends Component {
             <View>
                 <FormSection
                     sectionTitle='Objectifs'
-                    sectionIcon={faBullseyeArrow}
+                    sectionIcon={faBullseye}
                     isExpanded={sectionsExpansion["turnoverGoals"]}
                     onPressSection={() => this.toggleSection("turnoverGoals")}
                     form={
@@ -659,15 +663,15 @@ class Profile extends Component {
                     value={role}
                     autoCapitalize="none"
                     editable={false}
-                    right={
-                        isAdmin &&
-                        <TextInput.Icon
-                            name='pencil'
-                            color={theme.colors.gray_medium}
-                            size={isTablet ? 33 : 21}
-                            onPress={() => this.onPressRole(isAdmin, isConnected)}
-                        />
-                    }
+                    // right={
+                    //     isAdmin &&
+                    //     <TextInput.Icon
+                    //         name='pencil'
+                    //         color={theme.colors.gray_medium}
+                    //         size={isTablet ? 33 : 21}
+                    //         onPress={() => this.onPressRole(isAdmin, isConnected)}
+                    //     />
+                    // }
                 />
             </TouchableOpacity>
         )
@@ -924,14 +928,15 @@ class Profile extends Component {
                                                         errorText={currentPass.error}
                                                         autoCapitalize="none"
                                                         secureTextEntry={!currentPass.show}
-                                                        right={<TextInput.Icon
-                                                            name={currentPass.show ? 'eye-off' : 'eye'}
-                                                            color={theme.colors.placeholder}
-                                                            size={isTablet ? 33 : 21}
-                                                            onPress={() => {
-                                                                currentPass.show = !currentPass.show
-                                                                this.setState({ currentPass })
-                                                            }} />}
+                                                        // right={<TextInput.Icon
+                                                        //     name={currentPass.show ? 'eye-off' : 'eye'}
+                                                        //     color={theme.colors.placeholder}
+                                                        //     size={isTablet ? 33 : 21}
+                                                        //     onPress={() => {
+                                                        //         currentPass.show = !currentPass.show
+                                                        //         this.setState({ currentPass })
+                                                        //     }}
+                                                        //      />}
                                                     />
 
                                                     <MyInput
@@ -943,14 +948,14 @@ class Profile extends Component {
                                                         errorText={newPass.error}
                                                         autoCapitalize="none"
                                                         secureTextEntry={!newPass.show}
-                                                        right={<TextInput.Icon
-                                                            name={newPass.show ? 'eye-off' : 'eye'}
-                                                            color={theme.colors.placeholder}
-                                                            size={isTablet ? 33 : 21}
-                                                            onPress={() => {
-                                                                newPass.show = !newPass.show
-                                                                this.setState({ newPass })
-                                                            }} />}
+                                                        // right={<TextInput.Icon
+                                                        //     name={newPass.show ? 'eye-off' : 'eye'}
+                                                        //     color={theme.colors.placeholder}
+                                                        //     size={isTablet ? 33 : 21}
+                                                        //     onPress={() => {
+                                                        //         newPass.show = !newPass.show
+                                                        //         this.setState({ newPass })
+                                                        //     }} />}
                                                     />
 
                                                     <Button
@@ -1063,4 +1068,3 @@ const styles = StyleSheet.create({
         borderBottomColor: theme.colors.gray_light,
     }
 })
-

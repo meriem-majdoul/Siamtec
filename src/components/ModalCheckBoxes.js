@@ -3,7 +3,7 @@ import {StyleSheet, Text, View, TouchableOpacity, FlatList} from 'react-native';
 import Modal from 'react-native-modal';
 import {Checkbox} from 'react-native-paper';
 
-import {faPen, faTimes} from 'react-native-fontawesome';
+import {faPen, faTimes} from '@fortawesome/free-solid-svg-icons';
 
 import {constants, isTablet} from '../core/constants';
 import * as theme from '../core/theme';

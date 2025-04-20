@@ -3,7 +3,7 @@
 import React from "react";
 import { Text, StyleSheet, TouchableOpacity, View } from 'react-native'
 import { connect } from 'react-redux'
-import { faUser, faUsers } from 'react-native-vector-icons/FontAwesome5'
+import { faUser, faUsers } from '@fortawesome/free-solid-svg-icons'
 
 import TwoTabs from '../../components/TwoTabs'
 import SearchBar from '../../components/SearchBar'

@@ -5,7 +5,7 @@ import { Text, StyleSheet, TouchableOpacity, View } from 'react-native'
 import { FAB } from 'react-native-paper'
 import Animated from 'react-native-reanimated';
 import { connect } from 'react-redux'
-import { faConstruction, faTicket } from 'react-native-vector-icons/FontAwesome5'
+import { faDraftingCompass, faTicket } from '@fortawesome/free-solid-svg-icons'
 
 import Appbar from '../../components/Appbar'
 import SearchBar from '../../components/SearchBar'
@@ -65,7 +65,7 @@ class RequestsManagement extends React.Component {
                     <TabView
                         navigationState={{ index, routes }}
                         onIndexChange={(index) => this.setState({ index, searchInput: '', showInput: false })}
-                        icon1={faConstruction}
+                        icon1={faDraftingCompass}
                         icon2={faTicket}
                         Tab1={<ListProjects searchInput={searchInput} offLine={!isConnected} permissions={permissionsRequests} role={this.props.role} />}
                         Tab2={<ListTickets searchInput={searchInput} offLine={!isConnected} permissions={permissionsRequests} role={this.props.role} />} />

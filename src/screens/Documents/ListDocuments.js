@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, FlatList, RefreshControl } from 'react-native'
 import { List } from 'react-native-paper'
 import SearchInput, { createFilter } from 'react-native-search-filter'
 import { connect } from 'react-redux'
-import { faFolder } from 'react-native-vector-icons/FontAwesome5'
+import { faFolder } from '@fortawesome/free-solid-svg-icons'
 
 import Background from '../../components/NewBackground'
 import SearchBar from '../../components/SearchBar'

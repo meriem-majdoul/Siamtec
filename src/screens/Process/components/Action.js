@@ -4,8 +4,8 @@
 import React, { Component } from "react"
 import { View, StyleSheet, Text, ActivityIndicator, Alert } from "react-native"
 import _ from 'lodash'
-import { faCheckCircle, faExclamationCircle, faInfoCircle, faTimesCircle } from 'react-native-vector-icons/FontAwesome5'
-import { faCheckCircle as faSolidCheckCircle } from 'react-native-vector-icons/FontAwesome5'
+import { faCheckCircle, faExclamationCircle, faInfoCircle, faTimesCircle } from '@fortawesome/free-solid-svg-icons'
+import { faCheckCircle as faSolidCheckCircle } from '@fortawesome/free-solid-svg-icons'
 
 import CustomIcon from '../../../components/CustomIcon'
 import { isTablet } from '../../../core/constants'

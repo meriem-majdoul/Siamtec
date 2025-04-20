@@ -12,7 +12,7 @@ import { isTablet } from '../../../core/constants'
 
 import * as theme from "../../../core/theme"
 import { Header } from "../../../components/typography/Typography"
-import { faEye } from "react-native-vector-icons/FontAwesome5"
+import { faEye } from "@fortawesome/free-solid-svg-icons"
 
 
 class ActionHeader extends Component {

@@ -1,9 +1,8 @@
 
-
 import React, { Children, Component } from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, } from 'react-native';
 import { List } from 'react-native-paper';
-import { faAddressCard, faUsers, faUserTie, faUser, faUserShield, faUserCog } from 'react-native-vector-icons/FontAwesome5';
+import { faAddressCard, faUsers, faUserTie, faUser, faUserShield, faUserCog } from '@fortawesome/free-solid-svg-icons';
 
 import * as theme from '../core/theme';
 import { constants, isTablet } from '../core/constants';
@@ -29,21 +28,26 @@ const UserItem = ({ isTeam, userType, onPress, item, controller, itemStyle, opti
     const description = isTeam ? membersCount : userType === 'utilisateur' ? role : (item.phone || item.email)
 
     const setIcon = () => {
-        if (isTeam) return faUsers
-
+        if (isTeam) return faUsers;
+    
         if (userType === 'utilisateur') {
-            if (isPro) return faUserTie
-            if (normalUser) return faUser
-            if (role === 'Admin') return faUserShield
-            if (role === 'Back office') return faUserCog
+            if (isPro) return faUserTie;
+            if (normalUser) return faUser;
+            if (role === 'Admin') return faUserShield;
+            if (role === 'Back office') return faUserCog;
+        } else if (userType === 'client') {
+            return faUser;
+        } else if (userType === 'prospect') {
+            return faAddressCard;
         }
-
-        else if (userType === 'client') return faUser
-        else if (userType === 'prospect') return faAddressCard
-    }
-
-    const icon = setIcon()
-
+    
+        // Valeur par défaut
+        return faQuestionCircle; // ou null, ou tout autre icône par défaut
+    };
+    
+    const icon = setIcon();
+ 
+    
     return (
         <TouchableOpacity onPress={onPress} style={[styles.item, itemStyle]}>
 

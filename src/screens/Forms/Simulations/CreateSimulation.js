@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, SafeAreaView, StatusBar } from 'react-native';
-import { faVials } from 'react-native-vector-icons/FontAwesome5';
+import { faVials } from '@fortawesome/free-solid-svg-icons';
 import { connect } from 'react-redux';
 import StepsForm from '../../../containers/StepsForm';
 import { CustomIcon, Button } from '../../../components/index';

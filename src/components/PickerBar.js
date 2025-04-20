@@ -1,8 +1,8 @@
 import React, { memo } from "react";
 import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
 import { Appbar as appbar } from 'react-native-paper';
-import { FontAwesomeIcon } from 'react-native-vector-icons/FontAwesome5';
-import { faArrowLeft, faBars, faFilter, faRedo } from 'react-native-fontawesome';
+import { FontAwesomeIcon } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeft, faBars, faFilter, faRedo } from '@fortawesome/free-solid-svg-icons';
 
 import Menu from './Menu';
 import Filter from './Filter';

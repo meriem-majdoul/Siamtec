@@ -1,6 +1,6 @@
 import React, { memo } from "react";
 import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
-import { faPlusCircle } from 'react-native-fontawesome'
+import { faPlusCircle } from '@fortawesome/free-solid-svg-icons'
 
 import CustomIcon from './CustomIcon'
 

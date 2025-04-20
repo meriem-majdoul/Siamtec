@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, TouchableOpacity, FlatList, Text, RefreshControl } from 'react-native';
 import { List } from 'react-native-paper';
-import { faPen, faEnvelope } from 'react-native-vector-icons/FontAwesome5';
+import { faPen, faEnvelope } from '@fortawesome/free-solid-svg-icons';
 
 import Background from '../../components/NewBackground';
 import ListSubHeader from '../../components/ListSubHeader';

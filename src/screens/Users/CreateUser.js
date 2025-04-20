@@ -23,7 +23,7 @@ import * as theme from "../../core/theme";
 import { constants, errorMessages, roles as allRoles } from "../../core/constants";
 import { nameValidator, emailValidator, passwordValidator, generateId, updateField, setToast, load, setAddress, displayError } from "../../core/utils"
 import { checkEmailExistance } from "../../api/auth-api";
-// import { faMagic } from "react-native-vector-icons/FontAwesome5";
+ import { faMagic } from "@fortawesome/free-solid-svg-icons";
 import { validateUserInputs, formatNewUser, createUser } from "../../api/firestore-api";
 import { setAppToast } from "../../core/redux";
 

@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import { StyleSheet, TouchableOpacity, View, Text, Keyboard } from 'react-native'
 import _ from 'lodash'
-import { faPlusCircle } from 'react-native-vector-icons/FontAwesome5'
-import { faCheck, faMoneyBill, faTimes } from 'react-native-vector-icons/FontAwesome5'
+import { faPlusCircle } from '@fortawesome/free-solid-svg-icons'
+import { faCheck, faMoneyBill, faTimes } from '@fortawesome/free-solid-svg-icons'
 import { connect } from 'react-redux'
 
 import moment from 'moment';

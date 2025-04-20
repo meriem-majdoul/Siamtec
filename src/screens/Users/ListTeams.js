@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { StyleSheet, Text, View, FlatList, TouchableOpacity, Alert, RefreshControl } from 'react-native'
 import { List } from 'react-native-paper'
-import { faUsers } from 'react-native-vector-icons/FontAwesome5'
+import { faUsers } from '@fortawesome/free-solid-svg-icons'
 import { useNavigation } from '@react-navigation/native'  // Importez useNavigation
 import SearchInput, { createFilter } from 'react-native-search-filter'
 

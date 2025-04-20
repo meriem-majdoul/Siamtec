@@ -1,6 +1,6 @@
 
 
-import { faCheck, faVrCardboard } from "react-native-fontawesome";
+import { faCheck, faVrCardboard } from "@fortawesome/free-solid-svg-icons";
 import React from "react"
 import { View, StyleSheet, Text, Alert, TextInput as NativeTextInput } from "react-native";
 import NumberFormat from 'react-number-format';

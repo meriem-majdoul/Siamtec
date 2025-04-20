@@ -4,7 +4,7 @@ import { View, Text, StyleSheet } from 'react-native'
 import CustomIcon from './CustomIcon'
 import * as theme from '../core/theme'
 import { constants } from '../core/constants'
-import { faTimes } from 'react-native-fontawesome';
+import { faTimes } from '@fortawesome/free-solid-svg-icons';
 
 const ModalHeader = ({ title, toggleModal }) => {
     return (

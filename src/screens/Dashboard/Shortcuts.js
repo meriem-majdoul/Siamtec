@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { StyleSheet, Text, View, FlatList, ScrollView } from 'react-native'
-import { faUserAlt, faAddressCard, faClipboardUser, faConstruction, faCalendarAlt, faFolder, faVials } from 'react-native-vector-icons/FontAwesome5'
+import { faUserAlt, faAddressCard, faClipboardUser, faDraftingCompass, faCalendarAlt, faFolder, faVials } from '@fortawesome/free-solid-svg-icons'
 import { connect } from 'react-redux'
 import _ from "lodash"
 
@@ -46,7 +46,7 @@ const shortcutsModel = {
     createProject: {
         label: 'Nouveau projet',
         value: '',
-        icon: faConstruction,
+        icon: faDraftingCompass,
         colors: { primary: '#2ac3ff', secondary: '#38d3ff' },
         navigation: { Drawer:'ProjectsStack',screen: 'CreateProject', params: { isRoot: false, prevScreen: 'Dashboard' } }
     },

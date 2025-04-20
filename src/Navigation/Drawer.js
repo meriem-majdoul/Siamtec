@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View, FlatList } from 'react-native';
-import { faHomeLgAlt, faInbox, faConstruction, faCalendarAlt, faUserFriends, faAddressCard, faTicketAlt, faFileInvoice, faFolder, faNewspaper, faSignOutAlt, faVials, faCogs } from 'react-native-vector-icons/FontAwesome5';
-import { faCommentDots, faCog } from "react-native-vector-icons/FontAwesome5";
+import { faHomeLgAlt, faInbox, faDraftingCompass, faCalendarAlt, faUserFriends, faAddressCard, faTicketAlt, faFileInvoice, faFolder, faNewspaper, faSignOutAlt, faVials, faCogs } from '@fortawesome/free-solid-svg-icons';
+import { faCommentDots, faCog } from "@fortawesome/free-solid-svg-icons";
 import { connect } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
 
@@ -27,7 +27,7 @@ const menuPrivilleges = {
 const menuItems = [
   { id: 'home', name: 'Accueil', icon: faHomeLgAlt, color: theme.colors.miHome, navScreen: 'Dashboard', drawer: 'DashboardStack' },
   { id: 'inbox', name: 'Boite de réception', icon: faInbox, color: '#EF6C00', navScreen: 'Inbox', drawer: 'InboxStack' },
-  { id: 'projects', name: 'Projets', icon: faConstruction, color: '#3F51B5', navScreen: 'ListProjects', drawer: 'ProjectsStack' },
+  { id: 'projects', name: 'Projets', icon: faDraftingCompass, color: '#3F51B5', navScreen: 'ListProjects', drawer: 'ProjectsStack' },
   { id: 'planning', name: 'Planning', icon: faCalendarAlt, color: theme.colors.miPlanning, navScreen: 'Agenda', drawer: 'AgendaStack' },
   { id: 'users', name: 'Utilisateurs', icon: faUserFriends, color: theme.colors.miUsers, navScreen: 'UsersManagement', drawer: 'UsersManagementStack' },
   { id: 'clients', name: 'Clients/Prospects', icon: faAddressCard, color: theme.colors.miClients, navScreen: 'ClientsManagement', drawer: 'ClientsManagementStack' },

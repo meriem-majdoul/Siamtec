@@ -1,12 +1,14 @@
 import React from "react";
 import { StyleSheet, TouchableOpacity } from "react-native";
-import { faPlus } from 'react-native-fontawesome'
+import { faPlus } from '@fortawesome/free-solid-svg-icons'
 
 import * as theme from "../core/theme";
 import { constants, isTablet } from "../core/constants";
 import CustomIcon from "./CustomIcon";
 
 const MyFAB = ({ color = theme.colors.white, style, onPress, icon, ...props }) => (
+
+
     <TouchableOpacity style={[styles.fab, style]} onPress={onPress}>
         <CustomIcon icon={icon || faPlus} color={color} />
     </TouchableOpacity>

@@ -1,5 +1,5 @@
 
-import { faMars, faVenus } from "react-native-fontawesome";
+import { faMars, faVenus } from "@fortawesome/free-solid-svg-icons";
 import { rgb } from 'pdf-lib'
 
 import moment from "moment";

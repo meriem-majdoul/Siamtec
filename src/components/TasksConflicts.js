@@ -2,7 +2,7 @@ import React from "react"
 import { View, StyleSheet, Text, TouchableOpacity, FlatList, Alert, ScrollView } from "react-native"
 import { Switch } from "react-native-paper"
 import Modal from 'react-native-modal'
-import { faInfoCircle, faTimes, faCalendarPlus, faClock, faShieldCheck, faChevronUp, faChevronDown } from 'react-native-fontawesome'
+import { faInfoCircle, faTimes, faCalendarPlus, faClock, faShieldCheck, faChevronUp, faChevronDown } from '@fortawesome/free-solid-svg-icons'
 import _ from 'lodash'
 
 import moment from 'moment';

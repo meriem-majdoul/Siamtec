@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Appbar } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import FontAwesome5 from '@fortawesome/free-solid-svg-icons';
 
 import Loading from './Loading';
 import * as theme from '../core/theme';

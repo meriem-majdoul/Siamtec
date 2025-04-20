@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, ScrollView, TouchableOpacity, Keyboard, TextInp
 import { List } from 'react-native-paper'
 import _ from 'lodash'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
-import { faInfoCircle, faQuoteRight, faTasks, faFolder, faImage, faTimes, faChevronRight, faFileAlt, faCheckCircle, faEye, faArrowRight, faRedo, faAddressBook, faEuroSign, faRetweet, faUser } from 'react-native-vector-icons/FontAwesome5'
+import { faInfoCircle, faQuoteRight, faTasks, faFolder, faImage, faTimes, faChevronRight, faFileAlt, faCheckCircle, faEye, faArrowRight, faRedo, faAddressBook, faEuroSign, faRetweet, faUser } from '@fortawesome/free-solid-svg-icons'
 import ImageView from 'react-native-image-view'
 import { SliderBox } from "react-native-image-slider-box"
 import { connect } from 'react-redux'

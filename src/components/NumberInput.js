@@ -7,7 +7,7 @@ import CustomIcon from './CustomIcon'
 import * as theme from "../core/theme";
 import { constants, isTablet } from "../core/constants";
 import TextInput from "./TextInput";
-import { faMinus, faPlus } from "react-native-fontawesome";
+import { faMinus, faPlus } from "@fortawesome/free-solid-svg-icons";
 
 const NumberInput = ({ number, changeValue, error, ...props }) => {
 

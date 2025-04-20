@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { StyleSheet, View, FlatList, Alert, RefreshControl } from 'react-native'
-import { faUserPlus, faUserFriends } from 'react-native-vector-icons/FontAwesome5'
+import { faUserPlus, faUserFriends } from '@fortawesome/free-solid-svg-icons'
 import { useNavigation } from '@react-navigation/native'  // Remplacez avecNavigation par useNavigation
 import SearchInput, { createFilter } from 'react-native-search-filter'
 
@@ -88,8 +88,6 @@ const ListUsers = (props) => {
     const { userType, permissions, offLine } = props
     const { canRead, canUpdate, canDelete } = permissions
     const isClient = userType === 'client' || userType === 'prospect'
-    console.log('testtt ' + JSON.stringify(user));
-
 
     var roleId = getRoleIdFromValue(user.role)
 

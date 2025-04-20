@@ -57,7 +57,7 @@ import * as theme from '../../core/theme';
 import { isTablet, ScreenWidth} from '../../core/constants';
 import SquarePlus from '../../components/SquarePlus';
 import {CustomIcon} from '../../components';
-import {faPlusCircle, faTimes} from 'react-native-vector-icons/FontAwesome5';
+import {faPlusCircle, faTimes} from '@fortawesome/free-solid-svg-icons';
 
 const dialogContainerSize = ScreenWidth * 0.8;
 const logoSize = dialogContainerSize * 0.6;

@@ -5,7 +5,7 @@ import { Paragraph, Title } from 'react-native-paper';
 import * as  theme from '../core/theme'
 import { constants } from '../core/constants'
 import CustomIcon from './CustomIcon';
-import { faCheckCircle } from 'react-native-fontawesome';
+import { faCheckCircle } from '@fortawesome/free-solid-svg-icons';
 
 
 export default class SuccessMessage extends Component {

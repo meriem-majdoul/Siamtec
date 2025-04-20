@@ -1,4 +1,4 @@
-import { faInfoCircle } from "react-native-fontawesome";
+import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import React, { memo, useEffect, useRef } from "react";
 import { View, StyleSheet, Text, Alert, TextInput as NativeTextInput } from "react-native";
 import { TextInput as Input } from "react-native-paper";

@@ -1,5 +1,5 @@
 
-import { faCheck, faTimes, faCheckCircle } from "react-native-fontawesome";
+import { faCheck, faTimes, faCheckCircle } from "@fortawesome/free-solid-svg-icons";
 import * as theme from '../../theme'
 
 export const visiteTechModel = () => {

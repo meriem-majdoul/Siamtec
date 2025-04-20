@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, ScrollView, TouchableOpacity, Alert, Keyboard, TextInput, ActivityIndicator } from 'react-native';
 import MonthPicker from 'react-native-month-year-picker'
-import { faCalendarPlus, faInfoCircle, faFileAlt } from 'react-native-vector-icons/FontAwesome5'
+import { faCalendarPlus, faInfoCircle, faFileAlt } from '@fortawesome/free-solid-svg-icons'
 import _ from 'lodash'
 import { connect } from 'react-redux'
 

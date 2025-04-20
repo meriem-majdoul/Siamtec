@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, ActivityIndicator } from "react-native";
 // import {} from "react-native-paper";
 import * as theme from "../core/theme";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
-import { faWifiSlash } from 'react-native-fontawesome'
+import { faWifiSlash } from '@fortawesome/free-solid-svg-icons'
 import CustomIcon from "./CustomIcon";
 import { constants } from "../core/constants";
 

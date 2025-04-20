@@ -6,7 +6,7 @@ import * as theme from "../core/theme";
 import { constants, isTablet } from "../core/constants";
 import CustomIcon from './CustomIcon'
 import { Caption } from './typography/Typography'
-import { faAngleDown, faCheck } from "react-native-fontawesome";
+import { faAngleDown, faCheck } from "@fortawesome/free-solid-svg-icons";
 import CloseIcon from "./CloseIcon";
 
 const MyPicker = ({ containerStyle, style, pickerContainerStyle, elements, title, showTitle = true, errorText, enabled = true, ...props }) => {

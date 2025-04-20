@@ -4,7 +4,7 @@ import React, { Children, Component } from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, } from 'react-native';
 import { List } from 'react-native-paper';
 import Icon1 from 'react-native-vector-icons/MaterialCommunityIcons';
-import Icon2 from 'react-native-vector-icons/FontAwesome5';
+import Icon2 from '@fortawesome/free-solid-svg-icons';
 import * as theme from '../core/theme';
 import { constants } from '../core/constants';
 

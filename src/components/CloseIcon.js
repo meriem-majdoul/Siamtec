@@ -1,4 +1,4 @@
-import { faTimes } from "react-native-fontawesome";
+import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import React, { memo } from "react";
 //import { StyleSheet } from "react-native";
 import * as theme from "../core/theme";

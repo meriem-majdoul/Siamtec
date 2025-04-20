@@ -1,6 +1,6 @@
 import { Dimensions, Platform } from 'react-native'
 import RNFetchBlob from 'rn-fetch-blob'
-import { faCamera, faImages, faFileInvoice, faUserHardHat, faFileInvoiceDollar, faBallot, faFileCertificate, faFile, faFolderPlus, faHandHoldingUsd, faHandshake, faHomeAlt, faGlobeEurope, faReceipt, faFileAlt, faFileEdit } from 'react-native-fontawesome'
+import { faCamera, faImages, faFileInvoice, faUserHardHat, faFileInvoiceDollar, faBallot, faFileCertificate, faFile, faFolderPlus, faHandHoldingUsd, faHandshake, faHomeAlt, faGlobeEurope, faReceipt, faFileAlt, faFileEdit } from '@fortawesome/free-solid-svg-icons'
 
 import { rgb } from "pdf-lib"
 

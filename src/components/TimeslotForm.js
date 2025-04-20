@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 import { StyleSheet, Text, View, ScrollView, Keyboard, Alert, TouchableOpacity } from 'react-native'
 import { Switch } from 'react-native-paper'
 import DatePicker from 'react-native-date-picker'
-import { faCalendarPlus, faClock } from 'react-native-fontawesome'
+import { faCalendarPlus, faClock } from '@fortawesome/free-solid-svg-icons'
 
 import moment from 'moment';
 import 'moment/locale/fr'

@@ -6,7 +6,7 @@ import ListTeams from '../screens/Users/ListTeams'
 import * as theme from '../core/theme'
 import { constants } from '../core/constants'
 import CustomIcon from './CustomIcon';
-import { faUser } from 'react-native-fontawesome';
+import { faUser } from '@fortawesome/free-solid-svg-icons';
 
 const initialLayout = { width: Dimensions.get('window').width }
 
