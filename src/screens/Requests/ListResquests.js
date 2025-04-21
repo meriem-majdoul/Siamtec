@@ -37,7 +37,7 @@ const ListRequests = (props) => {
         if (count) {
             await countDown(count);
         }
-
+        console.log('props: ' + JSON.stringify(props, null, 2));
         const { queryFilters } = props.permissions;
         if (queryFilters.length === 0) {
             setRequestsList([]);

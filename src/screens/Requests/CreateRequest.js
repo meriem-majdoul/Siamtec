@@ -64,7 +64,7 @@ class CreateRequest extends Component {
         this.requestType = this.props.requestType
         this.isTicket = this.requestType === 'ticket'
 
-        this.RequestId = this.props.route?.params?.RequestId ?? '';
+        this.RequestId = this.props.requestId?? '';
 
         this.isEdit = this.RequestId !== ''
         this.RequestId = this.isEdit ? this.RequestId : this.isTicket ? generateId('GS-DTC-') : generateId('GS-DPR-')
@@ -100,6 +100,7 @@ class CreateRequest extends Component {
             toastMessage: '',
             toastType: ''
         }
+        // console.log('props111: ' + JSON.stringify(props, null, 2));
     }
 
     autoFillClient() {
@@ -201,37 +202,50 @@ class CreateRequest extends Component {
     }
 
     async handleSubmit() {
-        Keyboard.dismiss()
-
-        const { isConnected } = this.props.network
-        let isEditOffLine = isEditOffline(this.isEdit, isConnected)
-        if (isEditOffLine) return
-
-        const { error, loading } = this.state
-        if (loading || _.isEqual(this.state, this.initialState)) return
-        load(this, true)
-
-        //1. Validate inputs
-        const isValid = this.validateInputs()
-        if (!isValid) return
-
-        let props = ["client", "subject", "description", "state", "selectedProducts"]
-        if (this.isTicket) props = [...props, ...["project", "department"]]
-        else props = [...props, ...["address"]]
-        let request = unformatDocument(this.state, props, this.props.currentUser, this.isEdit)
-        request.type = this.isTicket ? 'ticket' : 'project'
-
-        this.AddRequestAndChatRoom(request, this.isEdit)
-
-        load(this, false)
-
-        //Refreshing requests list
-        if (this.props.navigation.state.params.onGoBack) {
-            this.props.navigation.state.params.onGoBack()
+        try {
+            Keyboard.dismiss();
+    
+            const { isConnected } = this.props.network;
+            let isEditOffLine = isEditOffline(this.isEdit, isConnected);
+            if (isEditOffLine) return;
+    
+            const { error, loading } = this.state;
+            if (loading || _.isEqual(this.state, this.initialState)) return;
+            load(this, true);
+    
+            // 1. Validate inputs
+            const isValid = this.validateInputs();
+            if (!isValid) return;
+    
+            let props = ["client", "subject", "description", "state", "selectedProducts"];
+            if (this.isTicket) props = [...props, "project", "department"];
+            else props = [...props, "address"];
+    
+            let request = unformatDocument(this.state, props, this.props.currentUser, this.isEdit);
+            request.type = this.isTicket ? 'ticket' : 'project';
+    
+            await this.AddRequestAndChatRoom(request, this.isEdit);
+    
+            load(this, false);
+    
+            console.log('Navigation and Route props:', JSON.stringify(this.props.navigation, null, 2));
+    
+            // Refreshing requests list
+            const { route, navigation } = this.props;
+    
+            if (route?.params?.onGoBack) {
+                route.params.onGoBack();
+            }
+    
+            navigation.goBack();
+    
+        } catch (error) {
+            console.error('Error in handleSubmit:', error);
         }
-
-        this.props.navigation.goBack()
     }
+    
+    
+     
 
     renderStateToggle(currentState, canWrite) {
         const label = this.isTicket ? 'ticket' : 'projet'
@@ -583,7 +597,7 @@ class CreateRequest extends Component {
                 {this.isEdit &&
                     <View style={{ flexDirection: 'row', alignItems: 'center', padding: 10, paddingRight: 15, backgroundColor: theme.colors.surface, elevation: 5 }}>
                         <MyFAB
-                            onPress={() => this.props.navigation.navigate('Chat', { chatId: this.state.chatId })}
+                            onPress={() => this.props.navigation.navigate('ChatStack',('Chat', { chatId: this.state.chatId }))}
                             icon={faCommentDots}
                             style={styles.fab} />
                         {this.renderStateToggle(state, canWrite)}

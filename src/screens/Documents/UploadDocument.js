@@ -653,65 +653,98 @@ class UploadDocument extends Component {
     }
 
     //3.1 Images
-    async configImageSources(index, noToggle) {
-        const isCamera = index === 0
-        const result = await this.setAttachment(isCamera)
-        const { attachment, error } = result
-        if (error) displayError(error)
-        else this.setState({ attachment, attachmentError: "", orderData: null })
-        if (noToggle) return
-        this.toggleModal()
-    }
 
-    async setAttachment(isCamera) {
-        try {
-            let attachment = null
-            if (isCamera) {
-                const attachments = await pickImage([], true, false)
-                if (attachments.length === 0) throw new Error("ignore")
-                attachment = attachments[0]
+async configImageSources(index, noToggle) {
+    try {
+        const isCamera = index === 0;
+        const { attachment, error } = await this.setAttachment(isCamera);
+
+        if (error) {
+            displayError(error);
+            return;
+        }
+
+        this.setState({
+            attachment,
+            attachmentError: "",
+            orderData: null,
+        });
+
+        if (!noToggle) {
+            this.toggleModal();
+        }
+        console.log('test');
+    } catch (err) {
+        console.error("Une erreur s'est produite dans configImageSources:", err);
+    }
+}
+
+// Récupération et traitement des fichiers joints
+async setAttachment(isCamera) {
+    try {
+        let attachment = null;
+
+        if (isCamera) {
+            const attachments = await pickImage([], true, false);
+            if (!attachments || attachments.length === 0) {
+                throw new Error("Aucune image sélectionnée.");
             }
-            else attachment = await this.pickDoc()
-            if (!attachment) throw new Error("ignore")
-            attachment = await this.handleImageToPdfConversion(attachment)
-            return { attachment }
+            attachment = attachments[0];
+        } else {
+            attachment = await this.pickDoc();
         }
 
-        catch (error) {
-            return { error }
+        if (!attachment) {
+            throw new Error("Aucun fichier sélectionné.");
         }
+
+        return {
+            attachment: await this.handleImageToPdfConversion(attachment),
+        };
+    } catch (error) {
+        return { error };
+    }
+}
+
+// Sélection de documents
+async pickDoc() {
+    try {
+        return await pickDoc(true, [DocumentPicker.types.pdf, DocumentPicker.types.images]);
+    } catch (error) {
+        const { message } = error;
+        displayError({ message });
+        return null;
+    }
+}
+
+// Conversion d'une image en PDF
+async handleImageToPdfConversion(attachment) {
+    const isImage = attachment.type?.includes('image/');
+
+    if (!isImage) {
+        return attachment;
     }
 
-    async pickDoc() {
-        try {
-            const attachment = await pickDoc(true, [DocumentPicker.types.pdf, DocumentPicker.types.images])
-            return attachment
-        }
-        catch (e) {
-            const { message } = e
-            displayError({ message })
-        }
-    }
+    this.setState({ modalLoading: true });
 
-    async handleImageToPdfConversion(attachment) {
-        const isImage = attachment.type.includes('image/')
-        if (!isImage) return attachment
-        try {
-            this.setState({ modalLoading: true })
-            const pdfBase64 = await convertImageToPdf(attachment)
-            const fileName = `Scan-${moment().format('DD-MM-YYYY-HHmmss')}.pdf`
-            const destPath = await saveFile(pdfBase64, fileName, 'base64')
-            attachment.path = destPath
-            attachment.name = fileName
-            return attachment
-        }
-        catch (e) {
-            throw new Error(e)
-        }
-        finally {
-            this.setState({ modalLoading: false })
-        }
+    try {
+        const pdfBase64 = await convertImageToPdf(attachment);
+        const fileName = `Scan-${moment().format('DD-MM-YYYY-HHmmss')}.pdf`;
+        const destPath = await saveFile(pdfBase64, fileName, 'base64');
+
+        return {
+            ...attachment,
+            path: destPath,
+            name: fileName,
+        };
+    } catch (error) {
+        console.error("Erreur lors de la conversion en PDF:", error);
+        throw error;
+    } finally {
+        this.setState({ modalLoading: false });
     }
+}
+
 
     //3.2 Generation
     async startGenPdf(index) {
@@ -973,14 +1006,15 @@ class UploadDocument extends Component {
                                     <ItemPicker
                                         onPress={() => {
                                             if (this.project || this.isEdit || loading) return //pre-defined project
-                                            navigateToScreen(this,
-                                                'ListProjects',
-                                                {
-                                                    onGoBack: this.refreshProject,
-                                                    isRoot: false,
-                                                    prevScreen: 'UploadDocument',
-                                                    titleText: 'Choix du projet',
-                                                    showFAB: false
+                                                this.props.navigation.navigate('ProjectsStack', {
+                                                    screen: 'ListProjects',
+                                                    params: {
+                                                        onGoBack: this.refreshProject,
+                                                        isRoot: false,
+                                                        prevScreen: 'UploadDocument',
+                                                        titleText: 'Choix du projet',
+                                                        showFAB: false
+                                                    }
                                                 })
                                         }}
                                         label="Projet concerné *"

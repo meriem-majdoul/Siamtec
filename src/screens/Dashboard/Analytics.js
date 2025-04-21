@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { StyleSheet, Text, View, FlatList, Dimensions, ScrollView } from 'react-native'
 import { connect } from 'react-redux'
-// import { LineChart } from 'react-native-chart-kit'
+import { LineChart } from 'react-native-chart-kit'
 //#task: try react-native-responsive-linechart
 import NumberFormat from 'react-number-format';
 

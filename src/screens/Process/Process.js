@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { StyleSheet, Text, View, KeyboardAvoidingView, Platform, TouchableOpacity } from 'react-native';
 import _ from 'lodash'
 import { faTimes } from '@fortawesome/free-solid-svg-icons'
-import { faArrowAltRight } from "@fortawesome/free-solid-svg-icons"
+import { faArrowRight } from "@fortawesome/free-solid-svg-icons"
 import { connect } from 'react-redux'
 
 import ProcessAction from './container/ProcessAction'
@@ -150,7 +150,7 @@ class Process extends Component {
                 <Text style={[theme.customFontMSbold.header, { color: theme.colors.primary, marginRight: 8 }]}>
                     Voir plus
                 </Text>
-                <CustomIcon icon={faArrowAltRight} color={theme.colors.primary} size={16} />
+                <CustomIcon icon={faArrowRight} color={theme.colors.primary} size={16} />
             </TouchableOpacity>
         )
     }

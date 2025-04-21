@@ -121,14 +121,20 @@ class ListProjects extends Component {
     }
 
     onPressProject(project) {
-        if (this.isRoot)
-            this.props.navigation.navigate('Process', { ProjectId: project.id })
-
-        else {
-            this.props.navigation.state.params.onGoBack(project)
-            this.props.navigation.goBack()
+    
+        if (this.isRoot) {
+            this.props.navigation.navigate('Process', { ProjectId: project.id });
+        } else {
+            const onGoBack = this.props.route.params?.onGoBack;
+    
+    
+            if (onGoBack) {
+                onGoBack(project);
+            }
+            this.props.navigation.goBack();
         }
     }
+    
 
     renderSearchBar() {
         const { searchInput, showInput } = this.state
