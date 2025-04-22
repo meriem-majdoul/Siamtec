@@ -1,5 +1,5 @@
-import React, { Component } from 'react'
-import { GiftedChat, Bubble, Send, SystemMessage, Day, Time, Actions } from 'react-native-gifted-chat'
+import React, { Component,forwardRef  } from 'react'
+import { GiftedChat, Bubble, Send, SystemMessage, Day, Time, Actions,InputToolbar  } from 'react-native-gifted-chat'
 import { TouchableOpacity, ActivityIndicator, View, StyleSheet, Text, Alert, ImageBackground } from 'react-native'
 import { faCommentDots } from '@fortawesome/free-solid-svg-icons'
 import DocumentPicker from '@react-native-documents/picker';
@@ -44,6 +44,7 @@ class Chat extends Component {
         super(props)
         this.currentUser = firebase.auth().currentUser
         this.chatId = this.props.route?.params?.chatId ?? '';
+        // console.log("props: ", this.chatId); 
 
         this.videoPlayer = null
 
@@ -92,17 +93,33 @@ class Chat extends Component {
             .collection('ChatMessages')
             .orderBy('createdAt', 'desc')
             .onSnapshot(querySnapshot => {
-                let messages = querySnapshot.docs.map(doc => {
-                    const message = doc.data()
-                    if (!message.system) {
-                        message.user._id = message.user.id
-                        message.user.name = message.user.fullName
+                const messages = querySnapshot.docs.map(doc => {
+                    const message = doc.data();
+    
+                    if (!message.system && message.user) {
+                        message.user._id = message.user.id || message.user._id; 
+                        message.user.name = message.user.fullName || message.user.name;
                     }
-                    return message
-                })
-                this.setState({ messages })
-            })
+    
+                    if (message.createdAt && typeof message.createdAt.toDate === 'function') {
+                        message.createdAt = message.createdAt.toDate();
+                    }
+    
+                    return message;
+                });
+    
+                this.setState({ messages });
+            });
     }
+    
+    
+    // Assurez-vous de déconnecter le listener lorsque le composant est démonté
+    componentWillUnmount() {
+        if (this.messagesListener) {
+            this.messagesListener();
+        }
+    }
+    
 
     async pickFilesAndSendMessage() {
         let attachments = []
@@ -185,6 +202,7 @@ class Chat extends Component {
 
     async handleSend(messages, messageId) {
 
+
         try {
             const text = messages[0].text
 
@@ -258,7 +276,8 @@ class Chat extends Component {
         </View>
     }
 
-    renderBubble = props => (
+    renderBubbleWithCustomTextStyle(props) {
+        return (
         <Bubble
             {...props}
 
@@ -302,7 +321,7 @@ class Chat extends Component {
             tickStyle={{ color: props.currentMessage.seen ? '#fff' : '#000' }}
             usernameStyle={{ color: theme.colors.gray_dark, marginTop: 10, fontSize: 14 }}
         />
-    )
+    )}
 
     renderLoading() {
         return (
@@ -520,11 +539,15 @@ class Chat extends Component {
                         onSend={this.handleSend}
                         user={{ _id: this.currentUser.uid, _name: this.currentUser.displayName }}
                         placeholder='Tapez un message'
+                         placeholderTextColor="gray"
+                        inputTextStyle={{
+                            color: 'black', // Couleur du texte de l'input
+                        }}
                         alwaysShowSend
                         showUserAvatar={false}
                         scrollToBottom
                         renderCustomView={this.renderCustomView}
-                        renderBubble={this.renderBubble.bind(this)}
+                        renderBubble={(props) => this.renderBubbleWithCustomTextStyle(props)}
                         renderLoading={this.renderLoading}
                         renderSend={this.renderSend}
                         renderActions={(props) => this.renderActions(props, isConnected)}
@@ -534,6 +557,17 @@ class Chat extends Component {
                         renderSystemMessage={this.renderSystemMessage}
                         renderDay={(props) => <Day {...props} dateFormat={'D MMM YYYY'} textStyle={[{ color: theme.colors.gray_dark, fontSize: isTablet ? 16 : undefined }]} />}
                         renderChatEmpty={this.renderChatEmpty.bind(this)}
+                        renderInputToolbar={(props) => {
+                            return (
+                                <InputToolbar
+                                    {...props}
+                                   
+                                    textInputStyle={{
+                                        color: 'black', // Couleur du texte de l'input
+                                    }}
+                                />
+                            );
+                        }}
                     />
                 </View>
                 <Toast

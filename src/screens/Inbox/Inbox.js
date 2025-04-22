@@ -1,4 +1,4 @@
-//Conditionnal rendering depending on USER ROLE
+Appbar//Conditionnal rendering depending on USER ROLE
 
 import React from "react"
 import { View } from 'react-native'
@@ -49,8 +49,9 @@ class Inbox extends React.Component {
         return (
             <View style={{ flex: 1 }}>
                 <Appbar
-                    menu={this.isRoot}
-                    back={!this.isRoot}
+                    // menu={this.isRoot}
+                    // back={!this.isRoot}
+                    back
                     title
                     titleText='Boîte de réception'
                 />

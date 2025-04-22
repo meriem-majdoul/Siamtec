@@ -105,7 +105,7 @@ const DrawerMenu = ({ role, currentUser }) => {
               <CustomIcon
                 icon={faCommentDots}
                 color={theme.colors.primary}
-                onPress={() => navigateToScreen('ChatStack', { chatId: 'GlobalChat' })}
+                onPress={() =>  navigation.navigate('ChatStack',{screen:'Chat', params:{ chatId: 'GlobalChat' }} )}
               />
             }
           </View>
@@ -167,7 +167,7 @@ const DrawerMenu = ({ role, currentUser }) => {
   };
 
   const navigateToScreen2 = (drawer, screenName, screenParams) => {
-    navigation.navigate(drawer, { screenName, screenParams });
+    navigation.navigate(drawer, { screen:screenName, params:screenParams });
   };
 
   return (
