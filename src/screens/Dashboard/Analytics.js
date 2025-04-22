@@ -174,9 +174,13 @@ class Analytics extends Component {
 
         const emptySpace = () => <View style={{ flex: 0.15 }} />
 
+        const formatNumber = (value, suffix = '') => {
+            return `${Number(value).toLocaleString('en-US')}${suffix}`;
+        };
+
         return (
             <View style={styles.summaryContainer}>
-                {summaryData.map((data, index) => {
+                {summaryData.map((data, index) => {                    
                     return (
                         <View
                             key={index.toString()}
@@ -187,13 +191,9 @@ class Analytics extends Component {
                                 <Text style={[theme.customFontMSsemibold.caption, styles.summaryLabel]}>{data.label}</Text>
                             </View>
                             <View style={styles.summaryValueContainer}>
-                                <NumberFormat
-                                    value={data.value}
-                                    displayType={'text'}
-                                    thousandSeparator={true}
-                                    suffix={data.symbol}
-                                    renderText={value => <Text style={[theme.customFontMSsemibold.body, styles.summaryValue, { color: data.colors.primary }]}>{value.toString()}</Text>}
-                                />
+                            <Text style={[theme.customFontMSsemibold.body, styles.summaryValue, { color: data.colors.primary }]}>
+                                {formatNumber(data.value, data.symbol)}
+                            </Text>
                             </View>
                             {emptySpace()}
                         </View>

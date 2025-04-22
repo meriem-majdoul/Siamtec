@@ -247,7 +247,7 @@ class UploadDocument extends Component {
     async setSignatures(DocumentId) {
         const query = db.collection('Documents').doc(DocumentId).collection('AttachmentHistory')
         let attachmentHistoryDocs = await fetchDocuments(query)
-        if (attachmentHistoryDocs === []) return
+        if (attachmentHistoryDocs == []) return
         attachmentHistoryDocs = attachmentHistoryDocs.filter((doc) => doc.sign_proofs_data)
         const signatures = attachmentHistoryDocs.map((doc) => {
             const { signedBy, signedAt } = doc.sign_proofs_data
@@ -653,98 +653,65 @@ class UploadDocument extends Component {
     }
 
     //3.1 Images
-
-async configImageSources(index, noToggle) {
-    try {
-        const isCamera = index === 0;
-        const { attachment, error } = await this.setAttachment(isCamera);
-
-        if (error) {
-            displayError(error);
-            return;
-        }
-
-        this.setState({
-            attachment,
-            attachmentError: "",
-            orderData: null,
-        });
-
-        if (!noToggle) {
-            this.toggleModal();
-        }
-        console.log('test');
-    } catch (err) {
-        console.error("Une erreur s'est produite dans configImageSources:", err);
+    async configImageSources(index, noToggle) {
+        const isCamera = index === 0
+        const result = await this.setAttachment(isCamera)
+        const { attachment, error } = result
+        if (error) displayError(error)
+        else this.setState({ attachment, attachmentError: "", orderData: null })
+        if (noToggle) return
+        this.toggleModal()
     }
-}
 
-// Récupération et traitement des fichiers joints
-async setAttachment(isCamera) {
-    try {
-        let attachment = null;
-
-        if (isCamera) {
-            const attachments = await pickImage([], true, false);
-            if (!attachments || attachments.length === 0) {
-                throw new Error("Aucune image sélectionnée.");
+    async setAttachment(isCamera) {
+        try {
+            let attachment = null
+            if (isCamera) {
+                const attachments = await pickImage([], true, false)
+                if (attachments.length === 0) throw new Error("ignore")
+                attachment = attachments[0]
             }
-            attachment = attachments[0];
-        } else {
-            attachment = await this.pickDoc();
+            else attachment = await this.pickDoc()
+            if (!attachment) throw new Error("ignore")
+            attachment = await this.handleImageToPdfConversion(attachment)
+            return { attachment }
         }
 
-        if (!attachment) {
-            throw new Error("Aucun fichier sélectionné.");
+        catch (error) {
+            return { error }
         }
-
-        return {
-            attachment: await this.handleImageToPdfConversion(attachment),
-        };
-    } catch (error) {
-        return { error };
-    }
-}
-
-// Sélection de documents
-async pickDoc() {
-    try {
-        return await pickDoc(true, [DocumentPicker.types.pdf, DocumentPicker.types.images]);
-    } catch (error) {
-        const { message } = error;
-        displayError({ message });
-        return null;
-    }
-}
-
-// Conversion d'une image en PDF
-async handleImageToPdfConversion(attachment) {
-    const isImage = attachment.type?.includes('image/');
-
-    if (!isImage) {
-        return attachment;
     }
 
-    this.setState({ modalLoading: true });
-
-    try {
-        const pdfBase64 = await convertImageToPdf(attachment);
-        const fileName = `Scan-${moment().format('DD-MM-YYYY-HHmmss')}.pdf`;
-        const destPath = await saveFile(pdfBase64, fileName, 'base64');
-
-        return {
-            ...attachment,
-            path: destPath,
-            name: fileName,
-        };
-    } catch (error) {
-        console.error("Erreur lors de la conversion en PDF:", error);
-        throw error;
-    } finally {
-        this.setState({ modalLoading: false });
+    async pickDoc() {
+        try {
+            const attachment = await pickDoc(true, [DocumentPicker.types.pdf, DocumentPicker.types.images])
+            return attachment
+        }
+        catch (e) {
+            const { message } = e
+            displayError({ message })
+        }
     }
-}
 
+    async handleImageToPdfConversion(attachment) {
+        const isImage = attachment.type.includes('image/')
+        if (!isImage) return attachment
+        try {
+            this.setState({ modalLoading: true })
+            const pdfBase64 = await convertImageToPdf(attachment)
+            const fileName = `Scan-${moment().format('DD-MM-YYYY-HHmmss')}.pdf`
+            const destPath = await saveFile(pdfBase64, fileName, 'base64')
+            attachment.path = destPath
+            attachment.name = fileName
+            return attachment
+        }
+        catch (e) {
+            throw new Error(e)
+        }
+        finally {
+            this.setState({ modalLoading: false })
+        }
+    }
 
     //3.2 Generation
     async startGenPdf(index) {

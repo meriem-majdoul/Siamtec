@@ -11,7 +11,6 @@ import Tasks from '../screens/Dashboard/Tasks';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faChartBar, faClipboardCheck, faBell, faArrowAltCircleRight } from '@fortawesome/free-solid-svg-icons';
 
-
 const DashboardMenu = ({ ...props }) => {
   const StatsRoute = () => <Analytics navigation={props.navigation} />;
   const TasksRoute = () => <Tasks navigation={props.navigation} />
@@ -20,12 +19,11 @@ const DashboardMenu = ({ ...props }) => {
 
   const [index, setIndex] = React.useState(3);
   const [routes] = React.useState([
-    { key: 'stats', title: 'Stats', icon: () => <FontAwesomeIcon icon={faChartBar} size={20} color="black" /> },
-    { key: 'tasks', title: 'Tâches', icon: () => <FontAwesomeIcon icon={faClipboardCheck} size={20} color="black" /> },
-    { key: 'notifications', title: 'Notifications', icon: () => <FontAwesomeIcon icon={faBell} size={20} color="black" /> },
-    { key: 'shortcuts', title: 'Raccourcis', icon: () => <FontAwesomeIcon icon={faArrowAltCircleRight} size={20} color="black" /> },
-  ]);
-  
+    { key: 'stats', title: 'Stats', icon: faChartBar },
+    { key: 'tasks', title: 'Tâches', icon: faClipboardCheck },
+    { key: 'notifications', title: 'Notifications', icon: faBell },
+    { key: 'shortcuts', title: 'Raccourcis', icon: faArrowAltCircleRight },
+  ])
 
   const renderScene = BottomNavigation.SceneMap({
     stats: StatsRoute,
@@ -34,17 +32,22 @@ const DashboardMenu = ({ ...props }) => {
     shortcuts: ShortcutsRoute,
   })
 
+  const renderIcon = ({ route }) => (
+    <FontAwesomeIcon icon={route.icon} size={20} color={index === routes.indexOf(route) ? '#061357' : 'gray'} />
+  );
+
   return (
     // <Provider>
     <BottomNavigation
       navigationState={{ index, routes }}
       onIndexChange={setIndex}
       renderScene={renderScene}
-      barStyle={{ backgroundColor: '#fff', height: 55 }}
+      renderIcon={renderIcon}
+      barStyle={{ backgroundColor: '#FFF', height: 55, color:'black' }}
       activeColor={"#061357"}
       safeAreaInset={{ bottom: 0 }}
       labelMaxFontSizeMultiplier={1.5}
-    //  renderLabel={(label)=><Text style={[theme.customFontMSregular.caption]}>{label.route.title}</Text>}
+      renderLabel={(label)=><Text style={[theme.customFontMSregular.caption]}>{label.route.title}</Text>}
     />
     // </Provider>
   )

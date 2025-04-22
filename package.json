@@ -83,7 +83,7 @@
     "react-native-video": "^6.0.0",
     "react-native-video-controls": "^2.7.1",
     "react-navigation": "^4.4.0",
-    "react-number-format": "^5.4.3",
+    "react-number-format": "^5.4.4",
     "react-redux": "^9.2.0",
     "redux": "^5.0.1",
     "redux-persist": "^6.0.0",
