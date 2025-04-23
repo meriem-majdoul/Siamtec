@@ -50,10 +50,10 @@ export default class ViewMessage extends Component {
     }
 
 
-    componentWillUnmount() {
-        if (this.willFocusSubscription)
-            this.willFocusSubscription.remove()
-    }
+    // componentWillUnmount() {
+    //     if (this.willFocusSubscription)
+    //         this.willFocusSubscription.remove()
+    // }
 
     async componentDidMount() {
         await this.fetchMainMessage()
@@ -129,8 +129,8 @@ export default class ViewMessage extends Component {
                         return (
                             <View key={key.toString()}>
                                 {key === 0 &&
-                                    <View>
-                                        <Text style={[theme.customFontMSregular.body, { marginBottom: 20 }]}>{msg.message}</Text>
+                                    <View >
+                                        <Text style={[theme.customFontMSregular.body, { marginBottom: 20,color:'black' }]}>{msg.message}</Text>
                                         {messagesRendered.length > 1 && <Text style={[theme.customFontMSregular.caption, { marginBottom: 5, color: theme.colors.primary }]} onPress={showOldMessages => this.setState({ showOldMessages: !this.state.showOldMessages })}>{showHideText}</Text>}
                                     </View>
                                 }
@@ -209,7 +209,7 @@ export default class ViewMessage extends Component {
         const { expandedId, messagesList } = this.state
 
         return (
-            <List.AccordionGroup
+            <List.AccordionGroup style={{backgroundColor:'#pink'}}
                 expandedId={expandedId}
                 onAccordionPress={(expandedId) => {
                     if (this.state.expandedId === expandedId)
@@ -226,15 +226,15 @@ export default class ViewMessage extends Component {
                     receivers = receivers.join(', ')
 
                     return (
-                        <List.Accordion
+                        <List.Accordion 
                             key={key.toString()}
                             id={message.id}
                             showArrow
-                            style={{ paddingVertical: constants.ScreenHeight * 0.015, borderBottomWidth: !isExpanded ? StyleSheet.hairlineWidth * 2 : 0, borderBottomColor: theme.colors.gray_light }}
+                            style={{ paddingVertical: constants.ScreenHeight * 0.015,color:'black', borderBottomWidth: !isExpanded ? StyleSheet.hairlineWidth * 2 : 0, borderBottomColor: theme.colors.gray_light }}
                             titleComponent={
                                 <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
-                                    <Text numberOfLines={1} style={[theme.customFontMSregular.header, { marginRight: isExpanded ? 3 : 5 }]}>{message.sender.fullName}</Text>
-                                    <Text style={[theme.customFontMSregular.caption, { color: theme.colors.placeholder, marginHorizontal: 5, marginTop: 3 }]}>{moment(message.sentAt).format('lll')}</Text>
+                                    <Text numberOfLines={1} style={[theme.customFontMSregular.header, { marginRight: isExpanded ? 3 : 5  }]}>{message.sender.fullName}</Text>
+                                    <Text style={[theme.customFontMSregular.caption, { color: 'gray', marginHorizontal: 5, marginTop: 3 }]}>{moment(message.sentAt).format('lll')}</Text>
                                     <CustomIcon icon={arrowStyle.icon} color={arrowStyle.color} size={15} style={{ marginTop: 1, marginLeft: 5 }} />
                                 </View>
                             }
@@ -264,7 +264,7 @@ export default class ViewMessage extends Component {
                 <Appbar back title titleText='File des messages' />
                 <View style={styles.container}>
                     <Headline style={[theme.customFontMSmedium.h3, { paddingLeft: constants.ScreenWidth * 0.038, marginBottom: 5 }]}>{this.state.mainMessage.mainSubject}</Headline>
-                    <ScrollView style={styles.container} >
+                    <ScrollView style={[styles.container, {backgroundColor:'pink'}]} >
                         {this.renderMessages()}
                     </ScrollView >
                 </View>
@@ -273,7 +273,7 @@ export default class ViewMessage extends Component {
                     message={toastMessage}
                     type={toastType}
                     onDismiss={() => this.setState({ toastMessage: '' })}
-                    containerStyle={{ bottom: 10 }} />
+                    containerStyle={{ bottom: 10 }} style={{backgroundColor:'#pink'}}/>
             </View>
         )
     }
@@ -282,7 +282,7 @@ export default class ViewMessage extends Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: theme.colors.background
+        backgroundColor: 'theme.colors.background'
     },
     content: {
         flex: 1,

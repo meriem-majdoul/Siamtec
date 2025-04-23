@@ -34,13 +34,14 @@ export default class ViewNews extends Component {
                 <Appbar back title titleText={this.newspost.postTitle} />
 
                 <ScrollView>
-                    <View style={{ paddingVertical: 80, paddingHorizontal: theme.padding, marginTop: -constants.ScreenHeight * 0.04 }}>
+                    <View style={{ paddingVertical: 80,color:'#000', paddingHorizontal: theme.padding, marginTop: -constants.ScreenHeight * 0.04 }}>
                         <HTML
                             tagsStyles={{
                                 // h1: { fontSize: 50 },
                                 // body: { fontSize: 20 },
-                                p: { fontSize: 20, fontWeight: "normal" },
-                                // strong: { fontSize: 20, },
+                                p: { fontSize: 17, fontWeight: "normal",color:'#000' },
+                                h3: { fontSize: 18,color:'#000' },
+                                strong: { fontSize: 17,color:'#09ce63' },
                                 // blockquote: { fontSize: 20 },
                                 a: { marginVertical: 10 },
                                 // em: { fontSize: 20, },

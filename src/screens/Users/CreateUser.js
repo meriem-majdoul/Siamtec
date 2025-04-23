@@ -276,7 +276,7 @@ class CreateUser extends Component {
               <AddressInput
                 label='Adresse postale'
                 offLine={!isConnected}
-                onPress={() => this.props.navigation.navigate('Address', { onGoBack: this.refreshAddress })}
+                onPress={() => this.props.navigation.navigate('ProfileStack',{screen:'Address', params:{ onGoBack: this.refreshAddress }})}
                 address={address}
                 onChangeText={this.setAddress}
                 clearAddress={() => this.setAddress('')}

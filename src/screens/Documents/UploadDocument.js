@@ -131,7 +131,8 @@ class UploadDocument extends Component {
         this.dynamicType = route?.params?.dynamicType ?? false;
         this.documentType = route?.params?.documentType;
         this.project = route?.params?.project;
-        this.onGoBack = route?.params?.onGoBack;
+        this.onGoBack = route?.params?.prevScreen; 
+       
 
         this.currentRole = this.props.role.id
         this.isHighrole = highRoles.includes(this.currentRole)
@@ -218,12 +219,12 @@ class UploadDocument extends Component {
             this.navigateToSignature(true, this.props.network.isConnected)
     }
 
-    componentWillUnmount() {
-        this.resetModalOptions()
-        this.unsubscribeAttachmentListener && this.unsubscribeAttachmentListener()
-        if (this.willFocusSubscription)
-            this.willFocusSubscription.remove()
-    }
+    // componentWillUnmount() {
+    //     this.resetModalOptions()
+    //     this.unsubscribeAttachmentListener && this.unsubscribeAttachmentListener()
+    //     if (this.willFocusSubscription)
+    //         this.willFocusSubscription.remove()
+    // }
 
     async initEditMode(DocumentId) {
         if (!this.isEdit) return
@@ -343,6 +344,8 @@ class UploadDocument extends Component {
 
         //6. Go back (Process context only)
         const { onGoBack } = this.props.navigation.state.params
+    
+
         if (onGoBack)
             onGoBack()
         this.props.navigation.goBack()
@@ -1136,13 +1139,15 @@ class UploadDocument extends Component {
         else return (
             <View style={styles.container}>
                 <Appbar
-                    close title
+                    close 
+                    title
                     titleText={titleText}
                     loading={loading}
                     // check={canWrite && !this.isProcess}
                     // handleSubmit={() => this.handleSubmit(false, this.DocumentId)}
                     del={canDelete}
-                    handleDelete={this.showAlert} />
+                    handleDelete={this.showAlert}
+                     />
 
                 {this.isProcess ?
                     this.renderProcessView(canWrite, isConnected)

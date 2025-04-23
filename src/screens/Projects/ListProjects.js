@@ -235,8 +235,8 @@ class ListProjects extends Component {
                             :
                             <EmptyList icon={faDraftingCompass} header='Aucun projet' description='Gérez tous vos projets. Appuyez sur le boutton "+" pour en créer un nouveau.' />
                         }
-
-                        {canCreate && this.showFAB &&
+                        {/* && this.showFAB */}
+                        {canCreate &&
                             <MyFAB onPress={() => this.props.navigation.navigate('CreateProject')} />
                         }
                     </Background>}

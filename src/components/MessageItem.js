@@ -41,7 +41,10 @@ const MessageItem = ({ message, options, functions, ...props }) => {
         <List.Item
             title={
                 <View style={{ flexDirection: 'row' }}>
-                    <Text style={theme.customFontMSmedium.body}>{message.sender.fullName}</Text>
+                   <Text style={[theme.customFontMSmedium.body, { color: '#000' }]}>
+                    {message.sender.fullName}
+                    </Text>
+
                 </View>
             }
             description={() => (

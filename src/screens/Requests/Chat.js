@@ -124,47 +124,49 @@ class Chat extends Component {
     async pickFilesAndSendMessage() {
         let attachments = []
 
-        try {
-            const results = await DocumentPicker.pickMultiple({ type })
+        // try {
+            const results = await DocumentPicker.pickMultiple({
+                type: [DocumentPicker.types.allFiles],
+              });
+              console.log('Selected files:', results);
+            // for (const res of results) {
+            //     //android only
+            //     if (res.uri.startsWith('content://')) { //#task remove this condition (useless..)
+            //         //1. Copy file to Cach to get its relative path (Documentpicker provides only absolute path which can not be used to upload file to firebase)
+            //         const destPath = `${RNFS.TemporaryDirectoryPath}/${'temporaryDoc'}${Date.now()}-${Math.floor(Math.random() * 100)}`
+            //         await RNFS.copyFile(res.uri, destPath)
 
-            for (const res of results) {
-                //android only
-                if (res.uri.startsWith('content://')) { //#task remove this condition (useless..)
-                    //1. Copy file to Cach to get its relative path (Documentpicker provides only absolute path which can not be used to upload file to firebase)
-                    const destPath = `${RNFS.TemporaryDirectoryPath}/${'temporaryDoc'}${Date.now()}-${Math.floor(Math.random() * 100)}`
-                    await RNFS.copyFile(res.uri, destPath)
+            //         const document = {
+            //             path: destPath,
+            //             type: res.type,
+            //             name: res.name, //#task: not used for video/image
+            //             size: res.size, //#task: not used for video/image
+            //             progress: 0
+            //         }
 
-                    const document = {
-                        path: destPath,
-                        type: res.type,
-                        name: res.name, //#task: not used for video/image
-                        size: res.size, //#task: not used for video/image
-                        progress: 0
-                    }
+            //         const { path, type, name, size } = document
+            //         if (type === mp4)
+            //             this.setState({ videoSource: path })
+            //         else if (type === png || type === jpeg)
+            //             this.setState({ imageSource: path })
+            //         else if (type === pdf || type === doc || type === docx)
+            //             this.setState({ file: { source: path, type, name, size } })
 
-                    const { path, type, name, size } = document
-                    if (type === mp4)
-                        this.setState({ videoSource: path })
-                    else if (type === png || type === jpeg)
-                        this.setState({ imageSource: path })
-                    else if (type === pdf || type === doc || type === docx)
-                        this.setState({ file: { source: path, type, name, size } })
+            //         const messageId = await uuidGenerator()
+            //         document.messageId = messageId
 
-                    const messageId = await uuidGenerator()
-                    document.messageId = messageId
+            //         await this.handleSend([{ text: '' }], messageId) //#task: get text using chat ref //#task2: add intermediary screen to crop/and adjust images
+            //         attachments.push(document)
+            //     }
+            // }
+            // return attachments
+        // }
 
-                    await this.handleSend([{ text: '' }], messageId) //#task: get text using chat ref //#task2: add intermediary screen to crop/and adjust images
-                    attachments.push(document)
-                }
-            }
-            return attachments
-        }
-
-        catch (err) {
-            if (!DocumentPicker.isCancel(err))
-                displayError({ message: err })
-            return null
-        }
+        // catch (err) {
+        //     if (!DocumentPicker.isCancel(err))
+        //         displayError({ message: err })
+        //     return null
+        // }
     }
 
     async handleUpload() {

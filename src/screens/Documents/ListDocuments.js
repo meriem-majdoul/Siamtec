@@ -84,10 +84,10 @@ class ListDocuments extends Component {
         }
     }
 
-    componentWillUnmount() {
-        if (this.willFocusSubscription)
-            this.willFocusSubscription.remove()
-    }
+    // componentWillUnmount() {
+    //     if (this.willFocusSubscription)
+    //         this.willFocusSubscription.remove()
+    // }
 
     async componentDidMount() {
         //Rehydrate killed upload tasks

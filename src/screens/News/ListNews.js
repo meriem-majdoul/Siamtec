@@ -31,7 +31,7 @@ class ListNews extends Component {
 
     fetchWordpressPosts = async () => {
         try {
-            const response = await fetch("https://groupe-synergys.fr/wp-json/wp/v2/posts?_embed");
+            const response = await fetch("https://siamtec.fr/wp-json/wp/v2/posts?_embed");
             if (!response.ok) throw new Error(errorMessages.wordpress.posts);
             const json = await response.json();
             this.setState({ news: json, loading: false });
@@ -74,7 +74,8 @@ class ListNews extends Component {
 
         return (
             <SafeAreaView style={styles.container}>
-                <Appbar titleText='Actualités' />
+                {/* <Appbar  titleText='Actualités'
+                 style={{color:'#black',backgroundColor:'pink'}} /> */}
 
                 {loading ? (
                     <View style={styles.container}>

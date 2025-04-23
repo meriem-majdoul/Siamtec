@@ -548,7 +548,7 @@ class CreateRequest extends Component {
                                         <ItemPicker
                                             onPress={() => {
                                                 if (this.project || this.isEdit) return //pre-defined project
-                                                navigateToScreen(this, 'ListProjects', { onGoBack: this.onPressProjectCallBack, prevScreen: 'CreateRequest', isRoot: false, titleText: 'Choix du projet', showFAB: false })
+                                                this.props.navigation.navigate('ProjectsStack',{screen:'ListProjects', params:{ onGoBack: this.onPressProjectCallBack, prevScreen: 'CreateRequest', isRoot: false, titleText: 'Choix du projet', showFAB: false }})
                                             }}
                                             label="Projet concerné"
                                             value={project.name}

@@ -860,13 +860,13 @@ generatePdf(order, docType) {
                       <ItemPicker
                         onPress={() => {
                           if (this.project || this.isEdit) return; //pre-defined project
-                          navigateToScreen(this, 'ListProjects', {
+                          this.props.navigation.navigate('ProjectsStack',{screen:'ListProjects', params:{
                             onGoBack: this.refreshProject,
                             isRoot: false,
                             prevScreen: 'CreateOrder',
                             titleText: 'Choix du projet',
                             showFAB: false,
-                          });
+                          }});
                         }}
                         label="Projet concerné *"
                         value={project.name}
