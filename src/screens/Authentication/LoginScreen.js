@@ -94,7 +94,7 @@ class LoginScreen extends Component {
             ) : null}
 
             <TextInput
-              style={styles.credInput}
+              style={[styles.credInput,{color:'#000'}]}
               label="Email"
               returnKeyType="next"
               value={email.value}
@@ -109,7 +109,15 @@ class LoginScreen extends Component {
               textContentType="emailAddress"
               keyboardType="email-address"
               editable={!loading}
-              theme={{ colors: { text: 'black' } }}
+             theme={
+                      {
+                        colors: {
+                          onSurface: "#000", 
+                          onSurfaceVariant:"#8D8D8D",
+                          text: 'black' 
+                        },
+                      }
+                    }
             />
             <TextInput
               style={styles.credInput}
@@ -133,7 +141,15 @@ class LoginScreen extends Component {
                   }))}
                 />
               }
-              theme={{ colors: { text: 'black' } }}
+              theme={
+                {
+                  colors: {
+                    onSurface: "#000", 
+                    onSurfaceVariant:"#8D8D8D",
+                    text: 'black' 
+                  },
+                }
+              }
             />
           </View>
           <View style={styles.forgotPassword}>

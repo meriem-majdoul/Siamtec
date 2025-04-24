@@ -1,90 +1,99 @@
-import React, { memo, Component } from "react";
+import React, { Component } from "react";
 import { Text, StyleSheet, View, TouchableOpacity, ActivityIndicator } from "react-native";
-import LinearGradient from 'react-native-linear-gradient'
-import { connect } from 'react-redux'
+import LinearGradient from 'react-native-linear-gradient';
+import { connect } from 'react-redux';
 
 import NewBackground from "../../components/NewBackground";
 import Appbar from "../../components/Appbar";
-import Logo from "../../components/Logo"
-import TextInput from "../../components/TextInput"
-import Button from "../../components/Button"
-import Toast from "../../components/Toast"
+import Logo from "../../components/Logo";
+import TextInput from "../../components/TextInput";
+import Toast from "../../components/Toast";
 
-import { sendEmailWithPassword } from "../../api/auth-api"
-import { updateField, emailValidator, load, setToast } from "../../core/utils"
-import * as theme from "../../core/theme"
-import { constants } from "../../core/constants"
+import { sendEmailWithPassword } from "../../api/auth-api";
+import { updateField, emailValidator, load } from "../../core/utils";
+import * as theme from "../../core/theme";
+import { constants } from "../../core/constants";
 import { setAppToast } from "../../core/redux";
 
 class ForgotPasswordScreen extends Component {
-
   constructor(props) {
-    super(props)
-    this.handleSendEmail = this.handleSendEmail.bind(this)
+    super(props);
+    this.handleSendEmail = this.handleSendEmail.bind(this);
     this.state = {
       email: { value: "", error: "" },
-      toastType: '',
-      toastMessage: '',
       loading: false,
-    }
+      errorMessage: "", // Message d'erreur
+      successMessage: "", // Message de succès
+    };
   }
 
   validateInputs() {
-    const { email } = this.state
-    const emailError = emailValidator(email.value)
+    const { email } = this.state;
+    const emailError = emailValidator(email.value);
 
     if (emailError) {
-      setToast(this, 'e', 'Le champs "email est obligatoire.')
-      return false
+      this.setState({ email: { ...email, error: emailError }, errorMessage: emailError });
+      return false;
     }
 
-    return true
+    return true;
   }
 
   async handleSendEmail() {
-    let { loading, email } = this.state
+    const { email, loading } = this.state;
 
-    if (loading) return
-    load(this, true)
+    if (loading) return;
 
-    //Inputs validation
-    const isValid = this.validateInputs()
+    this.setState({ loading: true, errorMessage: "", successMessage: "" }); // Réinitialiser les messages
+
+    // Validation des entrées
+    const isValid = this.validateInputs();
     if (!isValid) {
-      load(this, false)
-      return
+      this.setState({ loading: false });
+      return;
     }
 
-    const response = await sendEmailWithPassword(email.value);
+    try {
+      const response = await sendEmailWithPassword(email.value);
 
-    if (response.error) {
-      const toast = { message: response.error, type: "error" }
-      setAppToast(this, toast)
+      if (response.error) {
+        this.setState({ errorMessage: response.error });
+      } else {
+        this.setState({
+          successMessage: "Un email pour modifier le mot de passe a été envoyé. Veuillez vérifier votre boîte de réception.",
+        });
+      }
+    } catch (error) {
+      this.setState({ errorMessage: "Une erreur inconnue s'est produite. Veuillez réessayer." });
     }
 
-    else {
-      const toast = { message: "Un email pour modifier le mot de passe a été envoyé.", type: "info" }
-      setAppToast(this, toast)
-    }
-
-    load(this, false)
+    this.setState({ loading: false });
   }
 
   render() {
-    let { loading, email, toastType, toastMessage } = this.state
+    const { email, loading, errorMessage, successMessage } = this.state;
 
     return (
       <NewBackground>
-        <Appbar back title titleText='Mot de passe oublié' />
+        <Appbar back title titleText="Mot de passe oublié" />
 
         <View style={styles.container}>
           <Logo />
 
+          {/* Affichage du message de succès en tant qu'alerte */}
+          {successMessage ? (
+            <View style={styles.successAlert}>
+              <Text style={styles.successText}>{successMessage}</Text>
+            </View>
+          ) : null}
+
+          {/* Affichage du champ email */}
           <TextInput
             style={{ zIndex: 1, backgroundColor: theme.colors.background }}
             label="Adresse email"
             returnKeyType="done"
             value={email.value}
-            onChangeText={text => updateField(this, email, text)}
+            onChangeText={text => this.setState({ email: { value: text, error: "" }, errorMessage: "" })}
             error={!!email.error}
             errorText={email.error}
             autoCapitalize="none"
@@ -93,50 +102,68 @@ class ForgotPasswordScreen extends Component {
             keyboardType="email-address"
           />
 
-          <TouchableOpacity style={{ justifyContent: 'center', alignItems: 'center', marginTop: 30, zIndex: 500 }} onPress={this.handleSendEmail}>
-            <LinearGradient start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} colors={['#33a979', '#58cb7e', '#6edd81']} style={styles.linearGradient}>
-              {loading && <ActivityIndicator size='small' color={theme.colors.white} style={{ marginRight: 10 }} />}
-              <Text style={[theme.customFontMSmedium.header, { color: '#fff', letterSpacing: 1, marginLeft: 10 }]}>Envoyer un email</Text>
+          {/* Affichage du message d'erreur sous l'input */}
+          {errorMessage ? (
+            <Text style={styles.errorMessage}>{errorMessage}</Text>
+          ) : null}
+
+          {/* Bouton d'envoi */}
+          <TouchableOpacity
+            style={{ justifyContent: 'center', alignItems: 'center', marginTop: 30, zIndex: 500 }}
+            onPress={this.handleSendEmail}
+          >
+            <LinearGradient
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 0 }}
+              colors={['#33a979', '#58cb7e', '#6edd81']}
+              style={styles.linearGradient}
+            >
+              {loading && <ActivityIndicator size="small" color={theme.colors.white} style={{ marginRight: 10 }} />}
+              <Text style={[theme.customFontMSmedium.header, { color: '#fff', letterSpacing: 1, marginLeft: 10 }]}>
+                Envoyer un email
+              </Text>
             </LinearGradient>
           </TouchableOpacity>
-
         </View>
-
       </NewBackground>
-    )
+    );
   }
-
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: constants.ScreenWidth * 0.1,
-  //  zIndex: 20,
-  },
-  button: {
-    marginTop: 12
   },
   linearGradient: {
-    flexDirection: 'row',
+    flexDirection: "row",
     width: constants.ScreenWidth * 0.8,
     height: 50,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     borderRadius: 5,
   },
-})
+  errorMessage: {
+    color: theme.colors.error, // Assurez-vous que `theme.colors.error` est défini
+    fontSize: 14,
+    marginTop: 8,
+    textAlign: "center",
+  },
+  successAlert: {
+    backgroundColor: "#d4edda",
+    padding: 10,
+    borderRadius: 5,
+    marginBottom: 20,
+  },
+  successText: {
+    color: "#155724",
+    fontSize: 14,
+    textAlign: "center",
+  },
+});
 
+const mapStateToProps = (state) => ({
+  toast: state.toast,
+});
 
-const mapStateToProps = (state) => {
-
-  return {
-    toast: state.toast,
-    // role: state.roles.role,
-    // network: state.network,
-    // currentUser: state.currentUser
-    //fcmToken: state.fcmtoken
-  }
-}
-
-export default connect(mapStateToProps)(ForgotPasswordScreen)
+export default connect(mapStateToProps)(ForgotPasswordScreen);

@@ -62,7 +62,7 @@ const AutoCompleteProducts = (props) => {
         return (
             <View style={styles.suggestion}>
                 <View>
-                    <Text style={theme.customFontMSbold.body}>{product.name}</Text>
+                    <Text style={[theme.customFontMSbold.body,{ color: "gray" }]}>{product.name}</Text>
                     <Text style={[theme.customFontMSregular.body, { color: "gray", marginTop: 10 }]}>
                         Prix: <Text style={{ color: "#000" }}>€{product.price}</Text>
                     </Text>
@@ -92,6 +92,7 @@ const AutoCompleteProducts = (props) => {
                 props.main.setState({ tagsSelected: updatedTags });
             }}
             placeholder={props.placeholder}
+              placeholderTextColor="#888"
             filterData={customFilterData}
             renderSuggestion={customRenderSuggestion}
             renderTags={customRenderTags}
@@ -109,6 +110,7 @@ const AutoCompleteProducts = (props) => {
             listStyle={styles.listStyle}
             flatListProps={{ height: ScreenHeight * 0.3 }}
             showInput={props.showTextInput}
+        
         />
     );
 };
@@ -134,6 +136,7 @@ const styles = StyleSheet.create({
     },
     autotags: {
         backgroundColor: "#fff",
+        color:'#000',
         marginLeft: -ScreenWidth * 0.02,
         paddingTop: 5,
         paddingBottom: 15,

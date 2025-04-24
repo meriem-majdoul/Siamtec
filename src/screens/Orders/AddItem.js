@@ -202,7 +202,7 @@ class AddItem extends Component {
                 placeholder="Écrivez pour choisir un article"
                 suggestions={suggestions}
                 tagsSelected={tagsSelected}
-                main={this}
+                main={this}     
                 //autoFocus={false}
                 showInput={noItemSelected}
                 errorText=""

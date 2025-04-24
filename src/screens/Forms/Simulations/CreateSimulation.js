@@ -199,6 +199,7 @@ class CreateSimulation extends Component {
                 pages={ficheEEBModel}
                 genButtonTitle="Générer une fiche EEB"
                 fileName="Fiche EEB"
+              
             />
         );
     }

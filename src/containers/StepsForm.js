@@ -15,6 +15,7 @@ import {
   Alert,
   Platform,
   Keyboard,
+  
 } from 'react-native';
 import { ProgressBar, Checkbox, TextInput as Input } from 'react-native-paper';
 import FileViewer from 'react-native-file-viewer';
@@ -286,7 +287,7 @@ class StepsForm extends Component {
   //##Form
   renderSteps(pages, steps) {
     return (
-      <View style={styles.stepsContainer}>
+      <View style={[styles.stepsContainer,{color:'#fff'}]}>
         {steps.map((step, index) => {
           if (step === '')
             return (
@@ -312,7 +313,7 @@ class StepsForm extends Component {
       : '';
 
     return (
-      <View style={styles.titleContainer}>
+      <View style={[styles.titleContainer,{color:'#fff'}]}>
         <Text
           style={[
             theme.customFontMSmedium.body,
@@ -1693,56 +1694,79 @@ class StepsForm extends Component {
   }
   
   requestStoragePermission = async () => {
-    try {
+    if (Platform.OS === 'android' && Platform.Version < 30) {
+      try {
         const granted = await PermissionsAndroid.request(
-            PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-            {
-                title: 'Permission de stockage',
-                message: 'L\'application a besoin d\'accéder au stockage pour enregistrer le fichier PDF.',
-                buttonNeutral: 'Plus tard',
-                buttonNegative: 'Annuler',
-                buttonPositive: 'OK',
-            }
+          PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+          {
+            title: 'Permission de stockage',
+            message: 'L\'application a besoin d\'accéder au stockage pour enregistrer le fichier.',
+            buttonNeutral: 'Plus tard',
+            buttonNegative: 'Annuler',
+            buttonPositive: 'OK',
+          }
         );
         return granted === PermissionsAndroid.RESULTS.GRANTED;
-    } catch (err) {
+      } catch (err) {
         console.warn(err);
         return false;
-    }
-};
-
-
-savePdfBase64 = async (base64Data) => {
-  try {
-      const hasPermission = await this.requestStoragePermission();
-      if (!hasPermission) {
-          this.setState({
-              toastMessageModal: 'Permission refusée',
-              toastTypeModal: 'error',
-          });
-          return;
       }
-
-      const path = `${RNFS.DownloadDirectoryPath}/generated_file.pdf`;
-
-      await RNFS.writeFile(path, base64Data, 'base64');
-      console.log(`Fichier enregistré dans : ${path}`);
-
-      this.setState({
-          toastMessageModal: `Fichier enregistré dans : ${path}`,
-          toastTypeModal: 'success',
-      });
-
-      return path;
-  } catch (error) {
-      console.error('Erreur lors de la sauvegarde du fichier PDF :', error);
-
-      this.setState({
-          toastMessageModal: 'Erreur lors de la sauvegarde',
+    }
+    // Android 10+ : Scoped Storage
+    return true;
+  };
+  
+  savePdfBase64 = async (base64Data) => {
+    try {
+      // Vérification des permissions pour Android < 10
+      const hasPermission = await this.requestStoragePermission();
+      console.log('hasPermission: ' + hasPermission);
+  
+      if (!hasPermission) {
+        this.setState({
+          toastMessageModal: 'Permission refusée',
           toastTypeModal: 'error',
+        });
+        return;
+      }
+  
+      // Définir le chemin du fichier
+      const path = `${RNFS.DownloadDirectoryPath}/generated_file.pdf`;
+      console.log('Path cible : ' + path);
+      const dirExists = await RNFS.exists(RNFS.DownloadDirectoryPath);
+      if (!dirExists) {
+        console.error('Le répertoire Download n\'existe pas ou n\'est pas accessible.');
+        return;
+      } else{
+        console.log('Le répertoire Download ')
+      }
+  
+      // Écriture du fichier PDF
+      // await RNFS.writeFile(path, base64Data, 'base64');
+      // console.log(`Fichier enregistré avec succès dans : ${path}`);
+  
+      // this.setState({
+      //   toastMessageModal: `Fichier enregistré dans : ${path}`,
+      //   toastTypeModal: 'success',
+      // });
+  
+      // // Notifier l'utilisateur
+      // Alert.alert('Succès', `Fichier enregistré dans : ${path}`);
+  
+    } catch (error) {
+      console.error('Erreur lors de la sauvegarde du fichier PDF :', error);
+  
+      // Mise à jour de l'état pour une alerte utilisateur
+      this.setState({
+        toastMessageModal: 'Erreur lors de la sauvegarde',
+        toastTypeModal: 'error',
       });
-  }
-};
+  
+      // Facultatif : afficher une alerte d'erreur
+      Alert.alert('Erreur', 'Impossible de sauvegarder le fichier PDF.');
+    }
+  };
+  
 
 
   renderBottomRightButton(title, onPress) {
@@ -2273,7 +2297,7 @@ savePdfBase64 = async (base64Data) => {
     if (docNotFound)
       return (
         <View style={styles.mainContainer}>
-          <Appbar close title titleText={this.title} />
+          <Appbar close title titleText={this.title}/>
           <EmptyList
             icon={faTimes}
             header="Formulaire introuvable"
@@ -2288,6 +2312,7 @@ savePdfBase64 = async (base64Data) => {
         <Appbar
           appBarColor={'#003250'}
           iconsColor={theme.colors.white}
+          theme={{ colors: {  color: '#fff' } }}
           close={!this.isGuest}
           title
           check={!showWelcomeMessage && !readOnly && !this.isGuest}

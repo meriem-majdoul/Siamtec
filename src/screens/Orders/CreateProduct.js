@@ -436,33 +436,40 @@ class CreateProduct extends Component {
               label="Confirmer"
               onPress={async () => {
                 if (isCategory) {
+                  
                   if (!newCategory) return;
                   this.setState({loadingDialog: true});
                   this.addNewCategory();
                 } else {
+                 
                   if (!newBrandName) return;
-                  this.setState({loadingDialog: true});
-
+                  else{
+                    this.setState({loadingDialog: true});
+                   
                   //upload logo
                   const storageRefPath = `/Brands/${newBrandName}/logo`;
-                  const response = await this.uploadFile(
-                    newBrandLogo,
-                    storageRefPath,
-                    true,
-                  );
+                  console.log('newBrandLogo: ' + JSON.stringify(newBrandLogo, null, 2));
 
-                  if (response === 'failure') {
-                    this.setState({loadingDialog: false});
-                    setToast(
-                      this,
-                      'e',
-                      "Erreur lors de l'importation de la pièce jointe, veuillez réessayer.",
-                    );
-                    return;
-                  }
+                  // const response = await this.uploadFile(
+                  //   newBrandLogo,
+                  //   storageRefPath,
+                  //   true,
+                  // );
+
+                  // if (response === 'failure') {
+                  //   this.setState({loadingDialog: false});
+                  //   setToast(
+                  //     this,
+                  //     'e',
+                  //     "Erreur lors de l'importation de la pièce jointe, veuillez réessayer.",
+                  //   );
+                  //   return;
+                  // }
 
                   //add brand to db
                   this.addNewBrand();
+                  }
+                  
                 }
               }}
             />
@@ -473,6 +480,7 @@ class CreateProduct extends Component {
 
   async addNewCategory() {
     const {newCategory} = this.state;
+    console.log('newCategory'+newCategory)
     db.collection('ProductCategories').doc().set({name: newCategory});
     this.setState({
       category: {value: newCategory, error: ''},
@@ -490,14 +498,15 @@ class CreateProduct extends Component {
     const logo = newBrandLogo;
     const newBrand = {name, logo};
     tagsSelected.push(newBrand);
-    db.collection('Brands').doc().set(newBrand);
-    this.setState({
-      tagsSelected,
-      newBrandName: '',
-      newBrandLogo: {path: ''},
-      loadingDialog: false,
-      showDialog: false,
-    });
+    console.log('newBrand: ' + JSON.stringify(newBrand, null, 2));
+    // db.collection('Brands').doc().set(newBrand);
+    // this.setState({
+    //   tagsSelected,
+    //   newBrandName: '',
+    //   newBrandLogo: {path: ''},
+    //   loadingDialog: false,
+    //   showDialog: false,
+    // });
   }
 
   //Renderers

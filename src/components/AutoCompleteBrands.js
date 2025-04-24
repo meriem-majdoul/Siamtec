@@ -15,7 +15,7 @@ const AutoCompleteBrands = (props) => {
     const navigation = useNavigation(); // Utilisation de useNavigation pour obtenir l'objet navigation
     const [tagsSelected, setTagsSelected] = useState([]);
 
-    const myAlert = myAlert.bind(this);
+    // const myAlert = myAlert.bind(this);
 
     const customFilterData = query => {
         query = query.toUpperCase();
@@ -50,6 +50,7 @@ const AutoCompleteBrands = (props) => {
         const handleConfirm = () => handleDeleteBrand(BrandId);
         myAlert(title, message, handleConfirm);
     };
+    
 
     const handleDeleteBrand = async (BrandId) => {
         try {
@@ -97,6 +98,7 @@ const AutoCompleteBrands = (props) => {
                 handleAddition={handleAddition}
                 handleDelete={handleDelete}
                 placeholder={props.placeholder}
+                placeholderTextColor="#888"
                 filterData={customFilterData}
                 renderSuggestion={customRenderSuggestion}
                 renderTags={customRenderTags}
@@ -153,6 +155,7 @@ const styles = StyleSheet.create({
     },
     autotags: {
         backgroundColor: '#fff',
+        color:'#000',
         marginLeft: -constants.ScreenWidth * 0.02,
         paddingTop: 5,
         paddingBottom: 15,

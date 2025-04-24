@@ -4,8 +4,9 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
 import * as theme from '../core/theme';
-import { faArrowToRight, faInfo, faNewspaper, faVials } from '@fortawesome/free-solid-svg-icons';
-import { CustomIcon } from '../components/CustomIcon';
+import { faDraftingCompass, faInfo, faNewspaper, faVials,faUser } from '@fortawesome/free-solid-svg-icons';
+import CustomIcon from '../components/CustomIcon';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 
 // Import screens
 // Auth
@@ -270,7 +271,7 @@ const GuestTab = () => (
         let iconName;
 
         if (route.name === 'Auth') {
-          iconName = faDraftingCompass;
+          iconName = faUser;
         } else if (route.name === 'Simulation') {
           iconName = faVials;
         } else if (route.name === 'AboutUs') {
@@ -279,7 +280,7 @@ const GuestTab = () => (
           iconName = faNewspaper;
         }
 
-        return <CustomIcon icon={iconName} size={size} color={color} />;
+        return <CustomIcon icon={iconName} size={20} color={color} />;
       },
       tabBarActiveTintColor: theme.colors.primary,
       tabBarInactiveTintColor: theme.colors.gray_dark,
@@ -295,6 +296,7 @@ const GuestTab = () => (
     <Tab.Screen name="Auth" component={AuthStack} />
   </Tab.Navigator>
 );
+
 
 const AppStack = () => (
   <Stack.Navigator   screenOptions={{

@@ -1016,60 +1016,65 @@ export const generatePdfForm = async (formInputs, pdfType, params) => {
 }
 
 //##IMAGE PICKER
-export const pickImage = (previousAttachments, isCamera = false, addPathSuffix = true) => {
+export const pickImage = (previousAttachments = [], isCamera = false, addPathSuffix = true) => {
   const options = {
-    title: 'Selectionner une image',
+    title: 'Sélectionner une image',
     takePhotoButtonTitle: 'Prendre une photo',
-    chooseFromLibraryButtonTitle: 'Choisir de la librairie',
+    chooseFromLibraryButtonTitle: 'Choisir depuis la bibliothèque',
     cancelButtonTitle: 'Annuler',
     rotation: 360,
     noData: true,
-    quality:1, 
-    storageOptions: { skipBackup: true }
-  }
+    quality: 1, // Qualité maximale
+    storageOptions: { skipBackup: true },
+  };
 
   const imagePickerHandler = (response, resolve, reject) => {
-
-    let errorMessage = null
-
     if (response.didCancel) {
-      resolve(previousAttachments)
+      // Si l'utilisateur annule, renvoyer les pièces jointes existantes.
+      return resolve(previousAttachments);
     }
 
-    else if (response.error) {
-      errorMessage = "Erreur lors de la sélection du fichier. Veuillez réessayer."
-      reject(new Error(errorMessage))
+    if (response.errorMessage) {
+      // En cas d'erreur, rejeter avec un message explicite.
+      return reject(new Error("Erreur lors de la sélection du fichier. Veuillez réessayer."));
     }
 
-    else {
+    if (response.uri) {
+      // Préparer les informations de l'image.
       const image = {
         type: response.type,
-        name: response.fileName || `Image ${moment().format("DD-MM-YYYY-HH-mm")}`,
+        name: response.fileName || `Image_${moment().format("DD-MM-YYYY_HH-mm")}`,
         size: response.fileSize,
         local: true,
         progress: 0,
-        // originalRotation: response.originalRotation
-      }
+      };
 
-      let { path, uri } = response
+      // Gérer les chemins en fonction de la plateforme.
       if (Platform.OS === 'android') {
-        const pathSuffix = addPathSuffix ? 'file://' : ''
-        path = pathSuffix + path
-        image.path = path
+        const pathSuffix = addPathSuffix ? 'file://' : '';
+        image.path = pathSuffix + (response.path || response.uri);
+      } else {
+        image.path = response.uri;
       }
-      else image.path = uri
 
-      let attachments = previousAttachments
-      attachments.push(image)
-      resolve(attachments)
+      // Ajouter l'image aux pièces jointes existantes.
+      const attachments = [...previousAttachments, image];
+      return resolve(attachments);
     }
-  }
 
-  return new Promise(((resolve, reject) => {
-    if (isCamera) ImagePicker.launchCamera(options, (response) => imagePickerHandler(response, resolve, reject))
-    else ImagePicker.showImagePicker(options, (response) => imagePickerHandler(response, resolve, reject))
-  }))
-}
+    // Si aucun cas précédent n'est applicable, renvoyer une erreur générique.
+    return reject(new Error("Une erreur inconnue s'est produite."));
+  };
+
+  return new Promise((resolve, reject) => {
+    // Lancer l'ImagePicker selon l'option choisie (appareil photo ou bibliothèque).
+    if (isCamera) {
+      ImagePicker.launchCamera(options, (response) => imagePickerHandler(response, resolve, reject));
+    } else {
+      ImagePicker.showImagePicker(options, (response) => imagePickerHandler(response, resolve, reject));
+    }
+  });
+};
 
 //##FILE PICKER
 export const pickDocs = async (attachments, type = [DocumentPicker.types.allFiles]) => {
