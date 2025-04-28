@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, ScrollView, TouchableOpacity, Keyboard, Alert } from 'react-native';
 import { TextInput } from 'react-native-paper'
-import DocumentPicker from '@react-native-documents/picker';
+import DocumentPicker from 'react-native-document-picker';
 import { faTimes, faCloudUploadAlt, faMagic, faFilePlus, faFileSearch, faInfoCircle, faSignature, faFileSignature } from '@fortawesome/free-solid-svg-icons'
 import _ from 'lodash'
 import { connect } from 'react-redux'

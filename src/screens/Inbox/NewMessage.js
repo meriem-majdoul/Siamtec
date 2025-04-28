@@ -4,7 +4,7 @@ import { List } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/Entypo'
 import { connect } from 'react-redux'
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
-import DocumentPicker from '@react-native-documents/picker';
+import DocumentPicker from 'react-native-document-picker';
 
 import moment from 'moment';
 import 'moment/locale/fr'

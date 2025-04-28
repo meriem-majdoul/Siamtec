@@ -80,7 +80,7 @@ import org.apache.tools.ant.taskdefs.condition.Os
  */
 
 project.ext.react = [
-    enableHermes: true,  // clean and rebuild if changing
+    enableHermes: false,  // clean and rebuild if changing
 ]
 
 apply from: "../../node_modules/react-native/react.gradle"
@@ -142,6 +142,7 @@ android {
         versionCode 1
         versionName "1.0"
         buildConfigField "boolean", "IS_NEW_ARCHITECTURE_ENABLED", isNewArchitectureEnabled().toString()
+        multiDexEnabled true
 
         if (isNewArchitectureEnabled()) {
             // We configure the CMake build only if you decide to opt-in for the New Architecture.
@@ -258,12 +259,17 @@ android {
 }
 
 dependencies {
+    implementation 'com.android.support:multidex:2.0.1'
     implementation fileTree(dir: "libs", include: ["*.jar"])
-
+     implementation(project(':react-native-document-picker')) {
+        exclude group: 'com.reactnativedocumentpicker'
+    }
+     implementation 'androidx.multidex:multidex:2.0.1'
     //noinspection GradleDynamicVersion
     implementation "com.facebook.react:react-native:+"  // From node_modules
-
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
+
+    implementation 'androidx.documentfile:documentfile:1.0.1'
 
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}") {
         exclude group:'com.facebook.fbjni'
@@ -289,18 +295,21 @@ dependencies {
 }
 
 if (isNewArchitectureEnabled()) {
-    // If new architecture is enabled, we let you build RN from source
-    // Otherwise we fallback to a prebuilt .aar bundled in the NPM package.
-    // This will be applied to all the imported transtitive dependency.
+    // Si la nouvelle architecture est activée, on compile RN depuis le code source
     configurations.all {
         resolutionStrategy.dependencySubstitution {
             substitute(module("com.facebook.react:react-native"))
-                    .using(project(":ReactAndroid"))
-                    .because("On New Architecture we're building React Native from source")
+                .using(project(":ReactAndroid"))
+                .because("On New Architecture we're building React Native from source")
+
+            // Remplacer Hermes seulement si utilisé
             substitute(module("com.facebook.react:hermes-engine"))
-                    .using(project(":ReactAndroid:hermes-engine"))
-                    .because("On New Architecture we're building Hermes from source")
+                .using(project(":ReactAndroid:hermes-engine"))
+                .because("On New Architecture we're building Hermes from source")
         }
+
+        // Forcer une version spécifique si nécessaire
+        resolutionStrategy.force('com.facebook.react:react-native:0.70.6')
     }
 }
 

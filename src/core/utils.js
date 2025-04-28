@@ -1,6 +1,6 @@
 import { Alert, Platform } from 'react-native'
 import ImagePicker from 'react-native-image-picker'
-import DocumentPicker from '@react-native-documents/picker';
+import DocumentPicker from 'react-native-document-picker';
 import RNFS from 'react-native-fs'
 import RNFetchBlob from 'rn-fetch-blob'
 import FileViewer from 'react-native-file-viewer'

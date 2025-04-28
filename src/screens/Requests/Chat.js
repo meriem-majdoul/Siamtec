@@ -2,7 +2,7 @@ import React, { Component,forwardRef  } from 'react'
 import { GiftedChat, Bubble, Send, SystemMessage, Day, Time, Actions,InputToolbar  } from 'react-native-gifted-chat'
 import { TouchableOpacity, ActivityIndicator, View, StyleSheet, Text, Alert, ImageBackground } from 'react-native'
 import { faCommentDots } from '@fortawesome/free-solid-svg-icons'
-import DocumentPicker from '@react-native-documents/picker';
+import DocumentPicker from 'react-native-document-picker';
 import RNFS from 'react-native-fs'
 import { IconButton } from 'react-native-paper'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
