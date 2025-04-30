@@ -78,7 +78,7 @@ class ListEmployees extends React.Component {
 
     render() {
         const queryUsers = this.query || this.formatQuery() || db.collection('Users').where('deleted', '==', false)
-        console.log("queryUsers", queryUsers)
+   
      //   console.log("queryUsers", queryUsers)
         const { searchInput, showInput } = this.state
         const permissions = this.props.permissions.users

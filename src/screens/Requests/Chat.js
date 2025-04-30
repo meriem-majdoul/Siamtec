@@ -9,7 +9,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import { Thumbnail } from 'react-native-thumbnail-video'
 import ImageView from 'react-native-image-view'
 import _ from 'lodash'
-
+import UUIDGenerator from 'react-native-uuid-generator';
 import moment from 'moment'
 import 'moment/locale/fr'
 moment.locale('fr')
@@ -122,51 +122,55 @@ class Chat extends Component {
     
 
     async pickFilesAndSendMessage() {
-        let attachments = []
-
-        // try {
-            const results = await DocumentPicker.pickMultiple({
-                type: [DocumentPicker.types.allFiles],
-              });
-              console.log('Selected files:', results);
-            // for (const res of results) {
-            //     //android only
-            //     if (res.uri.startsWith('content://')) { //#task remove this condition (useless..)
-            //         //1. Copy file to Cach to get its relative path (Documentpicker provides only absolute path which can not be used to upload file to firebase)
-            //         const destPath = `${RNFS.TemporaryDirectoryPath}/${'temporaryDoc'}${Date.now()}-${Math.floor(Math.random() * 100)}`
-            //         await RNFS.copyFile(res.uri, destPath)
-
-            //         const document = {
-            //             path: destPath,
-            //             type: res.type,
-            //             name: res.name, //#task: not used for video/image
-            //             size: res.size, //#task: not used for video/image
-            //             progress: 0
-            //         }
-
-            //         const { path, type, name, size } = document
-            //         if (type === mp4)
-            //             this.setState({ videoSource: path })
-            //         else if (type === png || type === jpeg)
-            //             this.setState({ imageSource: path })
-            //         else if (type === pdf || type === doc || type === docx)
-            //             this.setState({ file: { source: path, type, name, size } })
-
-            //         const messageId = await uuidGenerator()
-            //         document.messageId = messageId
-
-            //         await this.handleSend([{ text: '' }], messageId) //#task: get text using chat ref //#task2: add intermediary screen to crop/and adjust images
-            //         attachments.push(document)
-            //     }
-            // }
-            // return attachments
-        // }
-
-        // catch (err) {
-        //     if (!DocumentPicker.isCancel(err))
-        //         displayError({ message: err })
-        //     return null
-        // }
+        let attachments = [];
+    
+        try {
+            // Sélection des fichiers avec DocumentPicker
+            const results = await DocumentPicker.pick({
+                allowMultiSelection: true, // Permet la sélection multiple
+                type: [DocumentPicker.types.allFiles], // Tous les types de fichiers
+            });
+    
+            console.log('Fichiers sélectionnés :', results);
+    
+            // Traitement de chaque fichier sélectionné
+            for (const res of results) {
+                // Gestion des URI Android (content://)
+                const destPath = `${RNFS.TemporaryDirectoryPath}/${'temporaryDoc'}${Date.now()}-${Math.floor(Math.random() * 100)}`;
+                await RNFS.copyFile(res.uri, destPath);
+    
+                // Génération d'un UUID unique
+                const messageId = await UUIDGenerator.getRandomUUID();
+    
+                // Création de l'objet document
+                const document = {
+                    path: destPath,
+                    type: res.type,
+                    name: res.name,
+                    size: res.size,
+                    progress: 0,
+                    messageId, // UUID généré
+                };
+    
+                // Ajout du document à la liste des pièces jointes
+                attachments.push(document);
+    
+                // Exemple d'intégration avec votre système d'envoi
+                await this.handleSend([{ text: '' }], messageId);
+            }
+    
+            // Retourne les pièces jointes après traitement
+            return attachments;
+    
+        } catch (err) {
+            if (!DocumentPicker.isCancel(err)) {
+                console.error('Erreur lors de la sélection des fichiers :', err);
+                displayError({ message: err.message });
+            } else {
+                console.log('Sélection annulée par l’utilisateur.');
+            }
+            return null;
+        }
     }
 
     async handleUpload() {
@@ -203,16 +207,12 @@ class Chat extends Component {
     }
 
     async handleSend(messages, messageId) {
-
-
         try {
-            const text = messages[0].text
-
-            const { imageSource, videoSource, file } = this.state
-
-            if (!messageId)
-                var messageId = await uuidGenerator()
-
+            const text = messages[0].text;
+            const { imageSource, videoSource, file } = this.state;
+    
+            if (!messageId) messageId = await uuidGenerator();
+    
             const msg = {
                 _id: messageId,
                 text,
@@ -220,54 +220,52 @@ class Chat extends Component {
                 user: {
                     id: this.currentUser.uid,
                     email: this.currentUser.email,
-                    fullName: this.currentUser.displayName
+                    fullName: this.currentUser.displayName,
                 },
                 sent: true,
                 received: true,
                 pending: false,
+            };
+    
+            console.log('Image source before attachment:', imageSource);
+    
+            // Si l'image est une URI `content://`, il faut la copier dans un emplacement temporaire
+            if (imageSource && imageSource.startsWith('content://')) {
+                const destPath = `${RNFS.TemporaryDirectoryPath}/temp-image-${Date.now()}.jpg`;
+                await RNFS.copyFile(imageSource, destPath);
+                console.log('Image copied to:', destPath);
+                msg.image = destPath;  // Mettre l'URL de l'image dans l'objet `msg`
+                msg.messageType = 'image/jpeg';
             }
-
-            console.log("Message date", msg.createdAt)
-
-            // Handle attachments
-            if (imageSource || videoSource || file && file.source) {
-                console.log('imageSource', imageSource)
-
-                msg.sent = false
-                msg.received = false
-                msg.pending = true //Only local user can see this file
-
-                if (imageSource) {
-                    msg.image = imageSource
-                    msg.messageType = 'image/jpeg'
-                }
-
-                else if (videoSource) {
-                    msg.video = videoSource
-                    msg.messageType = 'video/mp4'
-                }
-
-                if (!_.isEmpty(file)) {
-                    const { source, name, size, type } = file
-                    msg.file = { source, name, size, type }
-                }
+    
+            // Si on a une vidéo ou un fichier
+            if (videoSource) {
+                msg.video = videoSource;
+                msg.messageType = 'video/mp4';
             }
-
-            const batch = db.batch()
-            const chatsRef = db.collection('Chats').doc(this.chatId)
-            const messagesRef = db.collection('Chats').doc(this.chatId).collection('ChatMessages').doc(messageId)
-
-            batch.set(chatsRef, msg)
-            batch.set(messagesRef, msg)
-            batch.commit()
-
-            this.setState({ imageSource: '', videoSource: '', file: {} })
+    
+            if (file && file.source) {
+                const { source, name, size, type } = file;
+                msg.file = { source, name, size, type };
+            }
+    
+            console.log('Message to send:', JSON.stringify(msg, null, 2));
+    
+            const batch = db.batch();
+            const chatsRef = db.collection('Chats').doc(this.chatId);
+            const messagesRef = db.collection('Chats').doc(this.chatId).collection('ChatMessages').doc(messageId);
+    
+            batch.set(chatsRef, msg);
+            batch.set(messagesRef, msg);
+            await batch.commit();
+    
+            this.setState({ imageSource: '', videoSource: '', file: {} });
+        } catch (e) {
+            console.error('Error while sending message:', e);
+            displayError({ message: errorMessages.chat });
         }
-        catch (e) {
-            displayError({ message: errorMessages.chat })
-        }
-
     }
+    
 
 
     //Renderers

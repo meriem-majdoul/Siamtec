@@ -15,6 +15,7 @@ import { connect } from 'react-redux';
 import { db } from '../../firebase';
 import * as theme from '../../core/theme';
 import { constants, isTablet } from '../../core/constants';
+import {navigateToScreen} from '../../core/utils';
 
 import Appbar from '../../components/Appbar';
 import AutoCompleteProducts from '../../components/AutoCompleteProducts';
@@ -134,9 +135,9 @@ class AddItem extends Component {
       category: product.category,
     };
 
-    console.log("priority......", product.type)
+    // console.log("priority......", product.type)
 
-    this.props.navigation.state.params.onGoBack(orderLine, this.orderKey);
+    this.props.route.params.onGoBack(orderLine, this.orderKey);
     this.props.navigation.goBack();
   }
 
@@ -154,8 +155,9 @@ class AddItem extends Component {
   }
 
   addItem() {
-    this.props.navigation.navigate('CreateProduct', {
+    navigateToScreen(this,'CreateProduct', {
       onGoBack: this.refreshProduct,
+      test: 'test'
     });
   }
 
@@ -175,7 +177,7 @@ class AddItem extends Component {
     const isAdmin = this.props.role.id === 'admin';
     const iconSize = isTablet ? 32 : 21;
 
-    console.log("sug", suggestions)
+    // console.log("sug", suggestions)
 
     return (
       <View style={styles.container}>

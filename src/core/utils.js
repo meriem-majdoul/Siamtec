@@ -1,5 +1,5 @@
 import { Alert, Platform } from 'react-native'
-import ImagePicker from 'react-native-image-picker'
+import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import DocumentPicker from 'react-native-document-picker';
 import RNFS from 'react-native-fs'
 import RNFetchBlob from 'rn-fetch-blob'
@@ -503,7 +503,7 @@ export const setDestPath = async (fileName) => {
 
 export const saveFile = async (file, fileName, encoding) => {
   try {
-    console.log('test')
+ 
     const destPath = await setDestPath(fileName)
     await RNFS.writeFile(destPath, file, encoding)
     return destPath
@@ -1018,60 +1018,56 @@ export const generatePdfForm = async (formInputs, pdfType, params) => {
 //##IMAGE PICKER
 export const pickImage = (previousAttachments = [], isCamera = false, addPathSuffix = true) => {
   const options = {
-    title: 'Sélectionner une image',
-    takePhotoButtonTitle: 'Prendre une photo',
-    chooseFromLibraryButtonTitle: 'Choisir depuis la bibliothèque',
-    cancelButtonTitle: 'Annuler',
-    rotation: 360,
-    noData: true,
-    quality: 1, // Qualité maximale
-    storageOptions: { skipBackup: true },
+    mediaType: 'photo', // Pour des images uniquement
+    maxWidth: 1920,     // Largeur maximale
+    maxHeight: 1080,    // Hauteur maximale
+    quality: 1,         // Qualité maximale
+    saveToPhotos: true, // Sauvegarder les photos prises avec la caméra (optionnel)
   };
 
   const imagePickerHandler = (response, resolve, reject) => {
+    console.log("Réponse de l'image picker:", response);
+
     if (response.didCancel) {
-      // Si l'utilisateur annule, renvoyer les pièces jointes existantes.
-      return resolve(previousAttachments);
+      return resolve(previousAttachments); // L'utilisateur a annulé la sélection
     }
 
-    if (response.errorMessage) {
-      // En cas d'erreur, rejeter avec un message explicite.
-      return reject(new Error("Erreur lors de la sélection du fichier. Veuillez réessayer."));
+    if (response.errorCode) {
+      return reject(new Error(response.errorMessage || "Erreur lors de la sélection du fichier. Veuillez réessayer."));
     }
 
-    if (response.uri) {
-      // Préparer les informations de l'image.
+    if (response.assets && response.assets.length > 0) {
+      const selectedAsset = response.assets[0];
       const image = {
-        type: response.type,
-        name: response.fileName || `Image_${moment().format("DD-MM-YYYY_HH-mm")}`,
-        size: response.fileSize,
+        type: selectedAsset.type,
+        name: selectedAsset.fileName || `Image_${moment().format("DD-MM-YYYY_HH-mm")}`,
+        size: selectedAsset.fileSize,
         local: true,
         progress: 0,
       };
 
-      // Gérer les chemins en fonction de la plateforme.
+      // Gestion des chemins pour Android et iOS
       if (Platform.OS === 'android') {
         const pathSuffix = addPathSuffix ? 'file://' : '';
-        image.path = pathSuffix + (response.path || response.uri);
+        image.path = pathSuffix + selectedAsset.uri;
       } else {
-        image.path = response.uri;
+        image.path = selectedAsset.uri;
       }
 
-      // Ajouter l'image aux pièces jointes existantes.
       const attachments = [...previousAttachments, image];
       return resolve(attachments);
     }
 
-    // Si aucun cas précédent n'est applicable, renvoyer une erreur générique.
     return reject(new Error("Une erreur inconnue s'est produite."));
   };
 
   return new Promise((resolve, reject) => {
-    // Lancer l'ImagePicker selon l'option choisie (appareil photo ou bibliothèque).
     if (isCamera) {
-      ImagePicker.launchCamera(options, (response) => imagePickerHandler(response, resolve, reject));
+      // Utilisation de l'appareil photo
+      launchCamera(options, (response) => imagePickerHandler(response, resolve, reject));
     } else {
-      ImagePicker.showImagePicker(options, (response) => imagePickerHandler(response, resolve, reject));
+      // Utilisation de la bibliothèque
+      launchImageLibrary(options, (response) => imagePickerHandler(response, resolve, reject));
     }
   });
 };
@@ -1110,38 +1106,52 @@ export const pickDocs = async (attachments, type = [DocumentPicker.types.allFile
   }
 }
 
-export const pickDoc = async (genName = false, type = [DocumentPicker.types.allFiles]) => {
+export const pickDoc = async (generateName = false, type = [DocumentPicker.types.allFiles]) => {
   try {
-    const res = await DocumentPicker.pick({ type })
+    const results = await DocumentPicker.pick({ type });
+    
+    // Pour prendre en charge les versions qui retournent un tableau
+    const res = Array.isArray(results) ? results[0] : results;
 
-    //Android only
-    //if (res.uri.startsWith('content://')) {
-    const attachmentName = genName ? `Scan-${moment().format('DD-MM-YYYY-HHmmss')}.pdf` : res.name
-    const destPath = await setDestPath(attachmentName)
-    await RNFS.moveFile(decodeURI(res.uri), destPath)
-
-    const attachment = {
-      path: destPath,
-      type: res.type,
-      name: attachmentName,
-      size: res.size,
-      progress: 0,
-      downloadURL: ''
+    // Vérification si l'objet `res` est valide
+    if (!res || !res.uri) {
+      throw new Error('Fichier non valide ou sélection annulée.');
     }
 
-    return attachment
+    // Génération du nom de fichier
+    const attachmentName = generateName 
+      ? `Scan-${moment().format('DD-MM-YYYY-HHmmss')}.pdf` 
+      : res.name;
 
-    //  }
+    // Vérification du chemin URI
+    if (res.uri.startsWith('content://')) {
+      const destPath = await setDestPath(attachmentName);
 
+      // Déplacement du fichier
+      await RNFS.moveFile(decodeURI(res.uri), destPath);
+
+      // Retour de l'objet attaché
+      return {
+        path: destPath,
+        type: res.type,
+        name: attachmentName,
+        size: res.size,
+        progress: 0,
+        downloadURL: '',
+      };
+    } else {
+      throw new Error('Chemin de fichier non pris en charge.');
+    }
+  } catch (error) {
+    if (DocumentPicker.isCancel(error)) {
+      console.log('Sélection annulée par l\'utilisateur.');
+      return null; // Annulation
+    }
+
+    console.error('Erreur lors de la sélection du fichier :', error);
+    throw new Error('Erreur lors de la sélection du fichier. Veuillez réessayer.');
   }
-
-  catch (error) {
-    let errorMessage = 'Erreur lors de la sélection du fichier. Veuillez réessayer.'
-    if (DocumentPicker.isCancel(error))
-      return null
-    throw new Error(errorMessage)
-  }
-}
+};
 
 import { highRoles } from './constants'
 

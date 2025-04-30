@@ -83,6 +83,7 @@ class CreateProduct extends Component {
     
     const { route } = this.props;
 
+
     this.ProductId = this.props.route?.params?.ProductId ?? '';
     this.isEdit = this.ProductId ? true : false;
     this.title = this.isEdit ? "Modifier l'article" : 'Nouvel article';
@@ -282,57 +283,75 @@ class CreateProduct extends Component {
 
   async handleSubmit() {
     Keyboard.dismiss();
-
-    //Handle Loading or No edit done
+  
+    // Empêcher le traitement si une opération est déjà en cours ou si aucun changement n'a été fait
     if (this.state.loading || _.isEqual(this.state, this.initialState)) return;
-
+  
+    // Activer l'état de chargement
     load(this, true);
-
-    //0. Validate inputs
-    const isValid = this.validateInputs();
-    if (!isValid) return;
-
-    //2. ADDING product to firestore
-    let {
-      ProductId,
-      type,
-      category,
-      tagsSelected,
-      name,
-      description,
-      price,
-      taxe,
-    } = this.state;
-
-    const currentUser = {
-      id: auth.currentUser.uid,
-      fullName: auth.currentUser.displayName,
-      email: auth.currentUser.email,
-      role: this.props.role.value,
-    };
-
-    let product = {
-      type,
-      category: category.value,
-      brand: tagsSelected[0],
-      name: name.value,
-      description: description.value,
-      price: Number(price.value).toFixed(2),
-      taxe: Number(taxe.value).toFixed(2),
-      editedAt: moment().format(),
-      editedBy: currentUser,
-      deleted: false,
-    };
-
-    if (!this.isEdit) {
-      product.createdAt = moment().format();
-      product.createdBy = currentUser;
+  
+    try {
+      // 0. Validation des entrées utilisateur
+      const isValid = this.validateInputs();
+      if (!isValid) {
+        load(this, false); // Désactiver l'état de chargement en cas d'erreur de validation
+        return;
+      }
+  
+      // 1. Préparation des données
+      const {
+        ProductId,
+        type,
+        category,
+        tagsSelected,
+        name,
+        description,
+        price,
+        taxe,
+      } = this.state;
+  
+      const currentUser = {
+        id: auth.currentUser.uid,
+        fullName: auth.currentUser.displayName,
+        email: auth.currentUser.email,
+        role: this.props.role?.value || 'Utilisateur', // Valeur par défaut
+      };
+  
+      const product = {
+        type,
+        category: category.value || '', // Gestion des valeurs potentiellement indéfinies
+        brand: tagsSelected?.[0] || '', // Vérifier si `tagsSelected` contient un élément
+        name: name.value || '',
+        description: description.value || '',
+        price: parseFloat(price.value || 0).toFixed(2), // Conversion en nombre avec gestion de valeur par défaut
+        taxe: parseFloat(taxe.value || 0).toFixed(2),
+        editedAt: moment().format(),
+        editedBy: currentUser,
+        deleted: false,
+      };
+  
+      // Ajouter des métadonnées si c'est un nouveau produit
+      if (!this.isEdit) {
+        product.createdAt = moment().format();
+        product.createdBy = currentUser;
+      }
+  
+      // 2. Ajout ou mise à jour du produit dans Firestore
+      await db.collection('Products').doc(ProductId).set(product, { merge: true });
+      
+      this.props.route.params.onGoBack(product);
+     
+      this.props.navigation.goBack(); // Retour à l'écran précédent
+  
+    } catch (error) {
+      console.error('Erreur lors de l’ajout ou de la mise à jour du produit:', error);
+      alert('Une erreur s’est produite lors de l’enregistrement. Veuillez réessayer.');
+    } finally {
+      // Désactiver l'état de chargement
+      load(this, false);
     }
-
-    db.collection('Products').doc(ProductId).set(product, {merge: true});
-    this.props.navigation.state.params.onGoBack(product);
-    this.props.navigation.goBack();
   }
+  
 
   //Logo brand
   async pickNewBrandLogo() {
@@ -361,17 +380,17 @@ class CreateProduct extends Component {
     const label = isCategory ? 'catégorie' : 'marque';
 
     if (loadingDialog) {
-      const progression = isCategory
-        ? ''
-        : Math.round(this.state.newBrandLogo.progress * 100);
+      const progress = this.state.newBrandLogo?.progress ?? 0; // Valeur par défaut si progress est null/undefined
+      const progression = isCategory ? '' : Math.round(progress * 100);
       const title = `Ajout de la ${label} en cours... ${progression}%`;
+    
       return (
         <View style={styles.dialogContainer}>
           <Dialog.Container
             visible={showDialog}
-            contentStyle={{paddingVertical: 15}}>
+            contentStyle={{ paddingVertical: 15 }}>
             <Dialog.Title
-              style={[theme.customFontMSsemibold.body, {marginBottom: 5}]}>
+              style={[theme.customFontMSsemibold.body, { marginBottom: 5 }]}>
               {title}
             </Dialog.Title>
             <ActivityIndicator color={theme.colors.primary} size="small" />
@@ -450,21 +469,21 @@ class CreateProduct extends Component {
                   const storageRefPath = `/Brands/${newBrandName}/logo`;
                   console.log('newBrandLogo: ' + JSON.stringify(newBrandLogo, null, 2));
 
-                  // const response = await this.uploadFile(
-                  //   newBrandLogo,
-                  //   storageRefPath,
-                  //   true,
-                  // );
+                  const response = await this.uploadFile(
+                    newBrandLogo,
+                    storageRefPath,
+                    true,
+                  );
 
-                  // if (response === 'failure') {
-                  //   this.setState({loadingDialog: false});
-                  //   setToast(
-                  //     this,
-                  //     'e',
-                  //     "Erreur lors de l'importation de la pièce jointe, veuillez réessayer.",
-                  //   );
-                  //   return;
-                  // }
+                  if (response === 'failure') {
+                    this.setState({loadingDialog: false});
+                    setToast(
+                      this,
+                      'e',
+                      "Erreur lors de l'importation de la pièce jointe, veuillez réessayer.",
+                    );
+                    return;
+                  }
 
                   //add brand to db
                   this.addNewBrand();
@@ -499,14 +518,14 @@ class CreateProduct extends Component {
     const newBrand = {name, logo};
     tagsSelected.push(newBrand);
     console.log('newBrand: ' + JSON.stringify(newBrand, null, 2));
-    // db.collection('Brands').doc().set(newBrand);
-    // this.setState({
-    //   tagsSelected,
-    //   newBrandName: '',
-    //   newBrandLogo: {path: ''},
-    //   loadingDialog: false,
-    //   showDialog: false,
-    // });
+    db.collection('Brands').doc().set(newBrand);
+    this.setState({
+      tagsSelected,
+      newBrandName: '',
+      newBrandLogo: {path: ''},
+      loadingDialog: false,
+      showDialog: false,
+    });
   }
 
   //Renderers
@@ -844,17 +863,17 @@ const styles = StyleSheet.create({
   },
 });
 
-// <Modal
-// isVisible={this.state.showImages}
-// style={{ maxHeight: constants.ScreenHeight * 0.8, padding: 10, backgroundColor: '#fff', }}>
-// <MaterialCommunityIcons name='close' size={21} style={{ position: 'absolute', right: 10, top: 10 }} />
-// <View style={{ flex: 1 }}>
-//     <Text style={[theme.customFontMSsemibold.h3, { textAlign: 'center' }]}>Images de l'article</Text>
-//     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-//         <Text style={[theme.customFontMSsemibold.body, { color: theme.colors.placeholder, marginBottom: 10 }]}>Aucune image</Text>
-//         <Button loading={loading} mode="outlined" onPress={this.pickImage} style={{width: constants.ScreenWidth*0.5, borderWidth: 2, borderColor: theme.colors.primary}}>
-//             <Text style={theme.customFontMSsemibold.caption}>Ajouter une image</Text>
-//         </Button>
-//     </View>
-// </View>
-// </Modal>
+{/* <Modal
+isVisible={this.state.showImages}
+style={{ maxHeight: constants.ScreenHeight * 0.8, padding: 10, backgroundColor: '#fff', }}>
+<MaterialCommunityIcons name='close' size={21} style={{ position: 'absolute', right: 10, top: 10 }} />
+<View style={{ flex: 1 }}>
+    <Text style={[theme.customFontMSsemibold.h3, { textAlign: 'center' }]}>Images de l'article</Text>
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <Text style={[theme.customFontMSsemibold.body, { color: theme.colors.placeholder, marginBottom: 10 }]}>Aucune image</Text>
+        <Button loading={loading} mode="outlined" onPress={this.pickImage} style={{width: constants.ScreenWidth*0.5, borderWidth: 2, borderColor: theme.colors.primary}}>
+            <Text style={theme.customFontMSsemibold.caption}>Ajouter une image</Text>
+        </Button>
+    </View>
+</View>
+</Modal> */}

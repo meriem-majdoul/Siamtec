@@ -77,7 +77,7 @@ export default class AutoCompleteUsers extends React.Component {
     }
 
     onCustomTagCreated = userInput => {
-        console.log('userInput', userInput)
+    
         //user pressed enter, create a new tag from their input
         const contact = {
             email: userInput,

@@ -2,6 +2,7 @@ import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import React, { Component } from 'react';
 import RNFS from 'react-native-fs';
 import { PermissionsAndroid,Linking } from 'react-native';
+import RNFetchBlob from 'rn-fetch-blob';
 
 import {
   KeyboardAvoidingView,
@@ -1693,81 +1694,50 @@ class StepsForm extends Component {
     this.setState({ isPdfModalVisible: !this.state.isPdfModalVisible });
   }
   
-  requestStoragePermission = async () => {
-    if (Platform.OS === 'android' && Platform.Version < 30) {
-      try {
-        const granted = await PermissionsAndroid.request(
-          PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-          {
-            title: 'Permission de stockage',
-            message: 'L\'application a besoin d\'accéder au stockage pour enregistrer le fichier.',
-            buttonNeutral: 'Plus tard',
-            buttonNegative: 'Annuler',
-            buttonPositive: 'OK',
-          }
-        );
-        return granted === PermissionsAndroid.RESULTS.GRANTED;
-      } catch (err) {
-        console.warn(err);
-        return false;
-      }
-    }
-    // Android 10+ : Scoped Storage
-    return true;
-  };
-  
-  savePdfBase64 = async (base64Data) => {
-    try {
-      // Vérification des permissions pour Android < 10
-      const hasPermission = await this.requestStoragePermission();
-      console.log('hasPermission: ' + hasPermission);
-  
-      if (!hasPermission) {
-        this.setState({
-          toastMessageModal: 'Permission refusée',
-          toastTypeModal: 'error',
-        });
-        return;
-      }
-  
-      // Définir le chemin du fichier
-      const path = `${RNFS.DownloadDirectoryPath}/generated_file.pdf`;
-      console.log('Path cible : ' + path);
-      const dirExists = await RNFS.exists(RNFS.DownloadDirectoryPath);
-      if (!dirExists) {
-        console.error('Le répertoire Download n\'existe pas ou n\'est pas accessible.');
-        return;
-      } else{
-        console.log('Le répertoire Download ')
-      }
-  
-      // Écriture du fichier PDF
-      // await RNFS.writeFile(path, base64Data, 'base64');
-      // console.log(`Fichier enregistré avec succès dans : ${path}`);
-  
-      // this.setState({
-      //   toastMessageModal: `Fichier enregistré dans : ${path}`,
-      //   toastTypeModal: 'success',
-      // });
-  
-      // // Notifier l'utilisateur
-      // Alert.alert('Succès', `Fichier enregistré dans : ${path}`);
-  
-    } catch (error) {
-      console.error('Erreur lors de la sauvegarde du fichier PDF :', error);
-  
-      // Mise à jour de l'état pour une alerte utilisateur
-      this.setState({
-        toastMessageModal: 'Erreur lors de la sauvegarde',
-        toastTypeModal: 'error',
-      });
-  
-      // Facultatif : afficher une alerte d'erreur
-      Alert.alert('Erreur', 'Impossible de sauvegarder le fichier PDF.');
-    }
-  };
-  
 
+async savePdfBase64(pdfBase64, isProcess) {
+  const now = moment().format('DD-MM-YYYY HHmmss');
+  const pdfName = `Scan généré ${now}.pdf`;
+
+  try {
+    const hasPermission = await PermissionsAndroid.request(
+      PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE
+    );
+
+    // if (hasPermission !== PermissionsAndroid.RESULTS.GRANTED) {
+    //   throw new Error("Permission de stockage refusée.");
+    // }
+
+    const destPath = `${RNFS.DownloadDirectoryPath}/Synergys/Documents/${pdfName}`;
+    await RNFS.mkdir(`${RNFS.DownloadDirectoryPath}/Synergys/Documents`);
+    await RNFS.writeFile(destPath, pdfBase64, 'base64');
+
+    console.log('Fichier sauvegardé à :', destPath);
+
+    if (isProcess) {
+      const { params } = this.props.route;
+      if (params?.onGoBack) {
+        params.onGoBack({
+          pdfBase64Path: destPath,
+          pdfName,
+          DocumentId: this.DocumentId,
+        });
+      }
+      this.props.navigation.pop(this.popCount);
+    } else {
+      const fileExists = await RNFS.exists(destPath);
+      if (fileExists) {
+        console.log('Fichier téléchargé avec succès');
+        Alert.alert('Succès', `Fichier sauvegardé`);
+      } else {
+        throw new Error('Échec du téléchargement du fichier.');
+      }
+    }
+  } catch (error) {
+    console.error('Erreur:', error.message);
+    Alert.alert('Erreur', error.message);
+  }
+}
 
   renderBottomRightButton(title, onPress) {
     return (
@@ -2614,17 +2584,3 @@ const itemStyles = StyleSheet.create({
   },
 });
 
-//DONE
-//Submit color, estimation & products
-//Algo: products not showing all
-//Scrollview on recap simulation
-//"Générer une fiche eeb" button is showed even after pressing faPen
-//message: Enregistré avec succés
-// Save draft (check icon when this.isEdit === false)
-// Tag drafts
-// Navigate to pageindex onPress field recap
-// Cancel attachment removes reference
-
-//TO FIX
-//Soumettre: crash when editing existing field (try speed)
-//--> Check screenshot of error

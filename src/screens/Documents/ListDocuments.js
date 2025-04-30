@@ -4,6 +4,7 @@ import { List } from 'react-native-paper'
 import SearchInput, { createFilter } from 'react-native-search-filter'
 import { connect } from 'react-redux'
 import { faFolder } from '@fortawesome/free-solid-svg-icons'
+import { useFocusEffect } from '@react-navigation/native';
 
 import Background from '../../components/NewBackground'
 import SearchBar from '../../components/SearchBar'
@@ -98,25 +99,33 @@ class ListDocuments extends Component {
 
 
     async fetchSynergysDocuments(count) {
-        this.setState({ refreshing: true })
+        this.setState({ refreshing: true });
         if (count) {
-            await countDown(count)
+            await countDown(count);
         }
-        const { queryFilters } = this.props.permissions.documents
-        if (queryFilters === [])
-            this.setState({ documentsList: [], documentsCount: 0, refreshing: false })
-        else {
-            const params = { role: this.props.role.value }
-            var query = configureQuery('Documents', queryFilters, params)
-            const documentsList = await fetchDocuments(query)
-            this.setState({
-                documentsList,
-                documentsCount: documentsList.length,
-                loading: false,
-                refreshing: false
-            })
+        const { queryFilters } = this.props.permissions.documents;
+        if (queryFilters === []) {
+            this.setState({ documentsList: [], documentsCount: 0, refreshing: false });
+        } else {
+            const params = { role: this.props.role.value };
+            var query = configureQuery('Documents', queryFilters, params);
+            try {
+                const documentsList = await fetchDocuments(query);
+                this.setState({
+                    documentsList,
+                    documentsCount: documentsList.length,
+                    loading: false,
+                    refreshing: false,
+                });
+            } catch (error) {
+                console.error('Error fetching documents:', error);
+                this.setState({ refreshing: false });
+                myAlert('Erreur', 'Impossible de récupérer les documents. Veuillez réessayer.');
+            }
         }
     }
+    
+
 
     bootstrapUploads() {
         const { newAttachments } = this.props.documents //Documents uploads
@@ -182,6 +191,7 @@ class ListDocuments extends Component {
         // )
     }
 
+ 
     render() {
         let { documentsCount, documentsList, loading } = this.state
         let { type, state, project, filterOpened } = this.state
@@ -220,7 +230,7 @@ class ListDocuments extends Component {
                                 refreshControl={
                                     <RefreshControl
                                         refreshing={this.state.refreshing}
-                                        onRefresh={this.fetchSynergysDocuments}
+                                        onRefresh={() => this.fetchSynergysDocuments()}
                                     />
                                 }
                             />

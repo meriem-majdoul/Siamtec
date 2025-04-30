@@ -96,7 +96,7 @@ class Shortcuts extends Component {
         const { clients, users, projects, tasks, documents } = this.props.permissions
         const { createProspect, createUser, createProject, createTask, createDocument, createSimulation } = shortcutsModel
 
-        console.log('createProspect:', createProspect)
+        // console.log('createProspect:', createProspect)
         if (clients.canCreate) shortcuts.push(createProspect)
         // if (clients.canCreate) shortcuts.push(createClient)
         if (users.canCreate) shortcuts.push(createUser)

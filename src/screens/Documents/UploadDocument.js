@@ -292,69 +292,103 @@ class UploadDocument extends Component {
     }
 
     async handleSubmit(isConversion, DocumentId) {
-        Keyboard.dismiss()
-        //0. Reject offline updates
-        const { isConnected } = this.props.network
-        let isEditOffLine = isEditOffline(this.isEdit, isConnected)
-        if (isEditOffLine) return
-
-        //1. Is loading or no edit ?
-        const loadingOrNoEdit = this.state.loading || _.isEqual(this.state, this.initialState)
-        if (loadingOrNoEdit) return
-        this.setState({
-            loading: true,
-            loadingConversion: isConversion
-        })
-
-        //2. TECHNICIEN & COMMERCIAL PHASES UPDATES PRIVILEGES: Check if user has privilege to update selected project
-        const isBlockedUpdates = blockRoleUpdateOnPhase(this.currentRole, this.state.project.step)
-        if (isBlockedUpdates) {
-            Alert.alert('Accès refusé', `Utilisateur non autorisé à modifier un projet dans la phase ${this.state.project.step}.`)
-            this.setState({ loading: false, loadingConversion: false })
-            return
-        }
-
-        //3. Validate
-        const isValid = this.validateInputs()
-        if (!isValid) return
-
-        //4. Persist
-        const props = ["project", "name", "description", "type", "state", "attachment", "attachmentSource", "orderData"]
-        let document = unformatDocument(this.state, props, this.props.currentUser, this.isEdit)
-        const { attachment } = this.state
-        const isNewAttachment = attachment && !attachment.downloadURL
-
-        if (isNewAttachment)
-            document.attachment.pending = true
-
-        if (isConversion)
-            document = this.unformatDocument_conversion(document)
-
-        await this.persistDocument(document, DocumentId)
-
-        this.documentListener() //listener to await local writes
-
-        this.refreshState(document, DocumentId, isConversion)
-
-        //5. Upload
-        if (isNewAttachment)
-            var fileUploaded = await this.handleUpload(document, DocumentId, isConversion, isConnected)
-
-        this.initialState = _.cloneDeep(this.state)
-
-        //6. Go back (Process context only)
-        const { onGoBack } = this.props.navigation.state.params
+        try {
+            // Fermer le clavier
+            Keyboard.dismiss();
     
-
-        if (onGoBack)
-            onGoBack()
-        this.props.navigation.goBack()
-
-        this.setState({
-            loading: false,
-            loadingConversion: false
-        })
+            // 0. Rejeter les mises à jour hors ligne
+            const { isConnected } = this.props.network;
+            const isEditOffLine = isEditOffline(this.isEdit, isConnected);
+            if (isEditOffLine) return;
+    
+            // 1. Vérifier si le formulaire est en cours de chargement ou si aucune modification n'a été faite
+            const isLoadingOrNoEdit = this.state.loading || _.isEqual(this.state, this.initialState);
+            if (isLoadingOrNoEdit) return;
+    
+            this.setState({ loading: true, loadingConversion: isConversion });
+    
+            // 2. Vérifier les privilèges de l'utilisateur pour mettre à jour le projet
+            const isBlockedUpdates = blockRoleUpdateOnPhase(this.currentRole, this.state.project.step);
+            if (isBlockedUpdates) {
+                Alert.alert(
+                    'Accès refusé',
+                    `Utilisateur non autorisé à modifier un projet dans la phase ${this.state.project.step}.`
+                );
+                this.setState({ loading: false, loadingConversion: false });
+                return;
+            }
+    
+            // 3. Valider les entrées
+            const isValid = this.validateInputs();
+            if (!isValid) {
+                this.setState({ loading: false, loadingConversion: false });
+                return;
+            }
+    
+            // 4. Préparer le document pour la persistance
+            const propsToPersist = [
+                "project",
+                "name",
+                "description",
+                "type",
+                "state",
+                "attachment",
+                "attachmentSource",
+                "orderData",
+            ];
+            let document = unformatDocument(this.state, propsToPersist, this.props.currentUser, this.isEdit);
+            const { attachment } = this.state;
+            const isNewAttachment = attachment && !attachment.downloadURL;
+    
+            if (isNewAttachment) {
+                document.attachment.pending = true;
+            }
+    
+            if (isConversion) {
+                document = this.unformatDocument_conversion(document);
+            }
+    
+            // 4.1 Persister le document
+            await this.persistDocument(document, DocumentId);
+    
+            // 4.2 Attendre les écritures locales
+            this.documentListener();
+    
+            // 4.3 Rafraîchir l'état
+            this.refreshState(document, DocumentId, isConversion);
+    
+            // 5. Télécharger le nouvel attachement (si présent)
+            if (isNewAttachment) {
+                await this.handleUpload(document, DocumentId, isConversion, isConnected);
+            }
+    
+            // Mettre à jour l'état initial pour les futures modifications
+            this.initialState = _.cloneDeep(this.state);
+    
+            // 6. Navigation : retour en arrière et appel du callback si fourni
+            const params = this.props.navigation?.state?.params || {};
+            const { onGoBack, refreshDocuments } = params;
+    
+            if (onGoBack) onGoBack();
+             // Rafraîchir la liste des documents
+    
+            this.props.navigation.goBack();
+            
+    
+        } catch (error) {
+            console.error("Erreur dans handleSubmit:", error);
+    
+            // Gérer l'erreur
+            Alert.alert(
+                "Erreur",
+                "Une erreur est survenue lors de la soumission. Veuillez réessayer."
+            );
+        } finally {
+            this.setState({ loading: false, loadingConversion: false });
+        }
     }
+    
+      
 
     //1. Persist
     persistDocument(document, DocumentId) {
