@@ -72,6 +72,7 @@
     "react-native-screens": "^3.18.0",
     "react-native-search-filter": "^0.1.5",
     "react-native-sms-retriever": "^1.1.1",
+    "react-native-splash-screen": "^3.3.0",
     "react-native-status-bar-height": "^2.6.0",
     "react-native-step-indicator": "^1.0.3",
     "react-native-svg": "^13.0.0",
