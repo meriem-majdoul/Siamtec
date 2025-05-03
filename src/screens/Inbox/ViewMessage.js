@@ -209,7 +209,7 @@ export default class ViewMessage extends Component {
         const { expandedId, messagesList } = this.state
 
         return (
-            <List.AccordionGroup style={{backgroundColor:'#pink'}}
+            <List.AccordionGroup style={{backgroundColor:'#pink',color:'black'}}
                 expandedId={expandedId}
                 onAccordionPress={(expandedId) => {
                     if (this.state.expandedId === expandedId)
@@ -232,10 +232,10 @@ export default class ViewMessage extends Component {
                             showArrow
                             style={{ paddingVertical: constants.ScreenHeight * 0.015,color:'black', borderBottomWidth: !isExpanded ? StyleSheet.hairlineWidth * 2 : 0, borderBottomColor: theme.colors.gray_light }}
                             titleComponent={
-                                <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
-                                    <Text numberOfLines={1} style={[theme.customFontMSregular.header, { marginRight: isExpanded ? 3 : 5  }]}>{message.sender.fullName}</Text>
+                                <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center',color:'black' }}>
+                                    <Text numberOfLines={1} style={[theme.customFontMSregular.header, { marginRight: isExpanded ? 3 : 5 ,color:'black' }]}>{message.sender.fullName}</Text>
                                     <Text style={[theme.customFontMSregular.caption, { color: 'gray', marginHorizontal: 5, marginTop: 3 }]}>{moment(message.sentAt).format('lll')}</Text>
-                                    <CustomIcon icon={arrowStyle.icon} color={arrowStyle.color} size={15} style={{ marginTop: 1, marginLeft: 5 }} />
+                                    <CustomIcon icon={arrowStyle.icon} color={arrowStyle.color} size={15} style={{ marginTop: 1, marginLeft: 5,color:'black' }} />
                                 </View>
                             }
                             description={!isExpanded ? message.message : 'à ' + receivers}
@@ -264,7 +264,7 @@ export default class ViewMessage extends Component {
                 <Appbar back title titleText='File des messages' />
                 <View style={styles.container}>
                     <Headline style={[theme.customFontMSmedium.h3, { paddingLeft: constants.ScreenWidth * 0.038, marginBottom: 5 }]}>{this.state.mainMessage.mainSubject}</Headline>
-                    <ScrollView style={[styles.container, {backgroundColor:'pink'}]} >
+                    <ScrollView style={{color:'black'}} >
                         {this.renderMessages()}
                     </ScrollView >
                 </View>
@@ -273,7 +273,7 @@ export default class ViewMessage extends Component {
                     message={toastMessage}
                     type={toastType}
                     onDismiss={() => this.setState({ toastMessage: '' })}
-                    containerStyle={{ bottom: 10 }} style={{backgroundColor:'#pink'}}/>
+                    containerStyle={{ bottom: 10 }} />
             </View>
         )
     }

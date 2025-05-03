@@ -115,7 +115,9 @@ export default class AutoCompleteUsers extends React.Component {
                 inputContainerStyle={styles.inputContainerStyle}
                 listContainerStyle={styles.listContainerStyle}
                 listStyle={[styles.listStyle, theme.style.shadow]}
-            //renderTextInput={() => <TextInput style={[theme.customFontMSregular.body, { color: theme.colors.gray_light }]} {...this.props} />}
+                // renderTextInput={() => <TextInput 
+                // placeholderTextColor="gray"
+                // style={[theme.customFontMSregular.body, { color: '#000'}]} {...this.props} />}
             />
         )
     }

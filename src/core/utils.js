@@ -1074,37 +1074,45 @@ export const pickImage = (previousAttachments = [], isCamera = false, addPathSuf
 
 //##FILE PICKER
 export const pickDocs = async (attachments, type = [DocumentPicker.types.allFiles]) => {
-
   try {
-    const results = await DocumentPicker.pickMultiple({ type })
-    for (const res of results) {
-      var i = 0
-      // if (res.uri.startsWith('content://')) {
-      const destPath = await setDestPath(res.name)
-      await RNFS.moveFile(decodeURI(res.uri), destPath)
+    // Sélection multiple de fichiers
+    const results = await DocumentPicker.pick({
+      allowMultiSelection: true, // Permet de sélectionner plusieurs fichiers
+      type,
+    });
 
+    // Parcourir les résultats
+    for (const res of results) {
+      const destPath = await setDestPath(res.name); // Chemin de destination personnalisé
+      
+      // Déplacer le fichier vers le chemin de destination
+      await RNFS.moveFile(decodeURI(res.uri), destPath);
+
+      // Créer un objet pour chaque pièce jointe
       const attachment = {
         path: destPath,
-        type: res.type,
+        type: res.type || res.mimeType, // Adapter selon les métadonnées
         name: res.name,
         size: res.size,
-        progress: 0
-      }
-      attachments.push(attachment)
-    }
-    i = i + 1
-    // }
-    return attachments
-  }
+        progress: 0,
+      };
 
-  catch (error) {
-    console.log(error)
-    let errorMessage = 'Erreur lors de la sélection du fichier. Veuillez réessayer.'
-    if (DocumentPicker.isCancel(error))
-      return attachments
-    else throw new Error(errorMessage)
+      // Ajouter l'objet à la liste des pièces jointes
+      attachments.push(attachment);
+    }
+
+    return attachments; // Retourne les pièces jointes mises à jour
+  } catch (error) {
+    console.error('Erreur DocumentPicker:', error);
+    if (DocumentPicker.isCancel(error)) {
+      // Annulation de l'utilisateur
+      return attachments;
+    } else {
+      // Autres erreurs
+      throw new Error('Erreur lors de la sélection des fichiers. Veuillez réessayer.');
+    }
   }
-}
+};
 
 export const pickDoc = async (generateName = false, type = [DocumentPicker.types.allFiles]) => {
   try {

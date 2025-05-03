@@ -323,15 +323,15 @@ class NewMessage extends Component {
                 />
                 <ScrollView keyboardShouldPersistTaps="never" style={styles.form}>
 
-                    <View style={{ flexDirection: 'row', marginBottom: constants.ScreenHeight * 0.01 }}>
+                    <View style={{ flexDirection: 'row', marginBottom: constants.ScreenHeight * 0.01}}>
                         <View style={{ flexDirection: 'row' }}>
-                            <Text>De         </Text>
-                            <Text>{this.currentUser.displayName}</Text>
+                            <Text style={{color:'gray' }}>De         </Text>
+                            <Text style={{color:'gray' }}>{this.currentUser.displayName}</Text>
                         </View>
                     </View>
 
                     <View style={{ flexDirection: 'row', alignItems: "flex-end", zIndex: 1, marginBottom: 8 }}>
-                        <Text style={{ marginTop: 13 }}>À           </Text>
+                        <Text style={{ marginTop: 13 ,color:'gray'}}>À           </Text>
 
                         <AutoCompleteUsers
                             suggestions={suggestions}
@@ -342,6 +342,9 @@ class NewMessage extends Component {
                             showInput={true}
                             suggestionsBellow={true}
                             editable={!loading}
+                            style={{color:'gray'}}
+                            inputStyle={{ color: 'gray', borderColor: 'lightgray', borderWidth: 1 }}
+
                         />
 
                         <Icon style={{ marginTop: 10 }} name='chevron-down' size={15} color={theme.colors.placeholder} />
@@ -355,13 +358,15 @@ class NewMessage extends Component {
                         error={!!subject.error}
                         errorText={subject.error}
                         editable={!this.isReply && !loading}
+                        style={{ color: '#000' }}
                     />
 
-                    <View style={{ flex: 1, backgroundColor: '#fff', elevation: 0 }}>
+                    <View style={{ flex: 1, backgroundColor: 'pink ', elevation: 0 }}>
                         <MessageInput
-                            // label="Message"
+                            label="Message"
                             ref={ref => { this.messageInputRef = ref }}
                             placeholder='Rédigez votre message...'
+                             placeholderTextColor="gray"
                             underlineColor="transparent"
                             value={message.value}
                             onChangeText={text => updateField(this, message, text)}
@@ -370,8 +375,12 @@ class NewMessage extends Component {
                             multiline={true}
                             theme={{ colors: { primary: '#fff', text: '#333' } }}
                             selectionColor='#333'
-                            style={styles.messageInput}
                             editable={!loading}
+                            style={[
+                                styles.messageInput,
+                                { color: '#000' },
+                            ]}
+
                         //autoFocus={this.isReply}
                         />
 
