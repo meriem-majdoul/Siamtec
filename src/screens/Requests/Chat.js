@@ -110,9 +110,9 @@ class Chat extends Component {
     
                 this.setState({ messages });
             });
+          
     }
-    
-    
+
     // Assurez-vous de déconnecter le listener lorsque le composant est démonté
     componentWillUnmount() {
         if (this.messagesListener) {

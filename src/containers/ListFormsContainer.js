@@ -108,7 +108,7 @@ this.showFAB = (route?.params?.showFAB ?? true) && this.isRoot;
 
                 <Background showMotif={filterCount < 4} style={styles.container}>
 
-                    {/* <SearchBar
+                    <SearchBar
                         menu={this.props.isRoot}
                         title={!showInput}
                         titleText={titleText}
@@ -117,7 +117,7 @@ this.showFAB = (route?.params?.showFAB ?? true) && this.isRoot;
                         handleSearch={() => this.setState({ searchInput: '', showInput: !showInput })}
                         searchInput={searchInput}
                         searchUpdated={(searchInput) => this.setState({ searchInput })}
-                    /> */}
+                    />
 
                     {loading ?
                         <Loading size='large' />

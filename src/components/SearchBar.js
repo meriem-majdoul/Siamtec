@@ -1,64 +1,96 @@
 import React, { memo } from "react";
-import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
-import { Appbar as appbar } from 'react-native-paper';
-import { faBars, faTimes, faSearch, faArrowLeft, faCheck } from '@fortawesome/free-solid-svg-icons';
+import { StyleSheet } from "react-native";
+import { Appbar } from "react-native-paper";
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import { faBars, faTimes, faSearch, faArrowLeft, faCheck, faFilter } from "@fortawesome/free-solid-svg-icons";
 import { Searchbar } from "react-native-paper";
 import * as theme from "../core/theme";
-import { constants, isTablet } from '../core/constants';
-import { useNavigation } from '@react-navigation/native';  // Remplacer withNavigation par useNavigation
-
-import { FontAwesomeIcon } from '@fortawesome/free-solid-svg-icons';
-import { faFilter } from '@fortawesome/free-solid-svg-icons';
+import { isTablet } from "../core/constants";
+import { useNavigation } from "@react-navigation/native";
 
 const SearchBar = ({
-    menu = true, close,
-    main, placeholder,
-    showBar,
-    title, titleText,
-    searchInput = '', searchUpdated, handleSearch, magnifyStyle,
-    check, handleSubmit,
-    filterComponent,
-    style, ...props }) => {
+  menu = true,
+  close,
+  main,
+  placeholder,
+  showBar,
+  title,
+  titleText,
+  searchInput = "",
+  searchUpdated,
+  handleSearch,
+  magnifyStyle,
+  check,
+  handleSubmit,
+  filterComponent,
+  style,
+  ...props
+}) => {
+  const navigation = useNavigation();
 
-    const navigation = useNavigation();  // Utilisation du hook useNavigation
+  const showMenu = () => navigation.openDrawer();
+  const navBack = () => navigation.pop();
 
-    const showMenu = () => navigation.openDrawer();
-    const navBack = () => navigation.pop();
+  const AppBarIcon = ({ icon, onPress, style }) => (
+    <Appbar.Action
+      icon={() => <FontAwesomeIcon icon={icon} size={24} />}
+      onPress={onPress}
+      style={[styles.icon, style]}
+    />
+  );
 
-    const AppBarIcon = ({ icon, onPress, style }) => {
-        const faIcon = <FontAwesomeIcon icon={icon} size={24} />;
-        return <appbar.Action icon={() => <FontAwesomeIcon icon={icon} size={24} />} onPress={onPress} />;
-    };
+  const renderLeftIcon = () => {
+    const icon = showBar ? faArrowLeft : menu ? faBars : faTimes;
+    const handleAction = showBar ? handleSearch : menu ? showMenu : navBack;
+    return <AppBarIcon icon={icon} onPress={handleAction} />;
+  };
 
-    const renderLeftIcon = () => {
-        const icon = showBar ? faArrowLeft : menu ? faBars : faTimes;
-        const handleAction = showBar ? handleSearch : menu ? showMenu : navBack;
-        return <AppBarIcon icon={icon} onPress={handleAction} />;
-    };
-
-    return (
-        <appbar.Header style={[{ backgroundColor: theme.colors.appBar, elevation: 0 }, style]}>
-            {renderLeftIcon()}
-            {title && <appbar.Content title={titleText} titleStyle={[theme.customFontMSregular.header, { marginLeft: isTablet ? 0 : '-5%', letterSpacing: 1 }]} />}
-            {showBar &&
-                <Searchbar
-                    placeholder={placeholder}
-                    placeholderTextColor={theme.colors.gray_dark}
-                    onChangeText={(searchInput) => searchUpdated(searchInput)}
-                    value={searchInput}
-                    inputStyle={[theme.customFontMSregular.h3, { color: theme.colors.secondary }]}
-                    style={{ backgroundColor: theme.colors.appBar, elevation: 0 }}
-                    theme={{ colors: { placeholder: '#fff', text: '#fff' } }}
-                    icon={() => null}
-                    autoFocus={false}
-                    selectionColor={theme.colors.gray_dark}
-                />
-            }
-            {!showBar && <AppBarIcon icon={faSearch} onPress={handleSearch} />}
-            {!showBar && filterComponent}
-            {check && !showBar && <AppBarIcon icon={faCheck} onPress={handleSubmit} />}
-        </appbar.Header>
-    );
+  return (
+    <Appbar.Header style={[styles.header, style]}>
+      {renderLeftIcon()}
+      {title && (
+        <Appbar.Content
+          title={titleText}
+          titleStyle={[styles.title, { marginLeft: isTablet ? 0 : "-5%" }]}
+        />
+      )}
+      {showBar && (
+        <Searchbar
+          placeholder={placeholder}
+          placeholderTextColor={theme.colors.gray_dark}
+          onChangeText={searchUpdated}
+          value={searchInput}
+          inputStyle={[styles.input, { color: theme.colors.secondary }]}
+          style={styles.searchbar}
+          theme={{ colors: { placeholder: "#fff", text: "#fff" } }}
+        />
+      )}
+      {!showBar && <AppBarIcon icon={faSearch} onPress={handleSearch} />}
+      {!showBar && filterComponent}
+      {check && !showBar && <AppBarIcon icon={faCheck} onPress={handleSubmit} />}
+    </Appbar.Header>
+  );
 };
 
-export default SearchBar;
+const styles = StyleSheet.create({
+  header: {
+    backgroundColor: theme.colors.appBar,
+    elevation: 0,
+  },
+  title: {
+    ...theme.customFontMSregular.header,
+    letterSpacing: 1,
+  },
+  searchbar: {
+    backgroundColor: theme.colors.appBar,
+    elevation: 0,
+  },
+  input: {
+    ...theme.customFontMSregular.h3,
+  },
+  icon: {
+    color: "black",
+  },
+});
+
+export default memo(SearchBar);

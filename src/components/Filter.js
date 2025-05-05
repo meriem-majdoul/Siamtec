@@ -1,87 +1,90 @@
 import * as React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { List, Appbar } from 'react-native-paper';
-import { faFilter, faTimes } from '@fortawesome/free-solid-svg-icons'
+import { faFilter, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { MenuProvider, Menu as PopupMenu, MenuOptions, MenuOption, MenuTrigger, renderers } from 'react-native-popup-menu';
-import { useNavigation } from '@react-navigation/native'; // Importez useNavigation
+import { useNavigation } from '@react-navigation/native';
 
-import Picker from '../components/Picker'
-import TextInput from '../components/TextInput'
-import Button from '../components/Button'
-import CustomIcon from '../components/CustomIcon'
-import { SystemMessage } from 'react-native-gifted-chat';
-
+import Picker from '../components/Picker';
+import TextInput from '../components/TextInput';
+import Button from '../components/Button';
+import CustomIcon from '../components/CustomIcon';
 import * as theme from '../core/theme';
 import { constants } from '../core/constants';
 import { refreshClient, refreshProject, refreshUser } from '../core/utils';
 import ItemPicker from './ItemPicker';
 
-const { SlideInMenu } = renderers
+const { SlideInMenu } = renderers;
 
 const Filter = ({ main, opened, toggleFilter, setFilter, resetFilter, options, functions, menuStyle, isAppBar = false, ...props }) => {
-
-    const navigation = useNavigation(); // Utilisez useNavigation pour accéder à navigation
+    const navigation = useNavigation();
 
     const onPressScreenPicker = (option) => {
-        if (option.disabled) return
+        if (option.disabled) return;
 
-        toggleFilter()
+        toggleFilter();
 
-        if (option.screen === 'ListClients')
-            var callback = (client) => {
-                client = refreshUser(client)
-                return { client }
-            }
-
-        else if (option.screen === 'ListProjects')
-            var callback = (project) => {
-                project = refreshProject(project, false)
-                return { project }
-            }
-
-        else if (option.screen === 'ListEmployees')
-            var callback = (assignedTo) => {
-                assignedTo = refreshUser(assignedTo)
-                return { assignedTo }
-            }
+        let callback;
+        if (option.screen === 'ListClients') {
+             option.drawer='ClientsManagementStack';
+            callback = (client) => ({ client: refreshUser(client) });
+        } else if (option.screen === 'ListProjects') {
+            option.drawer='ProjectsStack';
+            callback = (project) => ({ project: refreshProject(project, false) });
+        } else if (option.screen === 'ListEmployees') {
+            option.drawer='AgendaStack';
+            callback = (assignedTo) => ({ assignedTo: refreshUser(assignedTo) });
+        }
 
         const refresh = (filter) => {
-            const obj = callback(filter)
-            main.setState(obj)
-        }
+            const obj = callback(filter);
+            main.setState(obj);
+        };
 
         const navParams = {
             isRoot: false,
             titleText: option.titleText,
             showButton: false,
-            onGoBack: refresh
-        }
-        navigation.push(option.screen, navParams) // Utilisez navigation.push à la place de props.navigation.push
-    }
+            onGoBack: refresh,
+        };
+        navigation.push(option.drawer,{screen:option.screen, params:navParams});
+    };
 
     const renderFilterIcon = () => {
-        if (isAppBar) return <Appbar.Action icon={<CustomIcon icon={faFilter} color={theme.colors.appBarIcon} size={24}/>} />
-        else return <CustomIcon icon={faFilter} />
-    }
+        if (isAppBar) {
+            return (
+                <Appbar.Action
+                    icon={() => <FontAwesomeIcon icon={faFilter} color={theme.colors.appBarIcon} size={24} />}
+                    onPress={toggleFilter}
+                />
+            );
+        } else {
+            return <FontAwesomeIcon icon={faFilter} size={20} color={theme.colors.appBarIcon} />;
+        }
+    };
 
     const renderHeader = () => {
         return (
             <View style={styles.header}>
-                <View style={{ flexDirection: 'row', alignItems: "center" }}>
-                    <CustomIcon icon={faFilter} color={theme.colors.white} size={15} />
-                    <Text style={[theme.customFontMSregular.header, { color: '#fff', textAlign: 'center', marginLeft: 10 }]}>Filtrer par</Text>
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                    <FontAwesomeIcon icon={faFilter} color={theme.colors.white} size={15} />
+                    <Text style={[theme.customFontMSregular.header, { color: '#fff', textAlign: 'center', marginLeft: 10 }]}>
+                        Filtrer par
+                    </Text>
                 </View>
-                <CustomIcon onPress={toggleFilter} icon={faTimes} color={theme.colors.white} />
+                <TouchableOpacity onPress={toggleFilter}>
+                    <FontAwesomeIcon icon={faTimes} color={theme.colors.white} size={15} />
+                </TouchableOpacity>
             </View>
-        )
-    }
+        );
+    };
 
     const renderOptions = () => {
-        return options.map((option, index) => renderOption(option, index))
-    }
+        return options.map((option, index) => renderOption(option, index));
+    };
 
     const renderOption = (option, index) => {
-
         if (option.type === 'picker') {
             return (
                 <Picker
@@ -90,11 +93,10 @@ const Filter = ({ main, opened, toggleFilter, setFilter, resetFilter, options, f
                     value={option.value}
                     selectedValue={option.value}
                     onValueChange={(value) => setFilter(option.field, value)}
-                    elements={option.values} />
-            )
-        }
-
-        else if (option.type === 'screen') {
+                    elements={option.values}
+                />
+            );
+        } else if (option.type === 'screen') {
             return (
                 <ItemPicker
                     key={index.toString()}
@@ -103,9 +105,9 @@ const Filter = ({ main, opened, toggleFilter, setFilter, resetFilter, options, f
                     value={option.value}
                     editable={true}
                 />
-            )
+            );
         }
-    }
+    };
 
     const renderFooter = () => {
         return (
@@ -117,15 +119,14 @@ const Filter = ({ main, opened, toggleFilter, setFilter, resetFilter, options, f
                     Confirmer
                 </Button>
             </View>
-        )
-    }
+        );
+    };
 
     return (
         <PopupMenu renderer={SlideInMenu} opened={opened} onBackdropPress={toggleFilter} style={menuStyle}>
             <MenuTrigger onPress={toggleFilter}>
                 {renderFilterIcon()}
             </MenuTrigger>
-
             <MenuOptions optionsContainerStyle={{ height: constants.ScreenHeight * 0.935, elevation: 50 }}>
                 {renderHeader()}
                 <View style={{ paddingHorizontal: theme.padding, paddingVertical: 5 }}>
@@ -134,8 +135,8 @@ const Filter = ({ main, opened, toggleFilter, setFilter, resetFilter, options, f
                 </View>
             </MenuOptions>
         </PopupMenu>
-    )
-}
+    );
+};
 
 const styles = StyleSheet.create({
     header: {
@@ -145,13 +146,13 @@ const styles = StyleSheet.create({
         borderTopLeftRadius: constants.ScreenWidth * 0.03,
         borderTopRightRadius: constants.ScreenWidth * 0.03,
         paddingHorizontal: theme.padding,
-        paddingVertical: 10
+        paddingVertical: 10,
     },
     buttonsContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        marginTop: 15
-    }
-})
+        marginTop: 15,
+    },
+});
 
-export default Filter
+export default Filter;

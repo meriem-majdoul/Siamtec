@@ -141,34 +141,34 @@ class ListProjects extends Component {
         let { step, state, client, filterOpened } = this.state
         
 
-        // return (
-        //     <SearchBar
-        //         menu={this.isRoot}
-        //         main={this}
-        //         title={!showInput}
-        //         titleText={this.titleText}
-        //         placeholder='Rechercher un projet'
-        //         showBar={showInput}
-        //         handleSearch={() => this.setState({ searchInput: '', showInput: !showInput })}
-        //         searchInput={searchInput}
-        //         searchUpdated={(searchInput) => this.setState({ searchInput })}
-        //         filterComponent={
-        //             <Filter
-        //                 isAppBar={true}
-        //                 main={this}
-        //                 opened={filterOpened}
-        //                 toggleFilter={() => toggleFilter(this)}
-        //                 setFilter={(field, value) => setFilter(this, field, value)}
-        //                 resetFilter={() => this.setState({ step: '', state: '', client: { id: '', fullName: '' } })}
-        //                 options={[
-        //                     { id: 0, type: 'picker', title: "Étape", values: phases, value: step, field: 'step' },
-        //                     { id: 1, type: 'picker', title: "État", values: states, value: state, field: 'state' },
-        //                     { id: 2, type: 'screen', title: "Client", value: client.fullName, field: 'client', screen: 'ListClients', titleText: 'Filtre par client' },
-        //                 ]}
-        //             />
-        //         }
-        //     />
-        // )
+        return (
+            <SearchBar
+                menu={this.isRoot}
+                main={this}
+                title={!showInput}
+                titleText={this.titleText}
+                placeholder='Rechercher un projet'
+                showBar={showInput}
+                handleSearch={() => this.setState({ searchInput: '', showInput: !showInput })}
+                searchInput={searchInput}
+                searchUpdated={(searchInput) => this.setState({ searchInput })}
+                filterComponent={
+                    <Filter
+                        isAppBar={true}
+                        main={this}
+                        opened={filterOpened}
+                        toggleFilter={() => toggleFilter(this)}
+                        setFilter={(field, value) => setFilter(this, field, value)}
+                        resetFilter={() => this.setState({ step: '', state: '', client: { id: '', fullName: '' } })}
+                        options={[
+                            { id: 0, type: 'picker', title: "Étape", values: phases, value: step, field: 'step' },
+                            { id: 1, type: 'picker', title: "État", values: states, value: state, field: 'state' },
+                            { id: 2, type: 'screen', title: "Client", value: client.fullName, field: 'client', screen: 'ListClients', titleText: 'Filtre par client' },
+                        ]}
+                    />
+                }
+            />
+        )
     }
 
     toggleViewMode() {

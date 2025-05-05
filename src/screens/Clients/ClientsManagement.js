@@ -56,7 +56,7 @@ class ClientsManagement extends React.Component {
 
         return (
             <View style={{ flex: 1 }}>
-                {/* <SearchBar
+                <SearchBar
                     menu={this.isRoot}
                     main={this}
                     title={!showInput}
@@ -65,7 +65,7 @@ class ClientsManagement extends React.Component {
                     handleSearch={() => this.setState({ searchInput: '', showInput: !showInput })}
                     searchInput={searchInput}
                     searchUpdated={(searchInput) => this.setState({ searchInput })}
-                /> */}
+                />
 
                 <TabView
                     navigationState={{ index, routes }}

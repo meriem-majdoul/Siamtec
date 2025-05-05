@@ -5,12 +5,12 @@ import { TextInput as NativeTextInput } from 'react-native';
 import { TextInput as Input } from "react-native-paper";
 import * as theme from "../core/theme";
 import { constants } from "../core/constants";
-import { AnimatedCircularProgress } from 'react-native-circular-progress'
-import NumberFormat from 'react-number-format';
+import { AnimatedCircularProgress } from 'react-native-circular-progress';
+import {NumberFormat} from 'react-number-format';
 
 const TurnoverGoal = ({ goal, index, onPress, isList = true, style, ...props }) => {
 
-    let { current, target, month, year } = goal
+    let { current = 0, target = 1, month = "N/A", year = "N/A" } = goal;
 
     const progress = (current / target) * 100
     const targetReached = progress >= 100
@@ -19,7 +19,9 @@ const TurnoverGoal = ({ goal, index, onPress, isList = true, style, ...props }) 
     const isFirstColumn = (index + 1) % 3 === 0
     const textColor = goal.isCurrent ? theme.colors.primary : theme.colors.secondary
     const size = constants.ScreenWidth * 0.26
-
+    const formatNumberCustom = (number) => {
+        return `${number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ')} €`;
+    };
     return (
         <TouchableOpacity style={[{ width: size, marginBottom: 17, marginLeft: !isList ? 0 : isFirstColumn ? 0 : constants.ScreenWidth * 0.06 }, style]} onPress={() => onPress(goal, index)}>
             <AnimatedCircularProgress
@@ -34,21 +36,13 @@ const TurnoverGoal = ({ goal, index, onPress, isList = true, style, ...props }) 
                 style={{ alignSelf: 'center' }}>
                 {(fill) => (
                         <View style={{ justifyContent: 'center' }}>
-                            <NumberFormat
-                                value={current}
-                                displayType={'text'}
-                                thousandSeparator={true}
-                                //suffix={'€'}
-                                renderText={value => <Text style={[theme.customFontMSsemibold.body, { color: tintColor, textAlign: "center" }]}>{value}</Text>}
-                            />
+                            <Text style={[theme.customFontMSsemibold.body, { color: tintColor, textAlign: "center" }]}>
+                                {formatNumberCustom(current)}
+                            </Text>
 
-                            <NumberFormat
-                                value={target}
-                                displayType={'text'}
-                                thousandSeparator={true}
-                                //suffix={'€'}
-                                renderText={value => <Text style={[theme.customFontMSmedium.caption, { textAlign: 'center', color: theme.colors.gray_dark }]}>sur {value}</Text>}
-                            />
+                            <Text style={[theme.customFontMSmedium.caption, { textAlign: 'center', color: theme.colors.gray_dark }]}>
+                                sur {formatNumberCustom(target)}
+                            </Text>
 
                             <Text style={[theme.customFontMSregular.caption, { color: theme.colors.gray_medium, textAlign: "center", marginTop: size * 0.05 }]}>
                                 {parseInt(fill)}%

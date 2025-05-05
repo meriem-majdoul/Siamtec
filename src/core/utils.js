@@ -428,15 +428,16 @@ export const downloadFile = async (fileName, url, open = true, updateProgress) =
   try {
     const path = await setDestPath(fileName)
     const fileExist = await RNFetchBlob.fs.exists(path)
+    
     let downloadProgress = 0
 
     //Open file...
-    if (fileExist && open) {
-      FileViewer.open(path, { showOpenWithDialog: true })
-      return true
-    }
+    // if (fileExist && open) {
+    //   FileViewer.open(path, { showOpenWithDialog: true })
+    //   return true
+    // }
 
-    //Download file...
+    // Download file...
     let options = {
       fileCache: true,
       path,

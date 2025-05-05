@@ -8,7 +8,7 @@ moment.locale('fr')
 import * as theme from '../core/theme'
 import { constants } from '../core/constants'
 
-import { TurnoverGoal } from '../components'
+import TurnoverGoal from '../components/TurnoverGoal';
 
 class TurnoverGoalsContainer extends Component {
 

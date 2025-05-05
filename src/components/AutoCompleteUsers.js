@@ -56,8 +56,8 @@ export default class AutoCompleteUsers extends React.Component {
 
         return (
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 10, paddingVertical: 15, borderBottomWidth: StyleSheet.hairlineWidth * 0.5, borderBottomColor: theme.colors.gray2 }}>
-                <Text>{name}</Text>
-                <AvatarText label={name.charAt(0)} size={35} />
+                <Text style={{color:'gray'}}>{name}</Text>
+                <AvatarText label={name.charAt(0)} size={35} style={{color:'white'}} />
             </View>
         )
     }
@@ -102,7 +102,7 @@ export default class AutoCompleteUsers extends React.Component {
                 onCustomTagCreated={this.onCustomTagCreated}
                 // autoFocus={this.props.autoFocus}
                 style={styles.autotags}
-
+                placeholderTextColor='gray'
                 autoFocus={false}
                 showInput={this.props.showInput}
                 editable={this.props.editable}
@@ -171,21 +171,18 @@ const styles = StyleSheet.create({
     listContainerStyle: {
         backgroundColor: "white",
         borderWidth: 0,
+        
     },
     listStyle: {
-        backgroundColor: 'white',
+        backgroundColor: '#fff',
         margin: 0,
         paddingHorizontal: theme.padding / 2,
         borderWidth: 0,
+        width: '80%',
     },
     autotags: {
-        //backgroundColor: '#fff',
-        //marginLeft: -constants.ScreenWidth * 0.02,
-        // paddingTop: 5,
-        // paddingBottom: 15,
+        color:'#000',
         width: constants.ScreenWidth * 0.9,
-        // borderBottomWidth: StyleSheet.hairlineWidth * 3,
-        // borderBottomColor: theme.colors.gray_extraLight
     },
 })
 

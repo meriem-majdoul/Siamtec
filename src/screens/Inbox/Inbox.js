@@ -49,9 +49,9 @@ class Inbox extends React.Component {
         return (
             <View style={{ flex: 1 }}>
                 <Appbar
-                    // menu={this.isRoot}
+                    menu={this.isRoot}
                     // back={!this.isRoot}
-                    back
+                   
                     title
                     titleText='Boîte de réception'
                 />

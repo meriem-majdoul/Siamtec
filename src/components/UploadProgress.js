@@ -22,7 +22,7 @@ const UploadProgress = ({ attachment, onPress, showRightIcon = false, rightIcon,
 
                 <View style={{ flex: showRightIcon ? 0.68 : 0.83, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-end' }}>
                     <View>
-                        <Text numberOfLines={1} ellipsizeMode='middle' style={[theme.customFontMSmedium.body]}>{attachment.name}</Text>
+                        <Text numberOfLines={1} ellipsizeMode='middle' style={[theme.customFontMSmedium.body, { color: theme.colors.gray_dark }]}>{attachment.name}</Text>
                         <Text style={[theme.customFontMSmedium.caption, { color: theme.colors.gray_dark }]}>{readableSize} KB</Text>
                     </View>
 

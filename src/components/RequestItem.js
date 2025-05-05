@@ -56,7 +56,7 @@ const RequestItem = ({ request, requestType, chatId, ...props }) => {
                         <Title style={[theme.customFontMSsemibold.header, { flex: 0.85 }]} numberOfLines={1}>
                             {request.subject}
                         </Title>
-                        <TouchableOpacity hitSlop={theme.hitslop} onPress={() => navigation.navigate('ChatStack',('Chat', { chatId: chatId }))}>
+                        <TouchableOpacity hitSlop={theme.hitslop} onPress={() => navigation.navigate('ChatStack',{screen:'Chat', params:{ chatId: chatId }} )} >
                             <CustomIcon icon={faCommentDots} />
                         </TouchableOpacity>
                     </View>

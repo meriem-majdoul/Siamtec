@@ -3,7 +3,7 @@
 import React, { Component } from 'react'
 import { StyleSheet, Text, View, ScrollView, Image, TouchableOpacity } from 'react-native'
 import { List, Headline } from 'react-native-paper'
-import { faArrowAltToBottom, faReply, faShare } from '@fortawesome/free-solid-svg-icons'
+import { faArrowAltToBottom, faReply, faShare ,faDownload} from '@fortawesome/free-solid-svg-icons'
 import Entypo from 'react-native-vector-icons/Entypo'
 
 import firebase, { db, functions } from '../../firebase'
@@ -137,7 +137,7 @@ export default class ViewMessage extends Component {
                                 {key > 0 && showOldMessages &&
                                     <View>
                                         <Text style={[theme.customFontMSregular.caption, { color: theme.colors.placeholder, marginTop: 4, marginBottom: 2 }]}>Le <Text style={theme.customFontMSregular.body}>{sentAtDate}</Text> à <Text style={theme.customFontMSregular.body}>{sentAtTime}</Text>, <Text style={theme.customFontMSregular.body}>{msg.sender.fullName}</Text> a écrit:</Text>
-                                        <Text style={[theme.customFontMSregular.body, { marginBottom: 15 }]}>{msg.message}</Text>
+                                        <Text style={[theme.customFontMSregular.body, { marginBottom: 15,color:'black' }]}>{msg.message}</Text>
                                     </View>
                                 }
                             </View>
@@ -182,7 +182,7 @@ export default class ViewMessage extends Component {
                             displayError({ message: e.message })
                         }
                     }}>
-                        <CustomIcon icon={faArrowAltToBottom} color={theme.colors.gray_dark} size={20} />
+                        <CustomIcon icon={faDownload} color={theme.colors.gray_dark} size={20} />
                     </TouchableOpacity>
                 }
             />
@@ -226,26 +226,56 @@ export default class ViewMessage extends Component {
                     receivers = receivers.join(', ')
 
                     return (
-                        <List.Accordion 
-                            key={key.toString()}
-                            id={message.id}
-                            showArrow
-                            style={{ paddingVertical: constants.ScreenHeight * 0.015,color:'black', borderBottomWidth: !isExpanded ? StyleSheet.hairlineWidth * 2 : 0, borderBottomColor: theme.colors.gray_light }}
-                            titleComponent={
-                                <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center',color:'black' }}>
-                                    <Text numberOfLines={1} style={[theme.customFontMSregular.header, { marginRight: isExpanded ? 3 : 5 ,color:'black' }]}>{message.sender.fullName}</Text>
-                                    <Text style={[theme.customFontMSregular.caption, { color: 'gray', marginHorizontal: 5, marginTop: 3 }]}>{moment(message.sentAt).format('lll')}</Text>
-                                    <CustomIcon icon={arrowStyle.icon} color={arrowStyle.color} size={15} style={{ marginTop: 1, marginLeft: 5,color:'black' }} />
-                                </View>
-                            }
-                            description={!isExpanded ? message.message : 'à ' + receivers}
-                            theme={{ colors: { primary: '#333' } }}
-                            titleStyle={theme.customFontMSregular.header}
-                            descriptionStyle={theme.customFontMSregular.caption}>
-
-                            {this.renderMessage(message)}
-
-                        </List.Accordion>
+                        <List.Accordion
+                        key={key.toString()}
+                        id={message.id}
+                        showArrow
+                        style={{
+                            paddingVertical: constants.ScreenHeight * 0.015,
+                            borderBottomWidth: !isExpanded ? StyleSheet.hairlineWidth * 2 : 0,
+                            borderBottomColor: theme.colors.gray_light,
+                        }}
+                        titleStyle={[
+                            theme.customFontMSregular.header,
+                            { color: 'black' } // Couleur du titre
+                        ]}
+                        descriptionStyle={[
+                            theme.customFontMSregular.caption,
+                            { color: 'gray' } // Couleur de la description
+                        ]}
+                        titleComponent={
+                            <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
+                                <Text
+                                    numberOfLines={1}
+                                    style={[
+                                        theme.customFontMSregular.header,
+                                        { marginRight: isExpanded ? 3 : 5, color: 'black' },
+                                    ]}
+                                >
+                                    {message.sender.fullName}
+                                </Text>
+                                <Text
+                                    style={[
+                                        theme.customFontMSregular.caption,
+                                        { color: 'gray', marginHorizontal: 5, marginTop: 3 },
+                                    ]}
+                                >
+                                    {moment(message.sentAt).format('lll')}
+                                </Text>
+                                <CustomIcon
+                                    icon={arrowStyle.icon}
+                                    color={arrowStyle.color}
+                                    size={15}
+                                    style={{ marginTop: 1, marginLeft: 5 }}
+                                />
+                            </View>
+                        }
+                        description={!isExpanded ? message.message : 'à ' + receivers}
+                        theme={{ colors: { primary: '#333' } }}
+                    >
+                        {this.renderMessage(message)}
+                    </List.Accordion>
+                    
                     )
                 })
                 }

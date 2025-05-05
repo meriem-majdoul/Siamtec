@@ -59,7 +59,7 @@ class UsersManagement extends React.Component {
 
         return (
             <View style={{ flex: 1 }}>
-                {/* <SearchBar
+                <SearchBar
                     menu={this.isRoot}
                     main={this}
                     title={!this.state.showInput}
@@ -68,7 +68,7 @@ class UsersManagement extends React.Component {
                     handleSearch={() => this.setState({ searchInput: '', showInput: !this.state.showInput })}
                     searchInput={this.state.searchInput}
                     searchUpdated={(searchInput) => this.setState({ searchInput })}
-                /> */}
+                />
 
                 <TabView
                     navigationState={{ index, routes }}
