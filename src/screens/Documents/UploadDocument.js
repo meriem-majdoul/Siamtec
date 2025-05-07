@@ -1131,7 +1131,7 @@ class UploadDocument extends Component {
         if (signMode)
             params.initMode = 'sign'
 
-        this.props.navigation.navigate("Signature", params)
+        this.props.navigation.navigate('DocumentsStack',{screen:"Signature", params:params})
     }
 
     render() {

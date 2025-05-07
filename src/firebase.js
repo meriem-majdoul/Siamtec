@@ -1,33 +1,41 @@
-import firebase from '@react-native-firebase/app'
+// firebase.js
+import firebase from '@react-native-firebase/app';
 // import '@react-native-firebase/crashlytics'
-import '@react-native-firebase/firestore'
-import '@react-native-firebase/auth'
-import '@react-native-firebase/messaging'
-import '@react-native-firebase/functions'
-import '@react-native-firebase/storage'
-import '@react-native-firebase/remote-config'
+import '@react-native-firebase/firestore';
+import '@react-native-firebase/auth';
+import '@react-native-firebase/messaging';
+import '@react-native-firebase/functions';
+import '@react-native-firebase/storage';
+import '@react-native-firebase/remote-config';
 
-// exports
-const dbTemp = firebase.firestore()
+// --- Firestore ---
+const dbTemp = firebase.firestore();
 dbTemp.settings({
-    cacheSizeBytes: firebase.firestore.CACHE_SIZE_UNLIMITED,
-})
+  cacheSizeBytes: firebase.firestore.CACHE_SIZE_UNLIMITED,
+});
+export const db = dbTemp;
 
-export default firebase
-export const db = dbTemp
-export const auth = firebase.auth()
-export const messaging = firebase.messaging()
-export const functions = firebase.functions()
-//export const crashlytics = firebase.crashlytics()
-export const remoteConfig = firebase.remoteConfig()
+// --- Authentification ---
+export const auth = firebase.auth();
 
-// in DEV env use emulators
-// TODO: https://github.com/invertase/react-native-firebase/pull/3690/files (only android redirects 10.0.2.2 to localhost)
+// --- Messaging (FCM) ---
+export const messaging = firebase.messaging();
+
+// --- Cloud Functions (instance par défaut, us-central1) ---
+export const functions = firebase.functions();
+
+// --- Remote Config ---
+export const remoteConfig = firebase.remoteConfig();
+
+// --- (Optionnel) export du core pour d’autres usages ---
+export default firebase;
+
+// En DEV, si besoin d’émulateur, décommentez et ajustez :
 // if (__DEV__) {
-//     functions.useFunctionsEmulator('http://localhost:5001')
-//     db.settings({
-//         persistence: false,
-//         host: 'localhost:8080',
-//         ssl: false,
-//     })
+//   functions.useFunctionsEmulator('http://localhost:5001');
+//   db.settings({
+//     host: 'localhost:8080',
+//     ssl: false,
+//     persistence: false,
+//   });
 // }

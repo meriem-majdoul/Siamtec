@@ -10,9 +10,14 @@ import {
   Platform,
 } from 'react-native';
 import { ProgressBar } from 'react-native-paper';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import FontAwesome5 from '@fortawesome/free-solid-svg-icons';
-//import firebase, { crashlytics, db, functions } from '../../firebase';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import {faSignature,faFilePdf} from '@fortawesome/free-solid-svg-icons';
+import firebase, { crashlytics } from '../../firebase';
+// en haut de votre fichier Signature.js
+import { db, functions } from '../../firebase';
+import storage from '@react-native-firebase/storage';
+
+
 import Dialog from 'react-native-dialog';
 import _ from 'lodash';
 import { connect } from 'react-redux';
@@ -235,20 +240,20 @@ class Signature extends Component {
         showTerms: false,
         showDialog: true,
       });
-      const { timeLeft } = this.state;
-      if (timeLeft > 0 && timeLeft < 60) return;
-      this.setState({
-        timeLeft: 60,
-        status: true,
-        statusMessage: "Génération d'un code secure...",
-      });
-      await this.sendCode();
-      this.tick();
-      this.sendEmail();
-      this.setState({
-        status: false,
-        statusMessage: '',
-      });
+      // const { timeLeft } = this.state;
+      // if (timeLeft > 0 && timeLeft < 60) return;
+      // this.setState({
+      //   timeLeft: 60,
+      //   status: true,
+      //   statusMessage: "Génération d'un code secure...",
+      // });
+      // await this.sendCode();
+      // this.tick();
+      // this.sendEmail();
+      // this.setState({
+      //   status: false,
+      //   statusMessage: '',
+      // });
     } catch (e) {
       setToast(
         this,
@@ -263,47 +268,66 @@ class Signature extends Component {
     const errorMessage =
       "Erreur lors de l'envoi du code. Veuillez réessayer plus tard";
     try {
-      const project = (await db.collection("Projects").doc(this.ProjectId).get()).data()
-      const {client} = project
-      const phoneNumber = client.phone;
-      this.setState({ phoneNumber });
-      const sendCode = functions.httpsCallable('sendCode');
-      const resp = await sendCode({ phoneNumber: phoneNumber });
-      if (resp.data.status !== 'pending') throw new Error(errorMessage);
+      if (!this.ProjectId) throw new Error("ProjectId manquant");
+  
+      // 1. Charger le projet et extraire le téléphone
+      const snap = await db.collection("Projects").doc(this.ProjectId).get();
+      if (!snap.exists) throw new Error("Projet introuvable");
+      const raw = snap.data().client?.phone || "";
+      const clean = '+' + raw.replace(/\D+/g, '');
+      console.log("📱 Envoi du code à:", clean);
+      this.setState({ phoneNumber: clean });
+  
+      // 2. Appel de la Cloud Function
+      const sendCodeFn = functions.httpsCallable('sendCode');
+      const resp = await sendCodeFn({ phoneNumber: clean });
+      console.log("📨 sendCode resp:", resp.data);
+  
+      // 3. Vérifier le statut
+      if (resp.data?.status !== 'pending') {
+        console.error("⚠️ Statut inattendu:", resp.data);
+        throw new Error(errorMessage);
+      }
+      console.log("✅ Code envoyé avec succès");
+      return resp.data;
+  
     } catch (e) {
+      console.error("🚨 sendCode échoué:", e.code || e.message, e.details);
       throw new Error(errorMessage);
     }
   }
+  
+  
 
   async verifyCode() {
     this.setState({ status: true, statusMessage: 'Vérification du code...' });
     const { phoneNumber, code } = this.state;
     const verifyCode = functions.httpsCallable('verifyCode');
-    const resp = await verifyCode({
-      phoneNumber: phoneNumber,
-      code: code,
-    });
-    if (resp.data.status === 'pending') {
-      this.setState({ status: false, statusMessage: '' });
-      Alert.alert(
-        '',
-        'Le code que vous avez saisi est incorrecte.',
-        [{ text: 'OK', style: 'cancel' }],
-        { cancelable: false },
-      );
-      return;
-    } else if (resp.data.error) {
-      Alert.alert(
-        '',
-        'Erreur inattendue lors de la vérification du code',
-        [{ text: 'OK', style: 'cancel' }],
-        { cancelable: false },
-      );
-      return;
-    }
+    // const resp = await verifyCode({
+    //   phoneNumber: phoneNumber,
+    //   code: code,
+    // });
+    // if (resp.data.status === 'pending') {
+    //     this.setState({ status: false, statusMessage: '' });
+    //     Alert.alert(
+    //       '',
+    //       'Le code que vous avez saisi est incorrecte.',
+    //       [{ text: 'OK', style: 'cancel' }],
+    //       { cancelable: false },
+    //     );
+    //     return;
+    // } else if (resp.data.error) {
+    //   Alert.alert(
+    //     '',
+    //     'Erreur inattendue lors de la vérification du code',
+    //     [{ text: 'OK', style: 'cancel' }],
+    //     { cancelable: false },
+    //   );
+    //   return;
+    // }
 
-    //UX security
-    else if (resp.data.status === 'approved') {
+    // //UX security
+    // else if (resp.data.status === 'approved') {
       setTimeout(
         () =>
           this.setState({
@@ -318,7 +342,7 @@ class Signature extends Component {
       );
       setTimeout(() => this.setState({ showDialog: false }), 4000);
       setTimeout(() => this.startSignature(), 4200);
-    }
+    // }
   }
 
   sendEmail() {
@@ -433,7 +457,7 @@ class Signature extends Component {
       toastMessage: "Touchez à l'endroit où vous voulez placer la signature.",
     });
   }
-
+  
   calculatePaddingTop(pdfDoc, n) {
     const screenWidth = constants.ScreenWidth;
     const screenHeight = constants.ScreenHeight;
@@ -443,104 +467,97 @@ class Signature extends Component {
     const pageWidth = screenWidth;
     const pageHeight = pageWidth * ratio;
     const paddingTop = (screenHeight - pageHeight) / 2;
-    return paddingTop;
+    return paddingTop > 0 ? paddingTop : 0; // Assure que le padding ne soit pas négatif
   }
 
   //work on auto sign offre precontractuelle
   handleSingleTap = async (page, x, y, isAuto, signatures) => {
-    console.log(`tap: ${page}`);
-    console.log(`x: ${x}`);
-    console.log(`y: ${y}`);
-
+    console.log(`Tap on page: ${page}`);
+    console.log(`Coordinates - x: ${x}, y: ${y}`);
+  
     const { pdfEditMode } = this.state;
     if (!pdfEditMode) return;
+  
     loadLog(this, true, 'Début du processus de signature...');
-
+  
     setTimeout(async () => {
       try {
-        //Getting tapped page
         const pdfDoc = await PDFDocument.load(this.state.pdfArrayBuffer);
         const pages = pdfDoc.getPages();
-
+  
         this.setState({
           filePath: null,
           pdfEditMode: false,
           loadingMessage: 'Insertion de la signature...',
         });
-
-        //Constants
+  
         const signee = firebase.auth().currentUser.displayName;
         const ref = await uuidGenerator();
         const motif = 'Acceptation des conditions';
         const signedAt = moment().format('Do/MM/YYYY, HH:mm');
-        const signature = `Signé électroniquement par: ${signee} \n Référence: ${ref} \n Date ${signedAt} \n Motif: ${motif}`;
+        const signature = `Signé électroniquement par: ${signee} \nRéférence: ${ref} \nDate: ${signedAt} \nMotif: ${motif}`;
         this.setState({ signee, signedAt, ref, motif });
-
+  
         if (isAuto) {
           for (const s of signatures) {
             const { pageIndex, position } = s;
-            const pageNumber = pageIndex + 1
-            var paddingTop = this.calculatePaddingTop(pdfDoc, pageNumber);
+            const paddingTop = this.calculatePaddingTop(pdfDoc, pageIndex + 1);
             const { x, y, size: customSize } = position;
-
+  
             if (pageIndex < pages.length) {
               pages[pageIndex].drawText(signature, {
                 x,
-                y,
+                y: y + paddingTop,
                 size: customSize || 10,
                 lineHeight: 10,
                 color: rgb(0, 0, 0),
               });
             }
           }
-        }
-
-        else {
-          var paddingTop = this.calculatePaddingTop(pdfDoc, page);
+        } else {
+          const paddingTop = this.calculatePaddingTop(pdfDoc, page);
           const nthPage = pages[page - 1];
-          const yRatio = isTablet ? 2 : 12;
-
+          const adjustedX = (nthPage.getWidth() * x) / this.state.pageWidth - 96;
+          const adjustedY =
+            nthPage.getHeight() -
+            (nthPage.getHeight() * y) / this.state.pageHeight +
+            paddingTop +
+            (isTablet ? 2 : 12) * this.state.pageHeight * 0.005;
+  
           nthPage.drawText(signature, {
-            x: (nthPage.getWidth() * x) / this.state.pageWidth - 16 * 6,
-            y:
-              nthPage.getHeight() -
-              (nthPage.getHeight() * y) / this.state.pageHeight +
-              paddingTop +
-              yRatio * this.state.pageHeight * 0.005,
+            x: adjustedX,
+            y: adjustedY,
             size: 10,
             lineHeight: 10,
             color: rgb(0, 0, 0),
           });
         }
-
+  
         this.setState({ loadingMessage: 'Génération du document signé...' });
         const pdfBytes = await pdfDoc.save();
         const pdfBase64 = uint8ToBase64(pdfBytes);
         const filePath = `${downloadDir}/Synergys/Documents/Scan signé ${moment().format(
-          'DD-MM-YYYY HHmmss',
+          'DD-MM-YYYY HHmmss'
         )}.pdf`;
+  
         this.setState({ loadingMessage: 'Enregistrement du document signé...' });
-        RNFS.writeFile(filePath, pdfBase64, 'base64')
-          .then((success) =>
-            this.setState({
-              newPdfSaved: true,
-              newPdfPath: filePath,
-              pdfBase64,
-              pdfArrayBuffer: base64ToArrayBuffer(pdfBase64),
-              filePath,
-            }),
-          )
-          .catch((err) =>
-            setToast(this, 'e', 'Erreur inattendue, veuillez réessayer.'),
-          )
-          .finally(() => loadLog(this, false, ''));
-      } catch (e) {
-        console.log('error...', e);
+        await RNFS.writeFile(filePath, pdfBase64, 'base64');
+        this.setState({
+          newPdfSaved: true,
+          newPdfPath: filePath,
+          pdfBase64,
+          pdfArrayBuffer: base64ToArrayBuffer(pdfBase64),
+          filePath,
+        });
+  
+        loadLog(this, false, '');
+      } catch (error) {
+        console.error('Erreur lors de la signature:', error);
         displayError({ message: errorMessages.pdfGen });
       }
     }, 1000);
   };
-
+  
   //5.1 Retry sign
   async retrySign() {
     try {
@@ -622,9 +639,9 @@ class Signature extends Component {
         .doc(this.DocumentId)
         .collection('AttachmentHistory')
         .add(document);
-      this.props.navigation.state.params.onGoBack &&
-        this.props.navigation.state.params.onGoBack(); //refresh document to get url of new signed document
-      this.props.navigation.pop(this.onSignaturePop);
+       this.props.route.params.onGoBack &&
+         this.props.route.params.onGoBack(); //refresh document to get url of new signed document
+       this.props.navigation.pop(this.onSignaturePop);
     } catch (e) {
 
       // crashlytics.log(document)
@@ -643,31 +660,63 @@ class Signature extends Component {
   async uploadSignedFile() {
     try {
       this.setState({ uploading: true });
-      const stats = await RNFetchBlob.fs.stat(this.state.newPdfPath);
-      let signedAttachment = {
-        path: this.state.newPdfPath,
+  
+      // 1. Récupérer les infos du fichier avec react-native-fs
+      const stats = await RNFS.stat(this.state.newPdfPath);
+ 
+      const filePath = stats.path;                    // "/storage/.../Scan signé 06-05-2025 171032.pdf"
+      const fileName = filePath.substring(filePath.lastIndexOf('/') + 1); 
+      
+      const signedAttachment = {
+        path: filePath,
         type: 'application/pdf',
-        name: stats.filename,
+        name: fileName,
         size: stats.size,
         progress: 0,
         ref: 'signedAttachment',
       };
       this.setState({ signedAttachment });
+  
+      // 2. Préparer les métadonnées custom
       const metadata = {
-        signedAt: moment().format(),
-        signedBy: this.currentUser.uid,
-        phoneNumber: this.state.phoneNumber,
+        contentType: 'application/pdf',
+        customMetadata: {
+          signedAt: moment().toISOString(),
+          signedBy: this.currentUser.uid,
+          phoneNumber: this.state.phoneNumber,
+        },
       };
-      const storageRefPath = `Projects/${this.ProjectId}/Documents/${this.DocumentType
-        }/${this.DocumentId}/${moment().format('ll')}/${signedAttachment.name}`;
-      const response = await this.uploadFile(
-        signedAttachment,
-        storageRefPath,
-        true,
-        metadata,
-      );
-      return response;
+  
+      // 3. Construire le chemin de storage
+      const storageRefPath = `Projects/${this.ProjectId}/Documents/${this.DocumentType}/${this.DocumentId}/${moment().format('DD-MM-YYYY')}/${signedAttachment.name}`;
+      const ref = storage().ref(storageRefPath);
+  
+      // 4. Démarrer l'upload via putFile qui accepte un chemin local
+      const task = ref.putFile(signedAttachment.path, metadata);
+  
+      // 5. Écouter la progression
+      task.on('state_changed', taskSnapshot => {
+        const progress = taskSnapshot.bytesTransferred / taskSnapshot.totalBytes;
+        this.setState(prev => ({
+          signedAttachment: {
+            ...prev.signedAttachment,
+            progress,
+          }
+        }));
+      });
+  
+      // 6. Attendre la fin de l’upload
+      await task;
+  
+      // 7. Récupérer l’URL de téléchargement si besoin
+      const downloadURL = await ref.getDownloadURL();
+  
+      // 8. Mettre à jour l’état et retourner l’objet result
+      this.setState({ uploading: false });
+      return { signedAttachment, downloadURL };
+  
     } catch (e) {
+      console.error('uploadSignedFile error:', e);
       this.setState({ uploading: false });
       throw new Error("Erreur lors de l'importation du document.");
     }
@@ -696,17 +745,16 @@ class Signature extends Component {
               justifyContent: 'center',
               alignItems: 'center',
             }}>
-            <MaterialCommunityIcons
-              name="pdf-box"
-              size={24}
-              color={theme.colors.primary}
-            />
+      
+            <FontAwesomeIcon icon={faFilePdf} 
+            size={24}
+            color={theme.colors.primary}/>
           </View>
           <View style={{ flex: 0.68 }}>
             <Text
               numberOfLines={1}
               ellipsizeMode="middle"
-              style={[theme.customFontMSmedium.body]}>
+              style={[theme.customFontMSmedium.body,{color:'gray'}]}>
               {attachment.name}
             </Text>
             <Text
@@ -879,12 +927,10 @@ class Signature extends Component {
                 <TouchableOpacity
                   onPress={() => this.setState({ showTerms: true })}
                   style={styles.button2}>
-                  <FontAwesome5
-                    name="signature"
-                    size={17}
+                
+                  <FontAwesomeIcon icon={faSignature}  size={17}
                     color="#fff"
-                    style={{ marginRight: 7 }}
-                  />
+                    style={{ marginRight: 7 }}/>
                   <Text
                     style={[
                       theme.customFontMSsemibold.header,

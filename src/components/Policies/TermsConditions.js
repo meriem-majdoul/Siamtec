@@ -28,14 +28,14 @@ export default class TermsConditions extends Component {
                         this.setState({ accepted: true })
                 }}
                 contentContainerStyle={{ padding: 15, paddingTop: 0 }}>
-                <Text style={[theme.customFontMSregular.body, styles.article]}>Le consommateur ne bénéficie pas d’un droit de rétractation pour un achat en magasin, dans une foire ou dans un salon</Text>
-                <Text style={[theme.customFontMSsemibold.body, styles.header]}>Article 1 : Identité du vendeur</Text>
-                <Text style={[theme.customFontMSregular.body, styles.article]}>
+                <Text style={[theme.customFontMSregular.body, styles.article,{color:"black"}]}>Le consommateur ne bénéficie pas d’un droit de rétractation pour un achat en magasin, dans une foire ou dans un salon</Text>
+                <Text style={[theme.customFontMSsemibold.body, styles.header,{color:"black"}]}>Article 1 : Identité du vendeur</Text>
+                <Text style={[theme.customFontMSregular.body, styles.article,{color:"black"}]}>
                     La Société SYNERGYS (ci-après le Vendeur) est une société à actions simplifiées au capital de 30 000 € dont le siège social se situe au 270 bis rue de la Combe du Meunier, ZAC du Castellas,11100 MONTREDON-DES-CORBIERES, immatriculée au Registre du Commerce et des
                     Sociétés de NARBONNE sous le numéro 849 583 281.
                 </Text>
-                <Text style={[theme.customFontMSsemibold.body, styles.header]}>Article 2 : Dispositions générales</Text>
-                <Text style={[theme.customFontMSregular.body, styles.article]}>
+                <Text style={[theme.customFontMSsemibold.body, styles.header,{color:"black"}]}>Article 2 : Dispositions générales</Text>
+                <Text style={[theme.customFontMSregular.body, styles.article,{color:"black"}]}>
                     Toute remise de commande implique l’acceptation sans réserve par l’Acheteur (ci-après dénommé « l’Acheteur » ou « le Client ») et son adhésion pleine et entière aux présentes Conditions Générales de vente (ci-après et ci-dessus dénommées « CGV »). Aucune clause
                     différente ne sera opposable à SYNERGYS à moins qu’elle ne l’ait acceptée expressément.
                     Ces conditions générales de vente sont systématiquement communiquées à tout Client préalablement à la passation de commande, et forme avec le bon commande les documents contractuels opposables au Vendeur et au Clients. Le fait que le Vendeur ne se prévale pas, à
@@ -44,8 +44,8 @@ export default class TermsConditions extends Component {
                     présentes CGV ce qui est expressément reconnu par le client, qui renonce notamment à se prévaloir de tous documents contradictoires qui serait opposable à la société SYNERGYS. Les présentes CGV pourront faire l’objet de modification ultérieure, la version applicable à
                     l’achat du client est celle en vigueur au jour de la conclusion du contrat.
                 </Text>
-                <Text style={[theme.customFontMSsemibold.body, styles.header]}>Article 3 : Crédit à la consommation</Text>
-                <Text style={[theme.customFontMSregular.body, styles.article]}>
+                <Text style={[theme.customFontMSsemibold.body, styles.header,{color:"black"}]}>Article 3 : Crédit à la consommation</Text>
+                <Text style={[theme.customFontMSregular.body, styles.article,{color:"black"}]}>
                     En cas de recours par l’acheteur à un crédit à la consommation, la vente est soumise aux articles
                     L 312-41, L 312-56 du code de la consommation ; notamment aux termes de l’article L 312-352.
                     Vente assortis d’un crédit :
@@ -54,28 +54,28 @@ export default class TermsConditions extends Component {
                     3) en cas de résolution du contrat de vente ou de prestations de services consécutives à l’exercice du droit de rétractation pour le crédit affecté, le vendeur ou le prestataire de service est tenu de rembourser, sur simple demande, toute somme que l’acheteur aurait versé
                     d’avance sur le prix. A compter du huitième jour suivant la demande de remboursement, cette somme est productive d’intérêts, de pleins droits, au taux de l’intérêt légal majoré de moitié.
                 </Text>
-                <Text style={[theme.customFontMSsemibold.body, styles.header]}>Article 4 : Commande-Modifications-Indisponibilités des produits</Text>
-                <Text style={[theme.customFontMSregular.body, styles.article]}>
+                <Text style={[theme.customFontMSsemibold.body, styles.header,{color:"black"}]}>Article 4 : Commande-Modifications-Indisponibilités des produits</Text>
+                <Text style={[theme.customFontMSregular.body, styles.article,{color:"black"}]}>
                     4.1 Toute commande doit être confirmé par écrit aux moyens d’un bon de commande SYNERGYS dument signé par le client. Le client reconnait être en possession d’un double de tous les documents qui aurait signé lors de la passation de commande.
                     4.2 Toute modification apportée à la commande confirmée devra intervenir dans les maximums dans les cinq (5) jours calendaires suivant la visite d’un technicien SYNERGYS au lieu où doit être livré le produit où exécutée la prestation de services indiquée sur le bon de
                     commande fera l’objet d’un ajustement du prix soit à la hausse, soit à la baisse.
                     4.3 Si le produit commandé est indisponible à la livraison SYNERGYS en informant immédiatement le client et peut lui proposer un produit d’une qualité et d’un prix équivalents. En cas de désaccord, le client est remboursé au plus tard dans les quatorze (14) jours du paiement
                     des sommes.
                 </Text>
-                <Text style={[theme.customFontMSsemibold.body, styles.header]}>Article 5 : Prix-Conditions de paiement du prix</Text>
-                <Text style={[theme.customFontMSregular.body, styles.article]}>
+                <Text style={[theme.customFontMSsemibold.body, styles.header,{color:"black"}]}>Article 5 : Prix-Conditions de paiement du prix</Text>
+                <Text style={[theme.customFontMSregular.body, styles.article,{color:"black"}]}>
                     Le prix s’entend toutes taxes comprises à l’égard des acheteurs personnes physiques. Le montant de la facture sera établi en incluant la TVA au taux en vigueur au jour de la facturation. Le paiement du prix se fait suivant le mode et les conditions indiquées sur le bon de
                     commande et notamment par le versement à SYNERGYS d’un acompte de 30% du prix TTC dès que le délai de quatorze (14) jours après la passation de la commande aura expiré, dans le cas d’un paiement au comptant. Cet acompte ne pourra en aucun cas être qualifié d’arrhes.
                     Le solde devra être versé par le client à réception de la facture. Le client ne peut jamais, sous prétexte de réclamations formulée par lui à l’encontre de SYNERGYS retenir toute ou partie des sommes dues par lui à cette dernière, ni opérer une compensation.
                 </Text>
-                <Text style={[theme.customFontMSsemibold.body, styles.header]}>Article 6 : Autorisations</Text>
-                <Text style={[theme.customFontMSregular.body, styles.article]}>
+                <Text style={[theme.customFontMSsemibold.body, styles.header,{color:"black"}]}>Article 6 : Autorisations</Text>
+                <Text style={[theme.customFontMSregular.body, styles.article,{color:"black"}]}>
                     Le client reconnait être informé du fait que les travaux d’installation des produits peuvent nécessiter l’obtention préalable d’une autorisation (autorisation d’urbanisme, autorisation de copropriété, …) ou d’un permis de construire. En conséquence, le client s’engage
                     expressément à faire son affaire personnelle, sauf convention expresse entre les parties, de l’obtention de ladite autorisation ou dudit permis de construire, et à fournir à SYNERGYS les justificatifs nécessaires avant le début des travaux. La non-obtention de ladite autorisation
                     ou dudit permis de construire pour quelques causes que ce soit ne saurait en aucun cas engager la responsabilité de la société SYNERGYS.
                 </Text>
-                <Text style={[theme.customFontMSsemibold.body, styles.header]}>Article 7 : Crédit d’impôt-Aides</Text>
-                <Text style={[theme.customFontMSregular.body, styles.article]}>
+                <Text style={[theme.customFontMSsemibold.body, styles.header,{color:"black"}]}>Article 7 : Crédit d’impôt-Aides</Text>
+                <Text style={[theme.customFontMSregular.body, styles.article,{color:"black"}]}>
                     Le client est informé qu’il peut exister des aides publiques ou parapubliques et/ou un crédit d’impôt lié à l’acquisition du produit, objet du contrat. Cependant, SYNERGYS ne garantit pas au client l’obtention d’une quelconque aide publique ou parapublique, de même qu’elle
                     ne garantit pas l’obtention ou le montant d’un crédit d’impôt. La non-obtention par le client du crédit d’impôt et/ou de l’aide publique ou parapublique sollicité ne serait constituer une condition suspensive du contrat. En aucun cas, la non-obtention du crédit d’impôt et/ou
                     de l’aide publique ou parapublique sollicité, ne pourra motiver la résolution du contrat, le blocage des fonds du financement par le client ou le non-paiement du solde du prix.
@@ -181,8 +181,8 @@ export default class TermsConditions extends Component {
                     La nullité ou d’une applicabilité de l’une quelconque des stipulations du présent contrat n’emportera pas nullité des autres stipulations qui conserveront toute leur force et leur portée. Cependant, les parties pourront d’un comme un accord convenir de remplacer la houle
                     les stipulations invalidées.
                 </Text>
-                <Text style={[theme.customFontMSsemibold.body, styles.header]}>Article 8 : Livraison-Délai</Text>
-                <Text style={[theme.customFontMSregular.body, styles.article]}>
+                <Text style={[theme.customFontMSsemibold.body, styles.header,{color:"black"}]}>Article 8 : Livraison-Délai</Text>
+                <Text style={[theme.customFontMSregular.body, styles.article,{color:"black"}]}>
                     Le client est informé qu’il peut exister des aides publiques ou parapubliques et/ou un crédit d’impôt lié à l’acquisition du produit, objet du contrat. Cependant, SYNERGYS ne garantit pas au client l’obtention d’une quelconque aide publique ou parapublique, de même qu’elle
                     ne garantit pas l’obtention ou le montant d’un crédit d’impôt. La non-obtention par le client du crédit d’impôt et/ou de l’aide publique ou parapublique sollicité ne serait constituer une condition suspensive du contrat. En aucun cas, la non-obtention du crédit d’impôt et/ou
                     de l’aide publique ou parapublique sollicité, ne pourra motiver la résolution du contrat, le blocage des fonds du financement par le client ou le non-paiement du solde du prix.
@@ -288,8 +288,8 @@ export default class TermsConditions extends Component {
                     La nullité ou d’une applicabilité de l’une quelconque des stipulations du présent contrat n’emportera pas nullité des autres stipulations qui conserveront toute leur force et leur portée. Cependant, les parties pourront d’un comme un accord convenir de remplacer la houle
                     les stipulations invalidées.
                 </Text>
-                <Text style={[theme.customFontMSsemibold.body, styles.header]}>Article 9 : Installation</Text>
-                <Text style={[theme.customFontMSregular.body, styles.article]}>
+                <Text style={[theme.customFontMSsemibold.body, styles.header,{color:"black"}]}>Article 9 : Installation</Text>
+                <Text style={[theme.customFontMSregular.body, styles.article,{color:"black"}]}>
                     Le client est informé qu’il peut exister des aides publiques ou parapubliques et/ou un crédit d’impôt lié à l’acquisition du produit, objet du contrat. Cependant, SYNERGYS ne garantit pas au client l’obtention d’une quelconque aide publique ou parapublique, de même qu’elle
                     ne garantit pas l’obtention ou le montant d’un crédit d’impôt. La non-obtention par le client du crédit d’impôt et/ou de l’aide publique ou parapublique sollicité ne serait constituer une condition suspensive du contrat. En aucun cas, la non-obtention du crédit d’impôt et/ou
                     de l’aide publique ou parapublique sollicité, ne pourra motiver la résolution du contrat, le blocage des fonds du financement par le client ou le non-paiement du solde du prix.
@@ -1711,9 +1711,11 @@ const styles = StyleSheet.create({
         height: height * .7
     },
     article: {
-        marginBottom: 15
+        marginBottom: 15,
+        color:'black'
     },
     header: {
-        marginBottom: 5
+        marginBottom: 5,
+         color:'black'
     }
 })

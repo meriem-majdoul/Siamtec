@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Alert } from 'react-native';
 import { TextInput as Input, ProgressBar } from "react-native-paper";
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import {faFilePdf,faClock} from '@fortawesome/free-solid-svg-icons';
 
 import { setAttachmentIcon } from '../core/utils'
 import * as theme from "../core/theme"
@@ -9,7 +11,6 @@ import * as theme from "../core/theme"
 const UploadProgress = ({ attachment, onPress, showRightIcon = false, rightIcon, showProgress = true, pending = false, containerStyle, ...props }) => {
 
     const { name, color } = setAttachmentIcon(attachment.type || attachment.contentType)
-    console.log("attachment", attachment)
     let readableSize = attachment.size / 1000
     readableSize = readableSize.toFixed(1)
 
@@ -17,7 +18,7 @@ const UploadProgress = ({ attachment, onPress, showRightIcon = false, rightIcon,
         <TouchableOpacity onPress={onPress} style={[styles.container, containerStyle]}>
             <View style={{ flex: 0.9, flexDirection: 'row', alignItems: 'center' }}>
                 <View style={{ flex: 0.17, justifyContent: 'center', alignItems: 'center' }}>
-                    <MaterialCommunityIcons name={name} size={24} color={color} />
+                    <FontAwesomeIcon icon={faFilePdf} size={24} color={color}/>
                 </View>
 
                 <View style={{ flex: showRightIcon ? 0.68 : 0.83, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-end' }}>
@@ -28,7 +29,7 @@ const UploadProgress = ({ attachment, onPress, showRightIcon = false, rightIcon,
 
                     {pending &&
                         <View style={{ paddingRight: 15 }}>
-                            <MaterialCommunityIcons name='clock' size={18} color={'#000'} />
+                            <FontAwesomeIcon icon={faClock} size={18} color={'#000'}/>
                         </View>
                     }
                 </View>

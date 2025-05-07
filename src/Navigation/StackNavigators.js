@@ -55,7 +55,7 @@ import Progression from '../screens/src/screen/Progression';
 // Documents
 import ListDocuments from '../screens/Documents/ListDocuments';
 import UploadDocument from '../screens/Documents/UploadDocument';
-//import Signature from '../screens/Documents/Signature';
+import Signature from '../screens/Documents/Signature';
 import PdfGeneration from '../screens/Documents/PdfGeneration';
 
 // Orders
@@ -182,7 +182,7 @@ const DocumentsStack = () => (
   <Stack.Navigator screenOptions={hideHeader}>
     <Stack.Screen name="ListDocuments" component={ListDocuments} />
     <Stack.Screen name="UploadDocument" component={UploadDocument} />
-    {/* <Stack.Screen name="Signature" component={Signature} /> */}
+    <Stack.Screen name="Signature" component={Signature} />
     <Stack.Screen name="PdfGeneration" component={PdfGeneration} />
   </Stack.Navigator>
 );

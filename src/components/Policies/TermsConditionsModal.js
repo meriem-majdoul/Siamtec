@@ -56,8 +56,8 @@ export default class TermsConditionsModal extends Component {
     renderTitle() {
         return (
             <View style={{ marginVertical: 15, paddingHorizontal: 30 }}>
-                <Text style={[theme.customFontMSsemibold.header, { alignSelf: 'center' }]}>CONDITIONS GÉNÉRALES DE</Text>
-                <Text style={[theme.customFontMSsemibold.header, { alignSelf: 'center' }]}>VENTE ET DE TRAVAUX (CGV)</Text>
+                <Text style={[theme.customFontMSsemibold.header, { alignSelf: 'center',color:"black" }]}>CONDITIONS GÉNÉRALES DE</Text>
+                <Text style={[theme.customFontMSsemibold.header, { alignSelf: 'center',color:"black" }]}>VENTE ET DE TRAVAUX (CGV)</Text>
             </View>
         )
     }
