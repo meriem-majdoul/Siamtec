@@ -1,61 +1,72 @@
-//Conditionnal rendering depending on USER ROLE
-
 import React from "react";
-import { Text, StyleSheet, TouchableOpacity, View } from 'react-native'
-import { connect } from 'react-redux'
-import { faUser, faUsers } from '@fortawesome/free-solid-svg-icons'
+import { Text, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { connect } from 'react-redux';
+import { faUser, faUsers } from '@fortawesome/free-solid-svg-icons';
 
-import TwoTabs from '../../components/TwoTabs'
-import SearchBar from '../../components/SearchBar'
-import TabView from '../../components/TabView'
+import TwoTabs from '../../components/TwoTabs';
+import SearchBar from '../../components/SearchBar';
+import TabView from '../../components/TabView';
 
 import ListUsers from './ListUsers';
 import ListTeams from './ListTeams';
 
-import { db } from '../../firebase'
+import { db } from '../../firebase';
 import * as theme from "../../core/theme";
 import { constants } from "../../core/constants";
 import { getRoleIdFromValue } from "../../core/utils";
 
 class UsersManagement extends React.Component {
-
     constructor(props) {
         super(props);
         this.isRoot = this.props.route?.params?.isRoot ?? true;
-    
+
         this.state = {
             index: 0,
             showInput: false,
-            searchInput: ''
+            searchInput: '',
         };
-    }
-    
 
+        this.focusListener = null; // Pour stocker l'écouteur de focus
+    }
+
+    componentDidMount() {
+        // Ajouter un écouteur pour rafraîchir les utilisateurs lors du focus
+        this.focusListener = this.props.navigation.addListener('focus', () => {
+            if (this.state.index === 0) {
+                this.setState({ searchInput: '' }); // Réinitialiser la recherche
+            }
+        });
+    }
+
+    componentWillUnmount() {
+        // Nettoyer l'écouteur
+        if (this.focusListener) {
+            this.focusListener();
+        }
+    }
 
     viewProfile(user) {
         const { id, role } = user;
         const roleId = getRoleIdFromValue(role);
-    
-        // Navigation vers le profil avec les paramètres de l'utilisateur
+
+        // Navigation vers le profil de l'utilisateur avec ses paramètres
         this.props.navigation.navigate('ProfileStack', {
-            screen: 'Profile', // Spécifiez l'écran cible si vous utilisez un navigator imbriqué
-            params: { user: { id, roleId } }, // Passez les paramètres ici
+            screen: 'Profile',
+            params: { user: { id, roleId } },
         });
     }
-    
 
     render() {
         const queryUsers = db.collection('Users').where('deleted', '==', false);
         const routes = [
             { key: 'first', title: 'UTILISATEURS' },
             { key: 'second', title: 'ÉQUIPES' },
-        ]
+        ];
 
-        const { index, searchInput } = this.state
-        const permissionsUsers = this.props.permissions.users
-        const permissionsTeams = this.props.permissions.teams
-        const { isConnected } = this.props.network
-        
+        const { index, searchInput } = this.state;
+        const permissionsUsers = this.props.permissions.users;
+        const permissionsTeams = this.props.permissions.teams;
+        const { isConnected } = this.props.network;
 
         return (
             <View style={{ flex: 1 }}>
@@ -72,7 +83,7 @@ class UsersManagement extends React.Component {
 
                 <TabView
                     navigationState={{ index, routes }}
-                    onIndexChange={(index) => this.setState({ index, searchInput: 'test', showInput: false })}
+                    onIndexChange={(index) => this.setState({ index, searchInput: '', showInput: false })}
                     icon1={faUser}
                     icon2={faUsers}
                     Tab1={
@@ -88,17 +99,18 @@ class UsersManagement extends React.Component {
                             onPress={(user) => this.viewProfile(user)}
                             emptyListHeader='Aucun utilisateur'
                             emptyListDesc='Gérez les utilisateurs. Appuyez sur le boutton, en bas à droite, pour en créer un nouveau.'
-                        />}
-
+                        />
+                    }
                     Tab2={
                         <ListTeams
                             searchInput={searchInput}
                             offLine={!isConnected}
                             permissions={permissionsTeams}
-                        />}
+                        />
+                    }
                 />
             </View>
-        )
+        );
     }
 }
 
@@ -107,19 +119,7 @@ const mapStateToProps = (state) => {
         role: state.roles.role,
         permissions: state.permissions,
         network: state.network,
-        //fcmToken: state.fcmtoken
-    }
-}
+    };
+};
 
-export default connect(mapStateToProps)(UsersManagement)
-
-
-
-
-
-
-
-
-
-
-
+export default connect(mapStateToProps)(UsersManagement);

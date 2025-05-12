@@ -1,53 +1,72 @@
-import React, { memo } from "react";
-import { View, StyleSheet, Text } from "react-native";
+import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
+import React, { memo, useEffect, useRef } from "react";
+import { View, StyleSheet, Text, Alert, TextInput as NativeTextInput } from "react-native";
 import { TextInput as Input } from "react-native-paper";
+import { isTablet } from "../core/constants";
 import * as theme from "../core/theme";
+import CustomIcon from "./CustomIcon";
 
-const TextInput = ({ errorText, disabled, whiteTheme, right, ...props }) => {
+const TextInput = ({ errorText, disabled, whiteTheme, link, maxLength, right, ...props }) => {
+
   return (
     <View style={styles.container}>
       <Input
-        mode="outlined" // Ajoute une bordure
-        style={[styles.input, whiteTheme && styles.whiteTheme]}
-        selectionColor={theme.colors.primary}
-        maxLength={props.maxLength}
-        placeholderTextColor="#6C7278" // Gris clair pour le placeholder
+        style={[theme.customFontMSregular.body, styles.input]}
+        selectionColor={whiteTheme ? '#fff' : theme.colors.primary}
+        underlineColor={theme.colors.gray_extraLight}
+        maxLength={maxLength}
         right={right}
-        outlineColor="#EDF1F3" // Couleur de la bordure
-        activeOutlineColor={theme.colors.primary} // Bordure active
-        theme={{
-          colors: {
-            text: disabled ? "#A0A0A0" : "#000",
-            error: theme.colors.error,
-          },
-        }}
-        {...props}
-      />
-      {errorText ? (
-        <Text style={[styles.error]}>{errorText}</Text>
-      ) : null}
+       
+        theme={
+          {
+            colors: {
+              onSurface: "#000", 
+              onSurfaceVariant:"#8D8D8D",
+              text: (disabled && !props.editable) ? "#000" : link ? 'green' : theme.colors.gray_dark,
+              error: theme.colors.error
+            },
+          }
+        }
+
+        {...props} />
+      {errorText ? <Text style={[theme.customFontMSregular.caption, styles.error]}>{errorText}</Text> : null}
     </View>
-  );
-};
+  )
+
+}
 
 const styles = StyleSheet.create({
   container: {
     width: "100%",
-    marginVertical: 10,
+    paddingTop: 5,
+    color:"#F1F2F7",
+    // marginBottom: 10,
+    // backgroundColor: 'yellow'
   },
   input: {
-    backgroundColor: "#F9F9F9", // Fond gris clair
-    fontSize: 16,
-    borderRadius: 8, // Coins arrondis
-  },
-  whiteTheme: {
-    backgroundColor: "#FFFFFF", // Fond blanc si `whiteTheme` est activé
+    width: "100%",
+    alignSelf: 'center',
+    backgroundColor: 'transparent',
+    borderBottomWidth: StyleSheet.hairlineWidth * 2,
+    borderBottomColor: theme.colors.gray_extraLight,
+    textAlign: 'center',
+    paddingHorizontal: 0,
+    textAlign: 'auto',
+    height: isTablet ? 85 : undefined,
+    // backgroundColor: 'pink',
+    textAlignVertical: "center",
+    paddingTop: 0,
+    placeholder:"#aaa",
+    color:"#F1F2F7",
+    paddingBottom: 0,
+    primary:"#000"
+
   },
   error: {
-    color: theme.colors.error,
-    fontSize: 12,
-    marginTop: 5,
-  },
+    // paddingHorizontal: 4,
+    paddingTop: 4,
+    color: theme.colors.error
+  }
 });
 
 export default memo(TextInput);

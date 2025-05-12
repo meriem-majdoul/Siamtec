@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { StyleSheet, View, FlatList, Alert, RefreshControl } from 'react-native'
 import { faUserPlus, faUserFriends } from '@fortawesome/free-solid-svg-icons'
-import { useNavigation } from '@react-navigation/native'  // Remplacez avecNavigation par useNavigation
+import { useNavigation } from '@react-navigation/native'
 import SearchInput, { createFilter } from 'react-native-search-filter'
 
 import firebase, { db } from '../../firebase'
@@ -25,14 +25,7 @@ const ListUsers = (props) => {
   const [usersCount, setUsersCount] = useState(3)
   const [loading, setLoading] = useState(true)
   const [refreshing, setRefreshing] = useState(false)
-
-  // const myAlert = myAlert.bind(this)
-  
-  useEffect(() => {
-    fetchUsers()
-    const willFocusSubscription = navigation.addListener('focus', async () => await fetchUsers())
-    return () => willFocusSubscription.remove()
-  }, [navigation])
+  const [searchInput, setSearchInput] = useState('') // État pour la recherche
 
   const fetchUsers = async (count) => {
     setRefreshing(true)
@@ -42,12 +35,39 @@ const ListUsers = (props) => {
     }
 
     const query = props.query
+
     const usersList = await fetchDocuments(query)
     setUsersList(usersList)
     setUsersCount(usersList.length)
     setLoading(false)
     setRefreshing(false)
   }
+
+useEffect(() => {
+  const loadUsers = async () => {
+    try {
+      await fetchUsers(); // Appel initial pour charger les utilisateurs
+    } catch (error) {
+      console.error("Erreur lors du chargement des utilisateurs :", error);
+    }
+  };
+
+  loadUsers(); // Exécution au montage du composant
+
+  const willFocusSubscription = navigation.addListener('focus', async () => {
+    try {
+      await fetchUsers(); // Rechargement lors du focus sur l'écran
+    } catch (error) {
+      console.error("Erreur lors du rechargement des utilisateurs :", error);
+    }
+  });
+
+  return () => willFocusSubscription.remove(); // Nettoyage de l'abonnement au démontage
+}, [navigation]);
+
+
+
+  
 
   const alertDeleteUser = (user) => {
     const title = "Supprimer l'utilisateur"
@@ -61,26 +81,19 @@ const ListUsers = (props) => {
     const { userType } = props
 
     if (userType === 'utilisateur') {
-      //1. Remove user from his team
       if (user.hasTeam) {
         const teamRef = db.collection('Teams').doc(user.teamId)
         batch.update(teamRef, { members: firebase.firestore.FieldValue.arrayRemove(user.id) })
       }
 
-      //2. Update User (deleted = true)
       const userRef = db.collection('Users').doc(user.id)
       batch.update(userRef, { deleted: true, hasTeam: false })
-    }
-
-    else if (userType === 'client' || userType === 'prospect') {
-      //1. Update Client/Prospect (deleted = false)
+    } else if (userType === 'client' || userType === 'prospect') {
       const userRef = db.collection('Clients').doc(user.id)
       batch.update(userRef, { deleted: true })
     }
 
-    // Commit the batch
     batch.commit()
-
     fetchUsers(3000)
   }
 
@@ -93,14 +106,13 @@ const ListUsers = (props) => {
 
     const viewProfile = (isEdit) => {
       navigation.navigate('ProfileStack', {
-        screen: 'Profile', // Indiquez le nom de l'écran cible dans le stack
-        params: { 
+        screen: 'Profile',
+        params: {
           user: { id: user.id, roleId },
           isClient,
           isEdit
         }
-      });
-      
+      })
     }
 
     const viewUser = () => viewProfile(false)
@@ -149,7 +161,8 @@ const ListUsers = (props) => {
   }
 
   const filteredUsers = usersList.filter(createFilter(props.searchInput, KEYS_TO_FILTERS))
-  const { canCreate } = props.permissions
+
+  const { canCreate } = props
 
   return (
     <View style={styles.container}>
@@ -159,9 +172,9 @@ const ListUsers = (props) => {
         </View>
         :
         <View style={styles.container}>
-
-          {usersCount > 0 && <ListSubHeader style={{ backgroundColor: theme.colors.background }}>{usersCount} {props.userType}{usersCount > 1 ? 's' : ''}</ListSubHeader>}
-          {usersCount > 0 ?
+       
+          {filteredUsers.length > 0 && <ListSubHeader style={{ backgroundColor: theme.colors.background }}>{filteredUsers.length} {props.userType}{filteredUsers.length > 1 ? 's' : ''}</ListSubHeader>}
+          {filteredUsers.length > 0 ?
             <FlatList
               enableEmptySections={true}
               data={filteredUsers}
@@ -189,7 +202,6 @@ const ListUsers = (props) => {
           {canCreate && props.showButton && !props.offLine &&
             <MyFAB icon={faUserPlus} onPress={onPressFAB} />
           }
-
         </View>}
     </View>
   )
@@ -199,6 +211,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: theme.colors.background
+  },
+  searchInput: {
+    margin: 10,
+    padding: 10,
+    backgroundColor: theme.colors.searchInputBackground,
+    borderRadius: 5
   },
   usersCount: {
     flexDirection: 'row',

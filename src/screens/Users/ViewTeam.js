@@ -3,21 +3,21 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, Alert, FlatList, ScrollView } from 'react-native';
 import { List, Card, Title, Paragraph, IconButton } from 'react-native-paper';
-// import { faPen, faUserPlus } from '@fortawesome/free-solid-svg-icons'
+import { faPen, faUserPlus } from '@fortawesome/free-solid-svg-icons'
 
 import { db } from '../../firebase'
 import * as theme from '../../core/theme';
 import { constants } from '../../core/constants';                                                                     
 import { checkPlural, getRoleIdFromValue, load, myAlert, setToast } from '../../core/utils';
 
-// import { deleteTeam } from '../../api/firestore-api';
+import { deleteTeam } from '../../api/firestore-api';
 
 import Appbar from "../../components/Appbar";
 import ListItem from '../../components/ListItem';
 import EmptyList from '../../components/EmptyList';
 import Loading from '../../components/Loading';
 import Toast from '../../components/Toast';
-// import CustomIcon from '../../components/CustomIcon';
+import CustomIcon from '../../components/CustomIcon';
 import MyFAB from '../../components/MyFAB';
 
 export default class ViewTeam extends Component {
@@ -72,17 +72,40 @@ export default class ViewTeam extends Component {
     renderTeam() {
         const { expanded, loading } = this.state
         return (
-            <Card style={{ margin: 5, marginBottom: 80, ...theme.style.shadow }}>
-                <List.Accordion
-                    id={this.teamId}
-                    titleComponent={<Text style={theme.customFontMSbold.header}>Membres</Text>}
-                    expanded={expanded}
-                    onPress={() => this.setState({ expanded: !expanded })}
-                    theme={{ colors: { primary: '#333' } }}
-                    titleStyle={theme.customFontMSsemibold.title}>
-                    {loading ? <Loading style={{ margin: constants.ScreenWidth * 0.1 }} /> : this.renderMembers()}
-                </List.Accordion>
-            </Card>
+                        <Card
+                    style={{
+                        margin: 5,
+                        marginBottom: 80,
+                        ...theme.style.shadow,
+                        backgroundColor: 'white',
+                        color:'black'
+                    }}
+                >
+           <List.Accordion
+                id={this.teamId}
+                titleComponent={
+                    <Text style={{ color: '#000' }} > 
+                        Membres
+                    </Text>
+                }
+             
+                expanded={expanded}
+                onPress={() => this.setState({ expanded: !expanded })}
+                theme={{ colors: { primary: '#000' } }} 
+                titleStyle={[
+                    theme.customFontMSsemibold.title,
+                    { color: '#000' },
+                ]}
+            >
+                {loading ? (
+                    <Loading style={{ margin: constants.ScreenWidth * 0.1 }} />
+                ) : (
+                    this.renderMembers()
+                )}
+            </List.Accordion>
+
+        </Card>
+
         )
     }
 
@@ -92,31 +115,40 @@ export default class ViewTeam extends Component {
         if (members.length > 0)
             return members.map((member, key) => {
                 return (
-                    <ListItem
-                        key={key.toString()}
-                        title={member.isPro ? member.denom : member.prenom + ' ' + member.nom}
-                        description={member.role}
-                        iconRightName='dots-horizontal'
-                        // left={props => {
-                        //     if (member.role === 'Admin')
-                        //         return <List.Icon {...props} icon="account-cog" />
-
-                        //     else if (member.isPro)
-                        //         return <List.Icon {...props} icon="briefcase" />
-
-                        //     else if (!member.isPro && member.role !== 'Admin')
-                        //         return <List.Icon {...props} icon="account" />
-                        // }}
-                        menu
-                        options={[
-                            { id: 0, title: 'Voir le profil' },
-                            { id: 1, title: "Retirer de l'équipe" },
-                        ]}
-                        functions={[
-                            () => this.viewProfil(member.id, member.role),
-                            () => this.removeMember(member.id),
-                        ]}
+             <ListItem
+                key={key.toString()}
+                title={member.isPro ? member.denom : member.prenom + ' ' + member.nom}
+                description={member.role}
+               right={(props) => (
+                    <List.Icon
+                        {...props}
+                        icon="dots-vertical"
+                        color="black" // Couleur noire pour l'icône du menu
                     />
+                )}
+                left={(props) => {
+                    if (member.role === 'Admin') return <List.Icon {...props} icon="account-cog" />;
+                    else if (member.isPro) return <List.Icon {...props} icon="briefcase" />;
+                    else if (!member.isPro && member.role !== 'Admin') return <List.Icon {...props} icon="account" />;
+                }}
+                titleStyle={{
+                    color: 'black', // Couleur noire pour le titre
+                    fontWeight: 'bold', // (optionnel) pour une meilleure visibilité
+                }}
+                descriptionStyle={{
+                    color: 'black', // Couleur noire pour la description
+                }}
+                menu
+                options={[
+                    { id: 0, title: 'Voir le profil' },
+                    { id: 1, title: "Retirer de l'équipe" },
+                ]}
+                functions={[
+                    () => this.viewProfil(member.id, member.role),
+                    () => this.removeMember(member.id),
+                ]}
+            />
+
                 )
             })
 
@@ -190,11 +222,11 @@ export default class ViewTeam extends Component {
                 <Appbar back title titleText={this.state.team.name} handleAction={this.addMembers} />
 
                 <ScrollView style={styles.container} >
-                    <Card style={{ margin: 5, ...theme.style.shadow }} onPress={this.editDetails}>
+                    <Card style={{ margin: 5, ...theme.style.shadow,backgroundColor:'white' }} onPress={this.editDetails}>
                         <Card.Content>
                             <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
                                 <Title style={theme.customFontMSbold.header}>Informations générales</Title>
-                                {/* <CustomIcon icon={faPen} color={theme.colors.primary} /> */}
+                                <CustomIcon icon={faPen} color={theme.colors.primary} />
                             </View>
                             <Paragraph style={theme.customFontMSsemibold.body}>{this.state.team.name}</Paragraph>
                             <Paragraph style={theme.customFontMSregular.body}>{this.state.team.description}</Paragraph>

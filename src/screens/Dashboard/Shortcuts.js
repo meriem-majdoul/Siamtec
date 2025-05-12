@@ -23,7 +23,7 @@ const shortcutsModel = {
         label: 'Nouveau prospect',
         value: '',
         icon: faClipboardUser,
-        colors: { primary: '#ff6968', secondary: '#fe8280' },
+        colors: { primary: '#6DE662', secondary: '#9fe899' },
         navigation: { Drawer:'ClientsManagementStack',screen: 'CreateClient', params: { prevScreen: 'Dashboard', isProspect: true } }
     },
     // createClient: {
@@ -40,35 +40,35 @@ const shortcutsModel = {
         label: 'Nouvel utilisateur',
         value: '',
         icon: faUserAlt,
-        colors: { primary: '#ff8f61', secondary: '#fea879' },
+        colors: { primary: '#73B799', secondary: '#8eceb1' },
         navigation: { Drawer:'UsersManagementStack',screen: 'CreateUser', params: { prevScreen: 'Dashboard' } }
     },
     createProject: {
         label: 'Nouveau projet',
         value: '',
         icon: faDraftingCompass,
-        colors: { primary: '#2ac3ff', secondary: '#38d3ff' },
+        colors: { primary: '#2E5C63', secondary: '#446f75' },
         navigation: { Drawer:'ProjectsStack',screen: 'CreateProject', params: { isRoot: false, prevScreen: 'Dashboard' } }
     },
     createTask: {
         label: 'Nouvelle demande',
         value: '',
         icon: faTicketAlt,
-        colors: { primary: '#5a65ff', secondary: '#717bff' },
+        colors: { primary: '#2C3D3F', secondary: '#3f5254' },
         navigation: { Drawer:'RequestsManagementStack',screen: 'CreateProjectReq', params: { prevScreen: 'Dashboard' } }
     },
     createDocument: {
         label: 'Nouveau document',
         value: '',
         icon: faFolder,
-        colors: { primary: '#96da45', secondary: '#ace558' },
+        colors: { primary: '#96DA45', secondary: '#a5dd61' },
         navigation: { Drawer:'DocumentsStack',screen: 'UploadDocument', params: { prevScreen: 'Dashboard' } }
     },
     createSimulation: {
         label: 'Nouvelle simulation',
         value: '',
         icon: faVials,
-        colors: { primary: theme.colors.primary, secondary: '#35E999' },
+        colors: { primary: '#26D367', secondary: '#4dd67f' },
         navigation: { Drawer:'SimulatorStack',screen: 'CreateSimulation', params: { prevScreen: 'Dashboard' } }
     }
 }

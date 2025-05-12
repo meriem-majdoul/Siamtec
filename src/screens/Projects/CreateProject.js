@@ -635,7 +635,7 @@ class CreateProject extends Component {
                         params: {
                             onGoBack: this.refreshClient,
                             prevScreen: 'CreateProject',
-                            isRoot: false
+                            isRoot: true
                         }
                     })
                 }}

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, SafeAreaView, StatusBar } from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView, StatusBar, Image } from 'react-native';
 import { faVials } from '@fortawesome/free-solid-svg-icons';
 import { connect } from 'react-redux';
 import StepsForm from '../../../containers/StepsForm';
@@ -113,18 +113,28 @@ class CreateSimulation extends Component {
 
         return (
             <View style={styles.welcomeContainer}>
-                <View style={styles.welcomeHeader}>
-                    <CustomIcon
-                        icon={faVials}
-                        style={{ alignSelf: "center" }}
-                        size={60}
-                        color={theme.colors.white}
-                        secondaryColor={theme.colors.primary}
-                    />
-                    <Text style={[theme.customFontMSmedium.h3, styles.welcomeTitle]}>
-                        SIMULATION EN LIGNE
-                    </Text>
-                </View>
+              <View style={styles.welcomeHeader}>
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <Text
+                style={[
+                theme.customFontMSmedium.h3,
+                styles.welcomeTitle,
+                { flex: 1 }, // Permet au texte de prendre tout l'espace disponible
+                ]}
+            >
+                SIMULATION EN LIGNE
+            </Text>
+            <Image
+                source={require('../../../assets/Group.png')}
+                style={{
+                width: '25%', // Ajustez selon vos besoins
+                resizeMode: 'contain', // Garde l'image proportionnelle
+                }}
+            />
+            </View>
+
+            </View>
+
 
                 <View style={styles.welcomeInstructionsContainer}>
                     <Text style={[theme.customFontMSregular.body, { opacity: 0.8 }]}>
@@ -211,13 +221,18 @@ const styles = StyleSheet.create({
         backgroundColor: theme.colors.white,
         justifyContent: "center"
     },
-    welcomeHeader: {
-        justifyContent: "center",
-        paddingTop: theme.padding / 2,
-        backgroundColor: "#003250",
-        borderBottomWidth: 2,
-        borderBottomColor: theme.colors.primary
-    },
+ welcomeHeader: {
+    paddingLeft:20,
+    paddingRight:20,
+    backgroundColor: "#2C3D3F",
+    borderBottomWidth: 2,
+    borderBottomColor: theme.colors.primary,
+    color: '#6DE662',
+    margin: 10, // Ajoute une marge externe
+    textAlign: 'left', 
+    borderRadius: 10, 
+},
+
     welcomeTitle: {
         color: theme.colors.white,
         textAlign: "center",

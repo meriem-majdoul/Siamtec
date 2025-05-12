@@ -209,7 +209,7 @@ export default class ViewMessage extends Component {
         const { expandedId, messagesList } = this.state
 
         return (
-            <List.AccordionGroup style={{backgroundColor:'#pink',color:'black'}}
+            <List.AccordionGroup style={{color:'black'}}
                 expandedId={expandedId}
                 onAccordionPress={(expandedId) => {
                     if (this.state.expandedId === expandedId)

@@ -49,18 +49,6 @@ class ListClients extends Component {
 
         return (
             <View style={{ flex: 1 }}>
-                {/* <SearchBar
-                    menu={this.isRoot}
-                    main={this}
-                    title={!showInput}
-                    titleText='Clients'
-                    placeholder='Rechercher'
-                    showBar={showInput}
-                    handleSearch={() => this.setState({ searchInput: '', showInput: !showInput })}
-                    searchInput={searchInput}
-                    searchUpdated={(searchInput) => this.setState({ searchInput })}
-                /> */}
-
                 <ListUsers
                     searchInput={searchInput}
                     prevScreen={this.prevScreen}

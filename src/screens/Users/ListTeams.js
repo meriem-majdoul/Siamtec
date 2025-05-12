@@ -85,7 +85,7 @@ const ListTeams = (props) => {
                 </View>
             ) : (
                 <View style={[styles.container, { paddingHorizontal: constants.ScreenWidth * 0.015 }]}>
-                    {teamsCount > 0 && <ListSubHeader>{teamsCount} équipe{s}</ListSubHeader>}
+                    {teamsCount > 0 && <ListSubHeader>{teamsCount} équipe{teamsCount > 1 ? 's' : ''}</ListSubHeader>}
                     {teamsCount > 0 ? (
                         <FlatList
                             enableEmptySections={true}

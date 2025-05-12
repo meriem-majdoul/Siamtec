@@ -233,117 +233,54 @@ class Signature extends Component {
     this.setState({ showTerms: !showTerms });
   }
 
-  //3. OTP verification + Email send
   async verifyUser() {
-    try {
-      this.setState({
-        showTerms: false,
-        showDialog: true,
-      });
-      // const { timeLeft } = this.state;
-      // if (timeLeft > 0 && timeLeft < 60) return;
-      // this.setState({
-      //   timeLeft: 60,
-      //   status: true,
-      //   statusMessage: "Génération d'un code secure...",
-      // });
-      // await this.sendCode();
-      // this.tick();
-      // this.sendEmail();
-      // this.setState({
-      //   status: false,
-      //   statusMessage: '',
-      // });
-    } catch (e) {
-      setToast(
-        this,
-        'e',
-        "Erreur lors de l'envoie du code, veuillez réessayer...",
-      );
-      this.setState({ showDialog: false });
-    }
-  }
+  try {
+    this.setState({
+      showTerms: false,
+      showDialog: true,
+    });
 
-  async sendCode() {
-    const errorMessage =
-      "Erreur lors de l'envoi du code. Veuillez réessayer plus tard";
-    try {
-      if (!this.ProjectId) throw new Error("ProjectId manquant");
-  
-      // 1. Charger le projet et extraire le téléphone
-      const snap = await db.collection("Projects").doc(this.ProjectId).get();
-      if (!snap.exists) throw new Error("Projet introuvable");
-      const raw = snap.data().client?.phone || "";
-      const clean = '+' + raw.replace(/\D+/g, '');
-      console.log("📱 Envoi du code à:", clean);
-      this.setState({ phoneNumber: clean });
-  
-      // 2. Appel de la Cloud Function
-      const sendCodeFn = functions.httpsCallable('sendCode');
-      const resp = await sendCodeFn({ phoneNumber: clean });
-      console.log("📨 sendCode resp:", resp.data);
-  
-      // 3. Vérifier le statut
-      if (resp.data?.status !== 'pending') {
-        console.error("⚠️ Statut inattendu:", resp.data);
-        throw new Error(errorMessage);
-      }
-      console.log("✅ Code envoyé avec succès");
-      return resp.data;
-  
-    } catch (e) {
-      console.error("🚨 sendCode échoué:", e.code || e.message, e.details);
-      throw new Error(errorMessage);
-    }
+    // Code OTP et envoi d'email supprimés ici.
+    setTimeout(() => this.setState({ showDialog: false }), 4000);
+    setTimeout(() => this.startSignature(), 4200);
+  } catch (e) {
+    setToast(
+      this,
+      'e',
+      "Erreur, veuillez réessayer...",
+    );
+    this.setState({ showDialog: false });
   }
-  
-  
+}
 
-  async verifyCode() {
-    this.setState({ status: true, statusMessage: 'Vérification du code...' });
-    const { phoneNumber, code } = this.state;
-    const verifyCode = functions.httpsCallable('verifyCode');
-    // const resp = await verifyCode({
-    //   phoneNumber: phoneNumber,
-    //   code: code,
-    // });
-    // if (resp.data.status === 'pending') {
-    //     this.setState({ status: false, statusMessage: '' });
-    //     Alert.alert(
-    //       '',
-    //       'Le code que vous avez saisi est incorrecte.',
-    //       [{ text: 'OK', style: 'cancel' }],
-    //       { cancelable: false },
-    //     );
-    //     return;
-    // } else if (resp.data.error) {
-    //   Alert.alert(
-    //     '',
-    //     'Erreur inattendue lors de la vérification du code',
-    //     [{ text: 'OK', style: 'cancel' }],
-    //     { cancelable: false },
-    //   );
-    //   return;
-    // }
+async sendCode() {
+  const errorMessage =
+    "Erreur lors de l'envoi du code. Veuillez réessayer plus tard";
+  try {
+    if (!this.ProjectId) throw new Error("ProjectId manquant");
 
-    // //UX security
-    // else if (resp.data.status === 'approved') {
-      setTimeout(
-        () =>
-          this.setState({
-            codeApproved: true,
-            approvalMessage: 'Code approuvé...',
-          }),
-        0,
-      );
-      setTimeout(
-        () => this.setState({ approvalMessage: 'Signature autorisée...' }),
-        2000,
-      );
-      setTimeout(() => this.setState({ showDialog: false }), 4000);
-      setTimeout(() => this.startSignature(), 4200);
-    // }
+    // 1. Charger le projet et extraire le téléphone (si nécessaire)
+    const snap = await db.collection("Projects").doc(this.ProjectId).get();
+    if (!snap.exists) throw new Error("Projet introuvable");
+    const raw = snap.data().client?.phone || "";
+    const clean = '+' + raw.replace(/\D+/g, '');
+    console.log("📱 Numéro de téléphone : ", clean);
+    this.setState({ phoneNumber: clean });
+
+    // 2. Pas de besoin d'envoyer le code via la Cloud Function
+    // Suppression de l'appel de la fonction `sendCode`
+  } catch (e) {
+    console.error("🚨 Erreur lors de l'envoi du code :", e.code || e.message, e.details);
+    throw new Error(errorMessage);
   }
+}
+
+async verifyCode() {
+  // Suppression de la logique de vérification du code OTP
+  // setTimeout(() => this.setState({ showDialog: false }), 4000);
+  // setTimeout(() => this.startSignature(), 4200);
+}
+
 
   sendEmail() {
     const html = emailTemplate(this.sourceUrl);
@@ -955,7 +892,7 @@ class Signature extends Component {
               }}
             />
           )}
-          {showDialog && this.renderDialog()}
+          {showDialog}
           {loading && <LoadDialog loading={loading} message={loadingMessage} />}
           <Toast
             duration={3500}

@@ -153,7 +153,7 @@ class StepsForm extends Component {
       'willFocus',
       () => {
         const darkStatusBarStyle = {
-          backgroundColor: '#003250',
+          backgroundColor: '#2C3D3F',
           barStyle: 'light-content',
          
         };
@@ -252,7 +252,7 @@ class StepsForm extends Component {
     const progress = Math.round((this.state.pageIndex / pagesCount) * 100);
 
     return (
-      <View style={{ marginTop: 16, backgroundColor: '#003250' }}>
+      <View style={{ marginTop: 16, backgroundColor: '#2C3D3F' }}>
         <ProgressBar
           progress={progress / 100}
           color={theme.colors.primary}
@@ -1906,7 +1906,7 @@ async savePdfBase64(pdfBase64, isProcess) {
                           {page.subStep && (
                             <View
                               style={{
-                                backgroundColor: '#003250',
+                                backgroundColor: '#2C3D3F',
                                 paddingHorizontal: theme.padding,
                                 paddingVertical: theme.padding / 2,
                               }}>
@@ -1929,7 +1929,7 @@ async savePdfBase64(pdfBase64, isProcess) {
                               <Text
                                 style={[
                                   theme.customFontMSmedium.body,
-                                  { color: '#003250' },
+                                  { color: '#2C3D3F' },
                                 ]}>
                                 {page.section.label}
                               </Text>
@@ -2280,9 +2280,9 @@ async savePdfBase64(pdfBase64, isProcess) {
     return (
       <View style={styles.mainContainer}>
         <Appbar
-          appBarColor={'#003250'}
-          iconsColor={theme.colors.white}
-          theme={{ colors: {  color: '#fff' } }}
+          appBarColor={'#FFF'}
+          iconsColor={theme.colors.black}
+          theme={{ colors: {  color: '#000' } }}
           close={!this.isGuest}
           title
           check={!showWelcomeMessage && !readOnly && !this.isGuest}
@@ -2386,12 +2386,12 @@ const styles = StyleSheet.create({
     borderColor: theme.colors.gray_medium,
   },
   header: {
-    backgroundColor: '#003250',
+    backgroundColor: '#2C3D3F',
     paddingHorizontal: theme.padding,
   },
   step: {
     borderWidth: 1,
-    borderColor: '#003250',
+    borderColor: '#2C3D3F',
     padding: 8,
     paddingHorizontal: 16,
     borderRadius: 4,
@@ -2417,7 +2417,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     //  alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: '#003250',
+    paddingTop:20,
+    backgroundColor:'#2C3D3F'
   },
   buttonsContainer: {
     padding: theme.padding,
@@ -2434,7 +2435,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: theme.padding * 2,
-    backgroundColor: '#003250',
+    backgroundColor: '#2C3D3F',
     borderBottomWidth: 2,
     borderBottomColor: theme.colors.primary,
   },

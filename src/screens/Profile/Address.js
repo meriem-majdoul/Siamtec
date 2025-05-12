@@ -99,7 +99,7 @@ class MarkerTypes extends React.Component {
         address.marker = marker
 
         load(this, false)
-        this.props.navigation.state.params.onGoBack(address)
+        this.props.route?.params?.onGoBack(address)
         this.props.navigation.goBack()
     }
 
