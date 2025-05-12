@@ -720,7 +720,7 @@ class CreateProject extends Component {
             <View style={{ flex: 1 }}>
                 {canCreateDocument && canWrite &&
                     <Text
-                        onPress={() => this.props.navigation.navigate('UploadDocument', { project: this.project })}
+                        onPress={() => this.props.navigation.navigate('DocumentsStack',{screen:'UploadDocument', params:{ project: this.project }})}
                         style={[theme.customFontMSregular.caption, { color: theme.colors.primary, marginBottom: 5, marginTop: 16 }]}>
                         + Ajouter un document
                     </Text>
@@ -742,7 +742,7 @@ class CreateProject extends Component {
                                 showArrow
                                 title={docType_LabelValueMap(type)}
                                 id={type}
-                                titleStyle={theme.customFontMSregular.body}
+                                titleStyle={{ color: '#000' }} 
                             >
                                 {this.renderAttachments(filteredDocuments, 'pdf', false)}
                             </List.Accordion>

@@ -53,61 +53,62 @@ export const buildEntityType = (collection, type) => {
 }
 
 export const buileNavigationOptions = (currentAction, project) => {
-  const { collection, params, documentId } = currentAction
-  const screenName = collectionScreenNameMap[collection]
-  const screenPush = collection === "Clients" //Because already on the nav stack
+  const { collection, params, documentId } = currentAction;
+  const screenName = collectionScreenNameMap[collection];
+  const screenPush = collection === "Clients"; // Because already on the nav stack
+  let drawer = "";
 
   let screenParams = {
     isProcess: true,
     project,
     screenPush,
-  }
+  };
 
   if (screenName === "UploadDocument") {
+    drawer = "DocumentsStack";
 
     screenParams = {
       ...screenParams,
       DocumentId: documentId || "",
       documentType: buildEntityType(collection, params.documentType),
       dynamicType: isPrivateType(collection, params.documentType),
-    }
-
+    };
 
     if (params.isSignature) {
       screenParams = {
         ...screenParams,
         isSignature: true,
         onSignaturePop: 2,
-      }
+      };
     }
+  } else if (screenName === "CreateTask") {
+    drawer = "AgendaStack";
 
-  }
-
-  else if (screenName === "CreateTask") {
     screenParams = {
       ...screenParams,
       TaskId: documentId || "",
       taskType: buildEntityType(collection, params.taskType),
       dynamicType: isPrivateType(collection, params.taskType),
-    }
-  }
+    };
+  } else if (screenName === "Profile") {
+    drawer = "ProfileStack";
 
-  else if (screenName === "Profile") {
     screenParams = {
       ...screenParams,
-      user: { id: project.client.id, roleId: 'client' },
-    }
-  }
+      user: { id: project.client.id, roleId: "client" },
+    };
+  } else if (screenName === "CreateProject") {
+    drawer = "ProjectsStack";
 
-  else if (screenName === "CreateProject") {
     screenParams = {
       ...screenParams,
       ...params.screenParams,
-    }
+    };
   }
 
-  return { screenName, screenParams }
-}
+  return { screenName, screenParams, drawer };
+};
+
 
 
 export const runOperation = async (operation, action) => {

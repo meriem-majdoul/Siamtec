@@ -465,9 +465,10 @@ class UploadDocument extends Component {
     handleDelete() {
         db.collection('Documents').doc(this.DocumentId).update({ deleted: true })
         //Refreshing documents list
-        if (this.props.navigation.state.params.onGoBack) {
-            this.props.navigation.state.params.onGoBack()
-        }
+        if (this.props.route.params?.onGoBack) {
+            this.props.route.params.onGoBack();
+          }
+          
         this.props.navigation.goBack()
     }
 

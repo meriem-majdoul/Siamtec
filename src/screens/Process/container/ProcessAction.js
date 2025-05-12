@@ -489,16 +489,19 @@ class ProcessAction extends Component {
     }
 
     handleNavigation = (currentAction) => {
+        console.log('currentAction JSON:', JSON.stringify(currentAction, null, 2));
 
-        let { screenName, screenParams } = buileNavigationOptions(currentAction, this.props.project)
 
+        let { screenName, screenParams ,drawer } = buileNavigationOptions(currentAction, this.props.project)
+        console.log('screenName:  '+screenName)
+        console.log('screenDrawer:  '+drawer)
         screenParams.onGoBack = this.onGoBack
 
         const navigate = () => {
             if (screenParams.screenPush)
-                this.props.navigation.push(screenName, screenParams)
+                this.props.navigation.push(drawer,{screen:screenName, params:screenParams})
             else
-                this.props.navigation.navigate(screenName, screenParams)
+                this.props.navigation.navigate(drawer,{screen:screenName, params:screenParams})
         }
 
 

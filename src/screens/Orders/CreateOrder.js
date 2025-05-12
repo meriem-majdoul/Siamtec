@@ -234,11 +234,13 @@ class CreateOrder extends Component {
   async handleDelete() {
     load(this, true);
     this.title = 'Suppression de la commande...';
+    console.log('this.OrderId :'+this.OrderId)
     db.collection('Orders').doc(this.OrderId).update({ deleted: true });
     //Refreshing orders list
-    if (this.props.navigation.state.params.onGoBack) {
-      this.props.navigation.state.params.onGoBack();
+    if (this.props.route.params?.onGoBack) {
+      this.props.route.params.onGoBack();
     }
+    
     load(this, false);
     this.props.navigation.goBack();
   }

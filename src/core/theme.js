@@ -10,7 +10,7 @@ const baseColors = {
 const colors = {    
   statusbar: "#013220",
   background: '#ffffff', //new
-  primary: "#25D366", //new
+  primary: "#6DE662", //new
   secondary: "#1B2331",
   surface: '#F5F5F5',
   appBar: '#ffffff', 
@@ -28,7 +28,7 @@ const colors = {
   inProgress: '#9cf8ff',
   blocked: '#ff9cad',
   pending: '#fffc9c',
-  valid: "#25D366", //primary
+  valid: "#6DE662", //primary
   canceled: '#f5f5f5',
 
   //Priorities
@@ -36,7 +36,7 @@ const colors = {
   moderate_priority: '#ff7311',
   low_priority: '#f3a700',
 
-  project: ["#25D366", "#cbd4db", "#0064fa", "#ffd101", "#ff7512", "#ff4ba6", "#6357f9", "#fb5779", "#47dafc", "#5a7795", "#abe60e", "#ffa800", "#ff78ff", "#a046e4", "#ff92af", "#00d4c8"],
+  project: ["#6DE662", "#cbd4db", "#0064fa", "#ffd101", "#ff7512", "#ff4ba6", "#6357f9", "#fb5779", "#47dafc", "#5a7795", "#abe60e", "#ffa800", "#ff78ff", "#a046e4", "#ff92af", "#00d4c8"],
 
   high_priority_light: '#ffe0e7',
   moderate_priority_light: '#ffdfc9',
@@ -73,7 +73,7 @@ const colors = {
   agendaLight: '#829BF8',
 
   //menu icons
-  miHome: "#25D366",
+  miHome: "#6DE662",
   miInbox: '#EF6C00',
   miProjects: '#3F51B5',
   miPlanning: '#000',

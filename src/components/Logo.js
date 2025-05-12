@@ -8,14 +8,14 @@ const height = width * ratio
 // const width = constants.ScreenWidth * 0.32
 
 const Logo = ({ style, ...props }) => (
-  <Image source={require('../assets/logo.png')} style={[styles.image,style]} />
+  <Image source={require('../assets/logo1.png')} style={[styles.image,style]} />
 );
 
 const styles = StyleSheet.create({
   image: {
     alignSelf: 'center',
-    width: width,
-    height: height
+    width:'60%',
+    resizeMode: "contain",
   },
 });
 

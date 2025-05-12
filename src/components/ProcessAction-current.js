@@ -711,7 +711,7 @@ class ProcessAction extends Component {
         const onPressEye = () => this.props.navigation.navigate('Progression', navParams)
         return (
             <View style={styles.headerBarContainer}>
-                <Text style={[theme.customFontMSsemibold.header, styles.headerBarText]}>Suivii</Text>
+                <Text style={[theme.customFontMSsemibold.header, styles.headerBarText]}>Suivi</Text>
                 <TouchableOpacity
                     style={styles.eye}
                     hitSlop={theme.hitslop}

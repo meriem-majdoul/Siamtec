@@ -74,8 +74,11 @@ class ListNews extends Component {
 
         return (
             <SafeAreaView style={styles.container}>
-                {/* <Appbar  titleText='Actualités'
-                 style={{color:'#black',backgroundColor:'pink'}} /> */}
+                   <Appbar
+                        menu
+                        title
+                        titleText='Actualités' 
+                    />
 
                 {loading ? (
                     <View style={styles.container}>

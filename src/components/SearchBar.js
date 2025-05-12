@@ -51,7 +51,7 @@ const SearchBar = ({
       {title && (
         <Appbar.Content
           title={titleText}
-          titleStyle={[styles.title, { marginLeft: isTablet ? 0 : "-5%" }]}
+          titleStyle={[styles.title, { marginLeft: 10,color:'#000'}]}
         />
       )}
       {showBar && (
@@ -80,6 +80,7 @@ const styles = StyleSheet.create({
   title: {
     ...theme.customFontMSregular.header,
     letterSpacing: 1,
+    fontSize:18
   },
   searchbar: {
     backgroundColor: theme.colors.appBar,

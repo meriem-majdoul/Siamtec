@@ -57,6 +57,7 @@ class ProcessTool extends Component {
             onPressAction
         } = this.props
 
+
         return (
             <TouchableOpacity onPress={() => onPressAction(currentAction)}>
                 <Action
