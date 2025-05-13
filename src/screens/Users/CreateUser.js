@@ -165,10 +165,10 @@ class CreateUser extends Component {
       const { navigation, route } = this.props; // Assurez-vous que route est passé en prop
       const onGoBack = route?.params?.onGoBack; // Accédez aux paramètres en toute sécurité
   
-      if (onGoBack) {
-        onGoBack();
+    if (onGoBack) {
+        onGoBack(); // Appel de la fonction de rappel avec les données utilisateur
       }
-  
+     
       this.setState({ loadingDialog: false }, () => {
         const toast = { message: "L'utilisateur a été crée !", type: "info" };
         setAppToast(this, toast);
@@ -198,8 +198,8 @@ class CreateUser extends Component {
           close={!loading}
           title
           titleText={this.title}
-        // check={!loading}
-        // handleSubmit={this.handleSubmit}
+           check={!loading}
+           handleSubmit={this.handleSubmit}
         />
 
         {loading ?

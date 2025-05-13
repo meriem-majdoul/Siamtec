@@ -137,8 +137,11 @@ class AddGoal extends Component {
         payload[formatedMonthYear] = monthlyGoal
 
         db.collection('Users').doc(this.userId).collection('Turnover').doc(GoalId).set(payload, { merge: true })
-        this.props.navigation.state.params.onGoBack()
-        this.props.navigation.goBack()
+        if (this.props.route.params?.onGoBack) {
+            this.props.route.params.onGoBack();
+        }
+        this.props.navigation.goBack();
+
     }
 
     //##DELETE

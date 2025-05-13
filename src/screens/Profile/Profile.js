@@ -122,14 +122,11 @@ class Profile extends Component {
             deleted: false
         }
     }
-    //##task: add Billing tab
 
-    // componentWillUnmount() {
-    //     if (this.willFocusSubscription)
-    //         this.willFocusSubscription.remove()
-    // }
+   
 
     //##GET
+
     async componentDidMount() {
         try {
             await this.fetchProfile()
@@ -500,7 +497,7 @@ class Profile extends Component {
 
         return (
             <View>
-                <SquarePlus onPress={() => this.props.navigation.navigate('CreateProject', { client, address, onGoBack: () => this.fetchProfile(1000) })} />
+                <SquarePlus onPress={() => this.props.navigation.navigate('ProjectsStack',{screen:'CreateProject', params:{ client, address, onGoBack: () => this.fetchProfile(1000) }})} />
                 <Text style={[theme.customFontMSregular.caption, { textAlign: "center", marginTop: theme.padding / 2, color: theme.colors.gray_dark }]}>
                     Nouveau projet
                 </Text>
@@ -583,31 +580,48 @@ class Profile extends Component {
         this.props.navigation.navigate('AddGoal', { userId: this.userParam.id, onGoBack: this.refreshMonthlyGoals })
     }
 
-    onPressGoal(goal, index) {
-        const navParams = {
-            userId: this.userParam.id,
-            GoalId: goal.id,
-            currentTurnover: goal.current,
-            incomeSources: goal.sources,
-            monthYear: goal.monthYear,
-            onGoBack: this.refreshMonthlyGoals
-        }
-        this.props.navigation.navigate('AddGoal', navParams)
+    onPressGoal = (goal, index) => {
+    if (!goal || !goal.id) {
+        console.warn('Objectif invalide ou non défini.');
+        return;
     }
 
-    async refreshMonthlyGoals() {
-        try {
-            const initialTurnoverObjects = initTurnoverObjects()
-            let turnoverObjects = await fetchTurnoverData(this.queries.turnover, initialTurnoverObjects, this.userParam.id)
-            const turnoverArr = setTurnoverArr(turnoverObjects)
-            const monthlyGoals = setMonthlyGoals(turnoverArr)
-            this.setState({ monthlyGoals })
-        }
-        catch (e) {
-            const { message } = e
-            displayError({ message })
-        }
+    const navParams = {
+        userId: this.userParam.id,
+        GoalId: goal.id,
+        currentTurnover: goal.current,
+        incomeSources: goal.sources,
+        monthYear: goal.monthYear,
+        prevScreen: 'Profil',
+        onGoBack: this.refreshMonthlyGoals, 
+    };
+
+    this.props.navigation.navigate('AddGoal', navParams);
+};
+
+refreshMonthlyGoals = async () => {
+    this.setState({ refreshing: true }); // Indiquer que le rafraîchissement est en cours
+
+    try {
+        const initialTurnoverObjects = initTurnoverObjects();
+        const turnoverObjects = await fetchTurnoverData(
+            this.queries.turnover,
+            initialTurnoverObjects,
+            this.userParam.id
+        );
+
+        const turnoverArr = setTurnoverArr(turnoverObjects);
+        const monthlyGoals = setMonthlyGoals(turnoverArr);
+
+        this.setState({ monthlyGoals });
+    } catch (e) {
+        const { message } = e;
+        displayError({ message });
+    } finally {
+        this.setState({ refreshing: false }); // Fin du rafraîchissement
     }
+};
+
 
 
     toggleSection(sectionId) {

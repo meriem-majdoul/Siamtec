@@ -69,7 +69,7 @@ const AutoCompleteBrands = (props) => {
                     <Image source={{ uri: brand.logo.downloadURL }} style={{ width: 45, height: 45 }} />
                 </View>
                 <View style={{ marginLeft: 10 }}>
-                    <Text style={theme.customFontMSsemibold.body}>{brand.name}</Text>
+                    <Text style={[theme.customFontMSsemibold.body,{color:'black'}]}>{brand.name}</Text>
                 </View>
             </View>
         );

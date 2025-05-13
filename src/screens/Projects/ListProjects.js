@@ -82,28 +82,42 @@ class ListProjects extends Component {
     }
 
     //#task: put lazy fetching: https://github.com/patrickleemsantos/react-native-food-panther/blob/master/App.js
-    async fetchProjects() {
-        this.setState({ refreshing: true })
+  async fetchProjects() {
+    try {
+        this.setState({ refreshing: true, loading: true });
 
-        const { queryFilters } = this.props.permissions.projects
+        const { queryFilters } = this.props.permissions.projects;
 
-        if (queryFilters === []) {
-            this.setState({ projectsList: [], projectsCount: 0 })
-        }
-        else {
-            const params = { role: this.props.role.value }
-            const query = configureQuery('Projects', queryFilters, params)
-
-            const projectsList = await fetchDocuments(query)
-
+        if (!queryFilters || queryFilters.length === 0) {
             this.setState({
-                projectsList,
-                projectsCount: projectsList.length,
+                projectsList: [],
+                projectsCount: 0,
                 loading: false,
-                refreshing: false
-            })
+                refreshing: false,
+            });
+            return;
         }
+
+        const params = { role: this.props.role?.value };
+        const query = configureQuery('Projects', queryFilters, params);
+
+        const projectsList = await fetchDocuments(query);
+
+        this.setState({
+            projectsList,
+            projectsCount: projectsList.length,
+            loading: false,
+            refreshing: false,
+        });
+    } catch (error) {
+        console.error('Error fetching projects:', error);
+        this.setState({
+            loading: false,
+            refreshing: false,
+        });
     }
+}
+
 
     renderProject(project) {
         const { view } = this.state

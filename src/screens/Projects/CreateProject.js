@@ -557,11 +557,19 @@ class CreateProject extends Component {
     }
 
     //#OOS
-    handleDeleteProject() {
-        load(this, true)
-        db.collection('Projects').doc(this.ProjectId).update({ deleted: true })
-        setTimeout(() => this.props.navigation.goBack(), 1000)
+    async handleDeleteProject() {
+    try {
+        load(this, true); // Start loading
+        await db.collection('Projects').doc(this.ProjectId).update({ deleted: true }); // Perform the deletion
+        // this.props.navigation.goBack();
+        this.props.navigation.navigate('ListProjects', {onGoBack: this.refreshAddress,isRoot:true});// Navigate back immediately after success
+    } catch (error) {
+        console.error('Error deleting project:', error); // Log the error for debugging
+    } finally {
+        load(this, false); // Stop loading, whether successful or not
     }
+}
+
 
     //Delete URLs from FIRESTORE
     async handleDeleteImage(allImages, currentImage) {
@@ -651,7 +659,7 @@ class CreateProject extends Component {
         return (
             <AddressInput
                 offLine={!isConnected}
-                onPress={() => navigateToScreen(this, 'Address', { onGoBack: this.refreshAddress, currentAddress: address })}
+                onPress={() => this.props.navigation.navigate('ProfileStack', {screen:'Address', params:{ onGoBack: this.refreshAddress, currentAddress: address }})}
                 onChangeText={this.setAddress}
                 clearAddress={() => this.setAddress('')}
                 address={address}
@@ -694,13 +702,13 @@ class CreateProject extends Component {
         const { techContact } = this.state
         return (
             <ItemPicker
-                onPress={() => navigateToScreen(this, 'ListEmployees', {
+                onPress={() =>    this.props.navigation.navigate('AgendaStack',{screen:'ListEmployees', params:{
                     onGoBack: this.refreshTechContact,
                     prevScreen: 'CreateProject',
                     isRoot: false,
                     titleText: 'Choisir un poseur',
                     query: db.collection('Users').where('role', '==', 'Équipe technique').where('deleted', '==', false)
-                })
+                }})
                 }
                 label="Contact technique *"
                 value={techContact.fullName || ''}

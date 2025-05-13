@@ -81,7 +81,7 @@ class EditRole extends Component {
                                 setRole(this, role)
                         }
                     }
-                    this.props.navigation.state.params.onGoBack('success', 'Le rôle a été modifié avec succès')
+                    this.props.route.params.onGoBack('success', 'Le rôle a été modifié avec succès')
                     this.props.navigation.goBack()
                 }
                 catch (e) {

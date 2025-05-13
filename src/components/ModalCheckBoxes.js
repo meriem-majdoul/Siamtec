@@ -37,7 +37,7 @@ export default class ModalCheckBoxes extends Component {
           onPress={onPressItem}
         />
         <Text
-          style={[theme.customFontMSregular.body, {marginLeft: 15, flex: 1}]}
+          style={[theme.customFontMSregular.body, {marginLeft: 15, flex: 1,color:'black'}]}
           onPress={onPressItem}>
           {item.label}
         </Text>
@@ -90,6 +90,7 @@ export default class ModalCheckBoxes extends Component {
               renderItem={({item, index}) =>
                 this.renderItem(items, item, index)
               }
+              style={{color:'black'}}
             />
             <Button
               mode="contained"
