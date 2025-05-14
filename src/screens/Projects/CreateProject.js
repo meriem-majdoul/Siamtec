@@ -459,80 +459,82 @@ class CreateProject extends Component {
 
     //#OOS
     async handleSubmit() {
-        Keyboard.dismiss()
+    Keyboard.dismiss();
 
-        if (this.state.loading || _.isEqual(this.state, this.initialState)) return
-        load(this, true)
+    const { loading, newAttachments, workTypes } = this.state;
+    const { isConnected } = this.props.network;
 
-        const { isConnected } = this.props.network
-        let isEditOffLine = isEditOffline(this.isEdit, isConnected)
-        if (isEditOffLine) {
-            load(this, false)
-            return
-        }
+    // Prevent submission if loading or no state changes
+    if (loading || _.isEqual(this.state, this.initialState)) return;
 
-        const isValid = this.validateInputs(isConnected)
-        if (!isValid) {
-            load(this, false)
-            return
-        }
+    load(this, true);
 
+    // Check offline edit
+    const isEditOffLine = isEditOffline(this.isEdit, isConnected);
+    if (isEditOffLine) {
+        load(this, false);
+        return;
+    }
 
-        let attachments = this.initialState.attachments
-        //1. UPLOADING FILES (ONLINE ONLY)
-        if (isConnected) {
-            const { newAttachments } = this.state
-            if (newAttachments.length > 0) {
-                this.setState({ uploading: true })
-                this.title = 'Importation des images...'
-                const storageRefPath = `/Projects/${this.ProjectId}/Images/`
-                const uploadedImages = await this.uploadFiles(newAttachments, storageRefPath)
-                this.title = this.isEdit ? "Modifier le projet" : "Nouveau projet"
-                if (uploadedImages) {
-                    attachments = attachments.concat(uploadedImages)
-                    this.setImageCarousel(attachments)
-                    this.setState({ attachments, newAttachments: [] })
-                }
-                else {
-                    const toast = { message: errorMessages.documents.upload, type: "error" }
-                    setAppToast(this, toast)
-                }
-                this.setState({ uploading: false })
+    // Validate inputs
+    const isValid = this.validateInputs(isConnected);
+    if (!isValid) {
+        load(this, false);
+        return;
+    }
+
+    let attachments = [...this.initialState.attachments];
+
+    // Upload files if online
+    if (isConnected && newAttachments.length > 0) {
+        try {
+            this.setState({ uploading: true });
+            this.title = "Importation des images...";
+            const storageRefPath = `/Projects/${this.ProjectId}/Images/`;
+            const uploadedImages = await this.uploadFiles(newAttachments, storageRefPath);
+
+            if (uploadedImages) {
+                attachments = attachments.concat(uploadedImages);
+                this.setImageCarousel(attachments);
+                this.setState({ attachments, newAttachments: [] });
+            } else {
+                setAppToast(this, { message: errorMessages.documents.upload, type: "error" });
             }
-        }
-
-        const props = ["name", "client", "note", "state", "step", "address", "color", "bill", "comContact", "techContact", "intervenant"]
-        let project = unformatDocument(this.state, props, this.props.currentUser, this.isEdit)
-        project.attachments = attachments
-        project.processVersion = latestProcessVersion
-        //project.processVersion = "version0"
-        const process = {
-            version: latestProcessVersion
-            //version: "version0" //Used for testing
-        }
-        const selectedWorkTypes = this.state.workTypes.filter((wt) => wt.selected === true)
-        const selectedWorkTypesValues = selectedWorkTypes.map((wt) => wt.value)
-        project.workTypes = selectedWorkTypesValues
-
-        this.persistData({ project, process })
-
-        const toastMessage = this.isEdit ? 'Le projet a été modifié' : 'Le projet a été crée.'
-        load(this, false)
-        const toast = { message: toastMessage, type: "info" }
-        setAppToast(this, toast)
-
-        if (!this.isEdit) {
-            this.props.navigation.replace("Process", { ProjectId: this.ProjectId })
-            //await this.initEditMode(project)
-        }
-
-        if (this.isGoBack) {
-            if (this.props.navigation.state.params.onGoBack) {
-                this.props.navigation.state.params.onGoBack()
-            }
-            this.props.navigation.goBack()
+        } catch (error) {
+            console.error("File upload error:", error);
+            setAppToast(this, { message: "Erreur lors de l'importation des fichiers.", type: "error" });
+        } finally {
+            this.setState({ uploading: false });
         }
     }
+
+    // Prepare project data
+    const props = ["name", "client", "note", "state", "step", "address", "color", "bill", "comContact", "techContact", "intervenant"];
+    const project = unformatDocument(this.state, props, this.props.currentUser, this.isEdit);
+    project.attachments = attachments;
+    project.processVersion = latestProcessVersion;
+    project.workTypes = workTypes.filter((wt) => wt.selected).map((wt) => wt.value);
+
+    // Persist project data
+    await this.persistData({ project, process: { version: latestProcessVersion } });
+
+    // Toast notification
+    const toastMessage = this.isEdit ? "Le projet a été modifié" : "Le projet a été crée.";
+    setAppToast(this, { message: toastMessage, type: "info" });
+
+    load(this, false);
+
+    // Navigation handling
+    if (!this.isEdit) {
+        this.props.navigation.replace("Process", { ProjectId: this.ProjectId });
+    }
+  else{
+        const onGoBack = this.props.route.params?.onGoBack;
+        if (onGoBack) onGoBack();
+        this.props.navigation.goBack();
+    }
+}
+
 
     persistData(data) {
         const { project, process } = data

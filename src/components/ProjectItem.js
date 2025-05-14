@@ -40,7 +40,7 @@ const ProjectItem = ({ project, onPress, ...props }) => {
     };
 
     const viewClientProfile = () => {
-        navigation.navigate('Profile', { user: { id: client.id, roleId: 'client' }, isClient: true });
+        navigation.navigate('ProfileStack',{screen:'Profile', params:{ user: { id: client.id, roleId: 'client' }, isClient: true }});
     };
 
     const lastUpdate = `${moment(editedAt).format('ll')} - ${moment(editedAt).format('HH:mm')}`;

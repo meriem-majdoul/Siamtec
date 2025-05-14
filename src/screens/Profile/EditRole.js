@@ -82,7 +82,9 @@ class EditRole extends Component {
                         }
                     }
                     this.props.route.params.onGoBack('success', 'Le rôle a été modifié avec succès')
-                    this.props.navigation.goBack()
+                     this.props.navigation.goBack()
+              
+
                 }
                 catch (e) {
                     throw new Error(e)
