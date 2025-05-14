@@ -1026,51 +1026,62 @@ export const pickImage = (previousAttachments = [], isCamera = false, addPathSuf
     saveToPhotos: true, // Sauvegarder les photos prises avec la caméra (optionnel)
   };
 
-  const imagePickerHandler = (response, resolve, reject) => {
-    console.log("Réponse de l'image picker:", response);
+const imagePickerHandler = (response, resolve, reject) => {
+  console.log("Réponse de l'image picker:", response);
 
-    if (response.didCancel) {
-      return resolve(previousAttachments); // L'utilisateur a annulé la sélection
+  if (response.didCancel) {
+    console.log("Sélection annulée par l'utilisateur.");
+    return resolve(previousAttachments); // L'utilisateur a annulé la sélection
+  }
+
+  if (response.errorCode) {
+    console.error("Erreur de l'image picker:", response.errorMessage);
+    return reject(new Error(response.errorMessage || "Erreur lors de la sélection du fichier. Veuillez réessayer."));
+  }
+
+  if (response.assets && response.assets.length > 0) {
+    const selectedAsset = response.assets[0];
+
+    // Vérification des propriétés de l'asset
+    if (!selectedAsset.uri || !selectedAsset.type) {
+      console.error("Données invalides dans la réponse de l'image picker:", selectedAsset);
+      return reject(new Error("Données invalides reçues de l'image picker."));
     }
 
-    if (response.errorCode) {
-      return reject(new Error(response.errorMessage || "Erreur lors de la sélection du fichier. Veuillez réessayer."));
-    }
+    const image = {
+      type: selectedAsset.type,
+      name: selectedAsset.fileName || `Image_${moment().format("DD-MM-YYYY_HH-mm")}`,
+      size: selectedAsset.fileSize,
+      local: true,
+      progress: 0,
+    };
 
-    if (response.assets && response.assets.length > 0) {
-      const selectedAsset = response.assets[0];
-      const image = {
-        type: selectedAsset.type,
-        name: selectedAsset.fileName || `Image_${moment().format("DD-MM-YYYY_HH-mm")}`,
-        size: selectedAsset.fileSize,
-        local: true,
-        progress: 0,
-      };
-
-      // Gestion des chemins pour Android et iOS
-      if (Platform.OS === 'android') {
-        const pathSuffix = addPathSuffix ? 'file://' : '';
-        image.path = pathSuffix + selectedAsset.uri;
-      } else {
-        image.path = selectedAsset.uri;
-      }
-
-      const attachments = [...previousAttachments, image];
-      return resolve(attachments);
-    }
-
-    return reject(new Error("Une erreur inconnue s'est produite."));
-  };
-
-  return new Promise((resolve, reject) => {
-    if (isCamera) {
-      // Utilisation de l'appareil photo
-      launchCamera(options, (response) => imagePickerHandler(response, resolve, reject));
+    // Gestion des chemins pour Android et iOS
+    if (Platform.OS === "android") {
+      image.path = selectedAsset.uri.startsWith("file://") ? selectedAsset.uri : `file://${selectedAsset.uri}`;
     } else {
-      // Utilisation de la bibliothèque
-      launchImageLibrary(options, (response) => imagePickerHandler(response, resolve, reject));
+      image.path = selectedAsset.uri;
     }
-  });
+
+    console.log("Image sélectionnée:", image);
+    const attachments = [...previousAttachments, image];
+    return resolve(attachments);
+  }
+
+  console.error("Erreur inconnue de l'image picker.");
+  return reject(new Error("Une erreur inconnue s'est produite."));
+};
+
+return new Promise((resolve, reject) => {
+  if (isCamera) {
+    console.log("Lancement de la caméra...");
+    launchCamera(options, (response) => imagePickerHandler(response, resolve, reject));
+  } else {
+    console.log("Ouverture de la bibliothèque d'images...");
+    launchImageLibrary(options, (response) => imagePickerHandler(response, resolve, reject));
+  }
+});
+
 };
 
 //##FILE PICKER

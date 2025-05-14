@@ -148,7 +148,7 @@ class CreateClient extends Component {
           };
   
       this.setState({ loadingDialog: false }, () => {
-        navigation.replace(drawer,{navScreen, navParams}); // Utilisation de `replace` pour naviguer
+        navigation.replace(drawer,{screen:navScreen, params:navParams}); // Utilisation de `replace` pour naviguer
       });
     }
   };
