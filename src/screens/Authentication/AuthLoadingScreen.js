@@ -29,10 +29,10 @@ moment.locale('fr')
 const roles = [
   { id: 'admin', value: 'Admin', level: 3, isHighRole: true, isLowRole: false, isClient: false },
   { id: 'backoffice', value: 'Back office', level: 3, isHighRole: true, isLowRole: false, isClient: false },
-  { id: 'dircom', value: 'Service commercial', level: 2, isHighRole: true, isLowRole: false, isClient: false },
+  { id: 'dircom', label: 'MAR', value: 'MAR', bool: 'isDirCom', level: 2 },
   { id: 'com', value: "Chargé d'affaires", level: 1, isHighRole: false, isLowRole: true, isClient: false },
   { id: 'poseur', value: 'Équipe technique', level: 1, isHighRole: false, isLowRole: true, isClient: false },
-  { id: 'tech', value: 'Service technique', level: 2, isHighRole: true, isLowRole: false, isClient: false },
+  { id: 'tech', value: 'Entreprise technique', level: 2, isHighRole: true, isLowRole: false, isClient: false },
   { id: 'client', value: 'Client', level: 0, isHighRole: false, isLowRole: false, isClient: true },
   { id: 'designoffice', value: "Bureau d'étude", level: 0, isHighRole: false, isLowRole: false, isClient: false }
 ]
@@ -243,7 +243,7 @@ class AuthLoadingScreen extends Component {
             routeParams = this.state.routeParams || {};
           } else {
             const isExternal = ["Client", "Équipe technique", "Bureau d'étude"].includes(roleValue);
-            routeName = isExternal ? "ProjectsStack" : "App";
+            routeName = "App";
           }
   
           this.props.navigation.navigate(routeName, routeParams);
@@ -270,51 +270,56 @@ class AuthLoadingScreen extends Component {
     return enabled
   }
 
-  async configureFcmToken() {
+    async configureFcmToken() {
     try {
-      //Register the device with FCM 
-      await firebase.messaging().registerDeviceForRemoteMessages() //iOS only
+      // Register the device with FCM (iOS only)
+      await firebase.messaging().registerDeviceForRemoteMessages();
 
-      //Get the token
-      const token = await firebase.messaging().getToken()
+      // Get the token
+      const token = await firebase.messaging().getToken();
 
-      //Save the token
-      const { uid } = firebase.auth().currentUser //user B
-      const fcmTokensRef = db.collection('FcmTokens')
-      const queryTokens = fcmTokensRef.where('tokens', 'array-contains', token)
-      await queryTokens.get().then(async (querysnapshot) => {
-        try {
-          //OLD TOKEN: already belongs to a user
-          if (!querysnapshot.empty) {
-            const doc = querysnapshot.docs[0]
-            //This device/token was used by user A
-            if (doc.id !== uid) {
-              //1. remove this token from user A
-              const tokens = doc.data().tokens
-              const index = tokens.indexOf(token)
-              tokens.splice(index, 1)
-              //2. update user A tokens
-              await doc.ref.update({ tokens })
-              //3. add this token to current user  
-              await this.addTokenToCurrentUser(token, uid)
-            }
+      // Get current user ID
+      const { uid } = firebase.auth().currentUser;
+      const fcmTokensRef = db.collection('FcmTokens');
+
+      // Query for existing tokens
+      const queryTokens = fcmTokensRef.where('tokens', 'array-contains', token);
+      const querySnapshot = await queryTokens.get();
+
+      // Handle token reassignment
+      if (!querySnapshot.empty) {
+        const doc = querySnapshot.docs[0];
+
+        // If the token belongs to another user, reassign it
+        if (doc.id !== uid) {
+          const tokens = doc.data().tokens;
+          const index = tokens.indexOf(token);
+          if (index > -1) {
+            tokens.splice(index, 1);
           }
-          //NEW TOKEN: add it to the current user
-          else {
-            await this.addTokenToCurrentUser(token, uid)
-          }
+          await doc.ref.update({ tokens });
         }
+      }
 
-        catch (e) {
-          throw new Error(e)
+      // Add the token to the current user
+      const userDoc = fcmTokensRef.doc(uid);
+      const userSnapshot = await userDoc.get();
+
+      if (userSnapshot.exists) {
+        const userTokens = userSnapshot.data().tokens || [];
+        if (!userTokens.includes(token)) {
+          userTokens.push(token);
+          await userDoc.update({ tokens: userTokens });
         }
-      })
-    }
+      } else {
+        await userDoc.set({ tokens: [token] });
+      }
 
-    catch (e) {
-      throw new Error(e)
+    } catch (error) {
+      console.error("Error configuring FCM token:", error);
     }
   }
+
 
   async addTokenToCurrentUser(token, uid) {
     try {

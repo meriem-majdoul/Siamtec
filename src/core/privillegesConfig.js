@@ -1,7 +1,7 @@
 
 
 export const privilleges = {
-    "Service technique": {
+    "Entreprise technique": {
         "tasks": {
             "queryFilters": [
                 { "operation": "array-contains", "value": "tech", "filterOrder": 1, "clause": "where", "filter": "natures" },
@@ -270,7 +270,7 @@ export const privilleges = {
             "canUpdate": false
         }
     },
-    "Service commercial": {
+    "MAR": {
         "tasks": {
             "queryFilters": [
                 { "operation": "array-contains", "value": "com", "filterOrder": 1, "filter": "natures", "clause": "where" },
@@ -712,7 +712,7 @@ export const privilleges = {
             ],
             "canDelete": false,
             "canRead": true,
-            "canCreate": false,
+            "canCreate": true,
             "canUpdate": true
         },
         "clients": {
@@ -983,5 +983,5 @@ export const privilleges = {
             "canCreate": true,
             "canUpdate": false
         }
-    }
+    },
 }

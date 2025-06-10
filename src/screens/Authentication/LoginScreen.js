@@ -174,6 +174,26 @@ class LoginScreen extends Component {
               <Text style={[theme.customFontMSmedium.header, { color: '#fff', letterSpacing: 1 }]}>
                 Se connecter
               </Text>
+             
+            </LinearGradient>
+          </TouchableOpacity>
+
+           
+              <TouchableOpacity 
+            style={styles.cmptButton} 
+           onPress={() => this.props.navigation.navigate("RegisterScreen")}
+            disabled={loading}
+          >
+            <LinearGradient 
+              start={{ x: 0, y: 0 }} 
+              end={{ x: 1, y: 0 }} 
+              colors={['#33a979', '#58cb7e', '#6edd81']} 
+              style={styles.linearGradient}
+            >
+              <Text style={[theme.customFontMSmedium.header, { color: '#fff', letterSpacing: 1 }]}>
+               Créer un compte
+              </Text>
+             
             </LinearGradient>
           </TouchableOpacity>
         </View> 
@@ -214,6 +234,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 30,
+  },
+   cmptButton: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 10,
   },
   errorText: {  // Style pour l'affichage de l'erreur
     color: 'red',

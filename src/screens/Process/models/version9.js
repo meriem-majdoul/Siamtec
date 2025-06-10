@@ -807,7 +807,7 @@ export const version9 = {
                         title: 'Créer une visite technique',
                         instructions: 'Créer une visite technique',
                         actionOrder: 1,
-                        responsable: 'Service technique', 
+                        responsable: 'Entreprise technique', 
                         verificationType: 'doc-creation',
                         collection: 'Agenda',
                         documentId: "",
@@ -827,7 +827,7 @@ export const version9 = {
         title: 'Visite technique',
         instructions: '',
         phaseOrder: 4,
-        followers: ['Admin', 'Service technique', 'Équipe technique'],
+        followers: ['Admin', 'Entreprise technique', 'Équipe technique'],
         steps: {
             siteCreation: {
                 title: 'Planification visite technique',
@@ -839,7 +839,7 @@ export const version9 = {
                         title: 'Créer une visite technique',
                         instructions: 'Créer une visite technique',
                         actionOrder: 1,
-                        responsable: 'Service technique', //Service technique
+                        responsable: 'Entreprise technique', //Entreprise technique
                         verificationType: 'doc-creation',
                         collection: 'Agenda',
                         documentId: "",
@@ -854,7 +854,7 @@ export const version9 = {
                         title: 'Valider la date de la visite technique',
                         instructions: 'Valider la date de la visite technique',
                         actionOrder: 2,
-                        responsable: 'Service technique',  //Service technique
+                        responsable: 'Entreprise technique',  //Entreprise technique
                         verificationType: 'doc-creation',
                         collection: 'Agenda',
                         documentId: "",
@@ -887,9 +887,9 @@ export const version9 = {
                     {
                         id: 'poseurAffectation',
                         title: 'Affecter un technicien à la visite technique',
-                        instructions: 'Affecter un technicien à la visite technique',  //Service technique
+                        instructions: 'Affecter un technicien à la visite technique',  //Entreprise technique
                         actionOrder: 3,
-                        responsable: 'Service technique',
+                        responsable: 'Entreprise technique',
                         collection: 'Agenda',
                         documentId: "",
                         params: {
@@ -940,7 +940,7 @@ export const version9 = {
                                 onSelectType: 'navigation'
                             },
                         ],
-                        responsable: 'Service technique',
+                        responsable: 'Entreprise technique',
                         status: 'pending',
                     },
                 ],
@@ -956,7 +956,7 @@ export const version9 = {
                         title: 'Remplir la visite technique',
                         instructions: 'Remplir la visite technique',
                         actionOrder: 1,
-                        responsable: 'Service technique',
+                        responsable: 'Entreprise technique',
                         verificationType: 'doc-creation',
                         collection: 'Documents',
                         documentId: "", //creation
@@ -975,7 +975,7 @@ export const version9 = {
                         title: 'Voulez-vous cloturer la visite technique',
                         instructions: 'Voulez-vous cloturer la visite technique',
                         actionOrder: 2,
-                        responsable: 'Service technique',
+                        responsable: 'Entreprise technique',
                         collection: 'Agenda',
                         documentId: "",
                         params: {
@@ -1073,7 +1073,7 @@ export const version9 = {
         title: "En attente d'installation",
         instructions: '',
         phaseOrder: 5,
-        followers: ['Admin', 'Service technique', 'Équipe technique'],
+        followers: ['Admin', 'Entreprise technique', 'Équipe technique'],
         steps: {
             installationPreparation: {
                 title: "Préparation de l'installation",
@@ -1688,7 +1688,7 @@ export const version9 = {
                         //Comment
                         comment: '',
                         //Others
-                        responsable: 'Service technique',
+                        responsable: 'Entreprise technique',
                         status: 'pending',
                     },
                     {
@@ -2009,7 +2009,7 @@ export const version9 = {
     //     title: 'Maintenance',
     //     instructions: '',
     //     phaseOrder: 6,
-    //     followers: ['Admin', 'Service technique', 'Équipe technique'],
+    //     followers: ['Admin', 'Entreprise technique', 'Équipe technique'],
     //     steps: {
     //         maintainanceContract: {
     //             title: 'Contrat maintenance',
@@ -2162,7 +2162,7 @@ export const version9 = {
             'Admin',
             'Service commercial',
             "Chargé d'affaires",
-            'Service technique',
+            'Entreprise technique',
             'Équipe technique',
         ],
         steps: {
@@ -2194,7 +2194,7 @@ export const version9 = {
             'Admin',
             'Service commercial',
             "Chargé d'affaires",
-            'Service technique',
+            'Entreprise technique',
             'Équipe technique',
         ],
         steps: {

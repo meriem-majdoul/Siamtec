@@ -10,7 +10,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 
 // Import screens
 // Auth
-import { LoginScreen, ForgotPasswordScreen } from "../screens/Authentication";
+import { LoginScreen, ForgotPasswordScreen,RegisterScreen } from "../screens/Authentication";
 
 // Dashboard
 import Dashboard from '../screens/Dashboard/Dashboard';
@@ -244,6 +244,7 @@ const ChatStack = () => (
 const AuthStack = () => (
   <Stack.Navigator screenOptions={hideHeader}>
     <Stack.Screen name="LoginScreen" component={LoginScreen} />
+    <Stack.Screen name="RegisterScreen" component={RegisterScreen} />
     <Stack.Screen name="ForgotPasswordScreen" component={ForgotPasswordScreen} />
   </Stack.Navigator>
 );

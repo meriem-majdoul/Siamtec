@@ -30,9 +30,9 @@ import { setAppToast } from "../../core/redux";
 const rolesPicker = {
   3: [
     { label: 'Admin', value: 'Admin' },
-    { label: 'Service commercial', value: 'Service commercial' },
+    { label: "MAR", value: "MAR" },
     { label: "Chargé d'affaires", value: "Chargé d'affaires" },
-    { label: 'Service technique', value: 'Service technique' },
+    { label: 'Entreprise technique', value: 'Entreprise technique' },
     { label: 'Équipe technique', value: 'Équipe technique' },
     { label: 'Back office', value: 'Back office' },
     //{ label: "Bureau d'étude", value: "Bureau d'étude" },
@@ -55,7 +55,7 @@ class CreateUser extends Component {
 
     const { route } = this.props;
     const { prevScreen } = route.params || {};
-    console.log('props'+JSON.stringify(this.props, null, 2))
+ 
 
 
     // Assignation de prevScreen avec une valeur par défaut
@@ -156,6 +156,7 @@ class CreateUser extends Component {
   
     //3. Create user doc
     const response = await createUser(user, isConnected); //#readyToExternalize
+    console.log('response: '+response)
     const { error } = response;
   
     if (error) {

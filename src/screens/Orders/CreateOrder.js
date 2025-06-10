@@ -92,7 +92,7 @@ const confirmMessage =
   "La remise a été validé par votre responsable d'agence. Vous pouvez continuer.";
 const pendingMessageAdmin = 'Valider la remise appliquée par votre commercial.';
 const pendingMessageCom =
-  'Le service technique a été notifié. Veuillez patienter ou bien contactez le par téléphone...';
+  "L'entreprise technique a été notifié. Veuillez patienter ou bien contactez le par téléphone...";
 
 
 class CreateOrder extends Component {
