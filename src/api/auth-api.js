@@ -66,9 +66,9 @@ export const sendEmailWithPassword = async email => {
 }
 
 export const checkEmailExistance = async (email, isConnected) => {
-  if (!isConnected) {
-    return { error: { message: errorMessages.network.newUser } }
-  }
+  // if (!isConnected) {
+  //   return { error: { message: errorMessages.network.newUser } }
+  // }
 
   const methods = await firebase.auth().fetchSignInMethodsForEmail(email)
   const emailExist = methods.length > 0

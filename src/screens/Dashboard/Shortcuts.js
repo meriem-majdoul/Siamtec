@@ -18,13 +18,15 @@ import { ModalForm } from '../../components/ModalOptions'
 import { Appbar, CustomIcon, Section, EmptyList, NotificationItem, TaskItem, Loading } from '../../components'
 //import crashlytics, { firebase } from '@react-native-firebase/crashlytics';
 
+const userRole=auth.currentUser;
+console.log('userRole: '+JSON.stringify(userRole))
 const shortcutsModel = {
     createProspect: {
         label: 'Nouveau prospect',
         value: '',
         icon: faClipboardUser,
         colors: { primary: '#6DE662', secondary: '#9fe899' },
-        navigation: { Drawer:'ClientsManagementStack',screen: 'CreateClient', params: { prevScreen: 'Dashboard', isProspect: true } }
+        navigation:   { Drawer:'ClientsManagementStack',screen: 'CreateClient', params: { prevScreen: 'Dashboard', isProspect: true } }
     },
     // createClient: {
     //     label: 'Nouveau client',
@@ -49,6 +51,13 @@ const shortcutsModel = {
         icon: faDraftingCompass,
         colors: { primary: '#2E5C63', secondary: '#446f75' },
         navigation: { Drawer:'ProjectsStack',screen: 'CreateProject', params: { isRoot: false, prevScreen: 'Dashboard' } }
+    },
+    createProjectClient: {
+        label: 'Nouveau projet',
+        value: '',
+        icon: faDraftingCompass,
+        colors: { primary: '#2E5C63', secondary: '#446f75' },
+        navigation: { Drawer:'SimulatorStack',screen: 'CreateSimulation', params: { prevScreen: 'Dashboard' } }
     },
     createTask: {
         label: 'Nouvelle demande',
@@ -94,7 +103,7 @@ class Shortcuts extends Component {
     setPermissionBasedShortcuts() {
         let shortcuts = []
         const { clients, users, projects, tasks, documents } = this.props.permissions
-        const { createProspect, createUser, createProject, createTask, createDocument, createSimulation } = shortcutsModel
+        const { createProspect, createUser, createProject, createTask, createDocument, createSimulation,createProjectClient } = shortcutsModel
 
         // console.log('createProspect:', createProspect)
         if (clients.canCreate) shortcuts.push(createProspect)
@@ -104,6 +113,7 @@ class Shortcuts extends Component {
         if (tasks.canCreate) shortcuts.push(createTask)
         if (documents.canCreate) shortcuts.push(createDocument)
         if (this.props.role.id !== "client") shortcuts.push(createSimulation)
+        if (this.props.role.id == "client") shortcuts.push(createProjectClient)
 
         return shortcuts
     }

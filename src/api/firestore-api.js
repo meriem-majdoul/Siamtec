@@ -146,10 +146,12 @@ export const formatNewUser = function formatNewUser(thisState) {
     email: email.value.toLowerCase(),
     password: password.value,
 
-    createdBy: {
-      id: auth.currentUser.uid,
-      fullName: auth.currentUser.displayName
-    },
+    createdBy: auth.currentUser
+      ? {
+          id: auth.currentUser.uid,
+          fullName: auth.currentUser.displayName,
+        }
+      : "registerScreen",
     createdAt: moment().format(),
     userType,
     deleted: false
@@ -174,8 +176,7 @@ export const formatNewUser = function formatNewUser(thisState) {
     user.status = "pending"
     user.email2 = email2.value.toLowerCase()
     user.phone2 = phone2.value
-    if (!isProspect)
-      user.role = 'Client'
+    user.role = 'Client'
   }
 
   else if (userType === "utilisateur") {
@@ -194,9 +195,11 @@ export const createUser = async function createUser(user, isConnected) {
   //1. Check if email has an account (works only ONLINE)
   const emailExist = await checkEmailExistance(email, isConnected)
   if (emailExist.error) {
-    return { error: emailExist.error }
+    return { errorrr: emailExist.error }
   }
 
+   console.log("userType: ",userType)
+  console.log("isProspect: ",isProspect)
   //2. Set collection
   if (userType === "client") {
     var collection = "Clients"

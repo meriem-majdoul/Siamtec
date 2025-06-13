@@ -270,43 +270,58 @@ export const version9 = {
                 instructions: '',
                 stepOrder: 1,
                 actions: [ //Audit energetique
-                    {
-                        id: 'eebOrEnergeticAudit',
+                    // {
+                    //     id: 'eebOrEnergeticAudit',
+                    //     title: "Voulez-vous importer une fiche EEB ou bien un Audit énergétique ?",
+                    //     instructions: '',
+                    //     actionOrder: 1,
+                    //     type: 'manual',
+                    //     comment: '',
+                    //     responsable: "MAR",
+                    //     status: 'pending',
+                    //     verificationType: 'multiple-choices',
+                    //     choices: [
+                    //         {
+                    //             label: 'Fiche EEB',
+                    //             id: 'confirm',
+                    //             onSelectType: 'validation',
+                    //             nextStep: 'eebCreation',
+                    //         },
+                    //         {
+                    //             label: 'Audit énergétique',
+                    //             id: 'confirm',
+                    //             onSelectType: 'validation',
+                    //             nextStep: 'energeticAuditCreation',
+                    //         },
+                    //     ],
+                    // },
+                     {
+                        id: 'ctrEligibilte',
                         title: "Vérification de l'éligibilité du client, de la catégorie et des aides complémentaires effectuée?",
                         instructions: '',
                         actionOrder: 1,
                         type: 'manual',
-                        comment: '',
-                        responsable: "MAR",
-                        status: 'pending',
                         verificationType: 'multiple-choices',
-                        choices: [
+                         choices: [
                             {
                                 label: 'Annuler',
                                 id: 'cancel',
+                                nextPhase: 'cancelProject',
                                 onSelectType: 'transition',
-                                nextStep: 'cancelProject',
+                                commentRequired: true,
                             },
                             {
                                 label: 'Valider',
                                 id: 'confirm',
                                 onSelectType: 'validation',
-                                nextStep: 'energeticAuditCreation',
+                                nextPhase: 'contratCreation',
                             },
                         ],
+                        comment: '',
+                        responsable: 'MAR',
+                        status: 'pending',
+                   
                     },
-                    //  {
-                    //     id: 'ctrEligibilte',
-                    //     title: "Vérification de l'éligibilité du client, de la catégorie et des aides complémentaires effectuée?",
-                    //     instructions: '',
-                    //     actionOrder: 1,
-                    //     type: 'manual',
-                    //     verificationType: 'validation',
-                    //     comment: '',
-                    //     responsable: 'MAR',
-                    //     status: 'pending',
-                    //     nextPhase: 'contratCreation',
-                    // },
                 ],
             },
             // eebCreation: {
@@ -335,39 +350,13 @@ export const version9 = {
             //         },
             //     ]
             // },
-            //   contratCreation: {
-            //     title: "Création du contrat d’accompagnement ",
-            //     instructions: '',
-            //     stepOrder: 2,
-            //     actions: [
-            //         {
-            //             id: 'contratCreation',
-            //             title: 'Importer le contrat d’accompagnement ',
-            //             instructions: 'Importer le contrat d’accompagnement ',
-            //             actionOrder: 1,
-            //             responsable: "MAR",
-            //             verificationType: 'doc-creation',
-            //             collection: 'Documents',
-            //             documentId: "", //creation
-            //             params: {
-            //                 documentType: "Fiche EEB",
-            //             },
-            //             //Updates documentId to view the "onProgress uploading document"
-            //             queryFilters_onProgressUpload: buildQueryFilters(queryFilters_Documents_Map("Fiche EEB").create.onProgress),
-            //             //Verification:
-            //             queryFilters: buildQueryFilters(queryFilters_Documents_Map("Fiche EEB").create.onCreate),
-            //             status: 'pending',
-            //             nextStep: 'rd2Creation',
-            //         },
-            //     ]
-            // },
-            energeticAuditCreation: {
-                title: "Importer le contrat d’accompagnement ",
+              contratCreation: {
+                title: "Création du contrat d’accompagnement ",
                 instructions: '',
-                stepOrder: 3,
+                stepOrder: 2,
                 actions: [
                     {
-                        id: 'energeticAuditCreation',
+                        // id: 'contratCreation',
                         title: 'Importer le contrat d’accompagnement ',
                         instructions: 'Importer le contrat d’accompagnement ',
                         actionOrder: 1,
@@ -376,12 +365,38 @@ export const version9 = {
                         collection: 'Documents',
                         documentId: "", //creation
                         params: {
-                            documentType: "Contrat d’accompagnement",
+                            documentType: "Fiche EEB",
                         },
                         //Updates documentId to view the "onProgress uploading document"
-                        queryFilters_onProgressUpload: buildQueryFilters(queryFilters_Documents_Map("Contrat d’accompagnement").create.onProgress),
+                        queryFilters_onProgressUpload: buildQueryFilters(queryFilters_Documents_Map("Fiche EEB").create.onProgress),
                         //Verification:
-                        queryFilters: buildQueryFilters(queryFilters_Documents_Map("Contrat d’accompagnement").create.onCreate),
+                        queryFilters: buildQueryFilters(queryFilters_Documents_Map("Fiche EEB").create.onCreate),
+                        status: 'pending',
+                        nextStep: 'rd2Creation',
+                    },
+                ]
+            },
+            energeticAuditCreation: {
+                title: "Audit énergétique",
+                instructions: '',
+                stepOrder: 3,
+                actions: [
+                    {
+                        id: 'energeticAuditCreation',
+                        title: 'Importer un Audit énergétique',
+                        instructions: 'Importer un Audit énergétique',
+                        actionOrder: 1,
+                        responsable: "MAR",
+                        verificationType: 'doc-creation',
+                        collection: 'Documents',
+                        documentId: "", //creation
+                        params: {
+                            documentType: "Audit énergétique",
+                        },
+                        //Updates documentId to view the "onProgress uploading document"
+                        queryFilters_onProgressUpload: buildQueryFilters(queryFilters_Documents_Map("Audit énergétique").create.onProgress),
+                        //Verification:
+                        queryFilters: buildQueryFilters(queryFilters_Documents_Map("Audit énergétique").create.onCreate),
                         status: 'pending',
                         nextStep: 'rd2Creation',
                     },
@@ -2231,7 +2246,6 @@ export const version9 = {
             'Admin',
             'MAR',
             'Entreprise technique',
-            'Équipe technique',
         ],
         steps: {
             resumeProject: {

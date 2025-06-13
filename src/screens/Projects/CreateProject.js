@@ -437,8 +437,8 @@ class CreateProject extends Component {
         const isStepTech = techSteps.includes(step)
         const clientError = nameValidator(client.fullName, '"Client"')
         const nameError = nameValidator(name, '"Nom du projet"')
-        const comContactError = nameValidator(comContact.id, '"Contact commercial"')
-        //const techContactError = isStepTech ? nameValidator(techContact.id, '"Contact technique"') : ''
+        const comContactError = nameValidator(comContact.id, '"MAR"')
+        //const techContactError = isStepTech ? nameValidator(techContact.id, '"Équipe technique"') : ''
         const addressError = '' //Address optional on offline mode
         //var addressError = isConnected ? nameValidator(address.description, '"Emplacemment"') : '' //Address optional on offline mode
        // const hasPriorTechVisitError = this.isEdit ? "" : hasPriorTechVisit ? "" : "La création d'une visite technique préalable est obligatoire."
@@ -683,15 +683,15 @@ class CreateProject extends Component {
                             onGoBack: this.refreshComContact,
                             prevScreen: 'CreateProject',
                             isRoot: false,
-                            titleText: 'Choisir un commercial',
+                            titleText: 'Choisir un MAR',
                             queryFilters: [
-                                { filter: 'role', operation: '==', value: "Chargé d'affaires" },
+                                { filter: 'role', operation: '==', value: "MAR" },
                                 { filter: 'deleted', operation: '==', value: false }
                             ]
                         }
                     })
                 }
-                label="Contact commercial *"
+                label="MAR *"
                 value={comContact.fullName || ''}
                 error={!!comContact.error}
                 errorText={comContact.error}
@@ -712,7 +712,7 @@ class CreateProject extends Component {
                     query: db.collection('Users').where('role', '==', 'Équipe technique').where('deleted', '==', false)
                 }})
                 }
-                label="Contact technique *"
+                label="Équipe technique *"
                 value={techContact.fullName || ''}
                 error={!!techContact.error}
                 errorText={techContact.error}

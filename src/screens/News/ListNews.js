@@ -9,6 +9,7 @@ import EmptyList from '../../components/EmptyList';
 
 import { constants, errorMessages } from '../../core/constants';
 import { displayError, load } from '../../core/utils';
+import { auth } from '../../firebase';
 
 const HTML_REGEX = /(<([^>]+)>)/ig;
 
@@ -21,6 +22,7 @@ class ListNews extends Component {
             loading: false,
         };
     }
+    
 
     componentDidMount() {
         const { isConnected } = this.props.network;
@@ -28,7 +30,7 @@ class ListNews extends Component {
         load(this, true);
         this.fetchWordpressPosts();
     }
-
+    
     fetchWordpressPosts = async () => {
         try {
             const response = await fetch("https://siamtec.fr/wp-json/wp/v2/posts?_embed");
@@ -74,11 +76,13 @@ class ListNews extends Component {
 
         return (
             <SafeAreaView style={styles.container}>
+                   {auth.currentUser && (
                    <Appbar
                         menu
                         title
                         titleText='Actualités' 
                     />
+                    )}
 
                 {loading ? (
                     <View style={styles.container}>

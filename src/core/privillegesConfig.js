@@ -712,7 +712,7 @@ export const privilleges = {
             ],
             "canDelete": false,
             "canRead": true,
-            "canCreate": true,
+            "canCreate": false,
             "canUpdate": true
         },
         "clients": {

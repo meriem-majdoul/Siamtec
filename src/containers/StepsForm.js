@@ -31,7 +31,7 @@ import moment from 'moment';
 import 'moment/locale/fr';
 moment.locale('fr');
 
-import { generatePdfForm } from '../core/utils';
+import { generatePdfForm ,refreshComContact} from '../core/utils';
 
 import {
   AddressInput,
@@ -49,6 +49,7 @@ import {
   Toast,
   SquarePlus,
   EEBPack,
+  ItemPicker
 } from '../components';
 import { setEstimation } from '../components/EEBPack';
 
@@ -73,6 +74,7 @@ import {
   pack1,
   pack2,
   simulationColorCats,
+  latestProcessVersion
 } from '../core/constants';
 import * as theme from '../core/theme';
 import { setStatusBarColor } from '../core/redux';
@@ -94,10 +96,14 @@ class StepsForm extends Component {
     this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
     this.submitContactForm = this.submitContactForm.bind(this);
     this.myAlert = myAlert.bind(this);
+    this.refreshComContact = refreshComContact.bind(this)
+
+  
     BackHandler.addEventListener(
       'hardwareBackPress',
       this.handleBackButtonClick,
     );
+ 
 
     this.isEdit = this.props.DocId !== '' && this.props.DocId !== undefined;
     this.DocId = this.isEdit
@@ -111,6 +117,7 @@ class StepsForm extends Component {
         this.popCount = this.props.route?.params?.popCount ?? 1;
 
     this.isGuest = !auth.currentUser;
+
 
     this.initialState = {
       showWelcomeMessage:
@@ -142,6 +149,7 @@ class StepsForm extends Component {
 
       totalImagesSize: 0,
       isTotalImagesSizeExceeded: false,
+      comContact: { id: '', fullName: '', email: '', role: '', error: '' },
     };
 
     this.state = this.initialState;
@@ -1235,6 +1243,10 @@ class StepsForm extends Component {
           db.collection(collection).doc(DocId).set(form);
         }
 
+          // Create a new project based on the simulation
+           if (this.props?.role.id === "client") {
+        await this.createProject(DocId, form);
+           }
         const pdfBase64 = await generatePdfForm(
           form,
           this.props.pdfType,
@@ -1266,6 +1278,91 @@ class StepsForm extends Component {
         this.setState({ loading: false });
       }
     });
+  }
+
+  // Function to create a project
+  async createProject(DocId, form) {
+
+        const { comContact } = this.state
+        // Récupérez l'UID de l'utilisateur connecté
+        const userId = auth.currentUser?.uid;
+        const clientDoc = await db.collection('Clients').doc(userId).get();
+
+        if (!clientDoc.exists) {
+            return null;
+        }
+        const clientData = clientDoc.data();
+   
+
+   try {
+  
+    // Mapper les champs
+      const project = {
+        name: form.nameSir || form.nameMiss || "Nouveau Projet",
+        description: "Projet généré à partir de la simulation",
+        address: clientData?.address || "",
+        client: {
+          id: form.createdBy?.id || "",
+          fullName: form.createdBy?.fullName || "",
+          email: form.createdBy?.email || "",
+          phone: form.phone || "",
+          role: "Client",
+        },
+        color: form.colorCat || "#FFFFFF",
+        workTypes: form.products || [],
+        bill: {
+          CEEPayment:"",
+          MPRPayment:"",
+          amount: form.estimation || "0",
+          amountHT: (form.estimation / 1.2).toFixed(2) || "0",//à changer
+          closedBy:{
+          id: form.createdBy?.id || "",
+          fullName: form.createdBy?.fullName || "",
+          email: form.createdBy?.email || "",
+          phone: form.phone || "",
+          role: "Client",
+        },  
+        customerPayment:"",
+        financingPayment:"",
+        },
+         comContact:comContact,
+
+        createdAt: new Date().toISOString(),
+        createdBy: form.createdBy || null,
+        editedAt: new Date().toISOString(),
+        editedBy: form.editedBy || null,
+        deleted:false,
+        Intervenant:null,
+        note:"",
+        state: 'En cours',
+        processVersion: latestProcessVersion,
+        step: 'Prospect',
+        techContact:{
+          id:"",
+          fullName:"",
+          email:"",
+          role: "",
+        },
+        attachments: [], // Vous pouvez ajouter des pièces jointes ici si nécessaire
+    };
+
+
+      const process= { version: latestProcessVersion }
+      const batch = db.batch()
+      const projectRef = db.collection('Projects').doc(DocId)
+      const processRef = projectRef.collection("Process").doc(DocId)
+      batch.set(projectRef, project, { merge: true })
+      batch.set(processRef, process, { merge: true })
+      batch.commit()
+    // Sauvegarder dans Firestore
+    // await db.collection("Projects").doc(DocId).set(project);
+
+    console.log("Projet créé avec succès :", project);
+    return project;
+  } catch (error) {
+    console.error("Erreur lors de la création du projet :", error);
+    throw new Error("Impossible de créer le projet.");
+  }
   }
 
   unformatDocument() {
@@ -1493,7 +1590,10 @@ class StepsForm extends Component {
     const message1 = 'Ce que nous vous recommandons';
     const colorLabel = this.setColorLabel(colorCat);
     const { packs, isPVElligible } = this.setPacks(products);
+    const { comContact } = this.state
 
+    // const comContactError = nameValidator(comContact.id || '', '"MAR"');
+    // comContact.error = comContactError;
     return (
       <View style={{ flex: 1 }}>
         <ScrollView
@@ -1536,6 +1636,29 @@ class StepsForm extends Component {
           <View style={{ flex: 1, padding: theme.padding }}>
             {/* <Text style={[theme.customFontMSsemibold.body, { opacity: 0.8, marginBottom: 16 }]}>{message3}</Text>
                         {this.renderTrackingSteps()} */}
+
+            <ItemPicker
+                onPress={() =>
+                    this.props.navigation.navigate('AgendaStack', {
+                        screen: 'ListEmployees',
+                        params: {
+                            onGoBack: this.refreshComContact,
+                            prevScreen: 'CreateSimulation',
+                            isRoot: false,
+                            titleText: 'Choisir un MAR',
+                            queryFilters: [
+                                { filter: 'role', operation: '==', value: "MAR" },
+                                { filter: 'deleted', operation: '==', value: false }
+                            ]
+                        }
+                    })
+                }
+                label="MAR *"
+                value={comContact.fullName || ''}
+                error={!!comContact.error}
+                errorText={comContact.error}
+                // editable={canWrite && !this.isClient}
+            />
             <Image
               source={require('../assets/images/maprimerenove.jpg')}
               style={{

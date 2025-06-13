@@ -35,7 +35,9 @@ import {
 export default class RegisterScreen extends Component {
   constructor(props) {
     super(props);
+     this.userType = 'prospect';
     this.state = {
+      isProspect: true,
       ClientId: generateId('GS-CL-'),
       checked: 'first',
       isPro: false,
@@ -54,6 +56,8 @@ export default class RegisterScreen extends Component {
       phone: { value: '', error: '' },
       phone2: { value: '', error: '' },
       password: { value: '', error: '', show: false },
+      userType: 'client',
+      role:'Client',
       loading: true,
       loadingDialog: false,
     };
@@ -79,6 +83,7 @@ export default class RegisterScreen extends Component {
     }
 
     const user = formatNewUser(this.state);
+    console.log('user:'+JSON.stringify(user))
     const response = await createUser(user);
     const { error } = response;
 
@@ -98,7 +103,7 @@ export default class RegisterScreen extends Component {
 
   render() {
     const { isPro, loading, loadingDialog } = this.state;
-    const { nom, prenom, address, addressError, phone, email, password, denom } = this.state;
+    const { nom, prenom, address, addressError, phone, email, password, denom ,siret} = this.state;
 
     return (
       <View style={styles.container}>
@@ -121,25 +126,45 @@ export default class RegisterScreen extends Component {
                 onPress2={() => this.setState({ checked: 'second', isPro: true })}
               />
 
-              {isPro && (
-                <MyInput
-                  label="Dénomination sociale"
-                  value={denom.value}
-                  onChangeText={(text) => updateField(this, denom, text)}
-                />
-              )}
-
-              <MyInput
-                label="Nom"
-                value={nom.value}
-                onChangeText={(text) => updateField(this, nom, text)}
-              />
-
-              <MyInput
-                label="Prénom"
-                value={prenom.value}
-                onChangeText={(text) => updateField(this, prenom, text)}
-              />
+           {!isPro && (
+                          <MyInput
+                            label="Prénom *"
+                            returnKeyType="done"
+                            value={prenom.value}
+                            onChangeText={(text) => updateField(this, prenom, text)}
+                            error={!!prenom.error}
+                            errorText={prenom.error}
+                          />
+                        )}
+          
+                        <MyInput
+                          label={isPro ? 'Dénomination sociale *' : 'Nom *'}
+                          returnKeyType="next"
+                          value={isPro ? denom.value : nom.value}
+                          onChangeText={(text) => {
+                            const name = isPro ? denom : nom;
+                            updateField(this, name, text);
+                          }}
+                          error={isPro ? !!denom.error : !!nom.error}
+                          errorText={isPro ? denom.error : nom.error}
+                        />
+          
+                        {isPro && (
+                          <MyInput
+                            label="Numéro siret *"
+                            returnKeyType="next"
+                            value={siret.value}
+                            onChangeText={(text) => updateField(this, siret, text)}
+                            error={!!siret.error}
+                            errorText={siret.error}
+                            render={(props) => (
+                              <TextInputMask
+                                {...props}
+                                mask="[000] [000] [000] [00000]"
+                              />
+                            )}
+                          />
+                        )}
 
             <AddressInput
                 onPress={() =>
@@ -165,7 +190,9 @@ export default class RegisterScreen extends Component {
                 keyboardType='phone-pad'
                 dataDetectorTypes='phoneNumber'
                 render={props => <TextInputMask {...props} mask="+33 [0] [00] [00] [00] [00]" />} />
-              <MyInput label="Email" value={email.value} onChangeText={(text) => updateField(this, email, text)} />
+
+              <MyInput label="Email" value={email.value} 
+              onChangeText={(text) => updateField(this, email, text)} />
 
               <MyInput
                 label="Mot de passe"

@@ -10,6 +10,8 @@ import { GuestTab, AppStack } from './StackNavigators';
 import { constants } from '../core/constants';
 import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
 
+
+
 const Drawer = createDrawerNavigator();
 const Stack = createNativeStackNavigator();
 
