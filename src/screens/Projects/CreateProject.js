@@ -1074,7 +1074,7 @@ class CreateProject extends Component {
 
         const onPressAttachment = (isUpload, DocumentId) => {
             if (isUpload) return
-            this.props.navigation.navigate('UploadDocument', { DocumentId })
+      this.props.navigation.navigate('DocumentsStack',{screen:'UploadDocument', params:{ DocumentId}})
         }
 
         const setRightIcon = (key) => {

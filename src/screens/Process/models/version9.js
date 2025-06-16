@@ -189,82 +189,7 @@ export const version9 = {
         phaseOrder: 2,
         followers: ['Admin', 'MAR'],
         steps: {
-            //##draft
-            // priorTechnicalVisit: {
-            //     title: 'Visite technique préalable',
-            //     instructions: '',
-            //     stepOrder: 1,
-            //     actions: [
-            //         {
-            //             id: 'createPriorTechnicalVisit',
-            //             title: 'Créer une visite technique préalable',
-            //             instructions: 'Créer une visite technique préalable',
-            //             actionOrder: 1,
-            //             responsable: "MAR",
-            //             verificationType: 'doc-creation',
-            //             collection: 'Agenda',
-            //             documentId: "",
-            //             params: {
-            //                 taskType: "Visite technique préalable",
-            //             },
-            //             queryFilters: buildQueryFilters(queryFilters_Agenda_Map("Visite technique préalable").create),
-            //             status: 'pending',
-            //         },
-            //         {
-            //             id: 'address',
-            //             title: 'Lieu du rendez-vous',
-            //             instructions: 'Lieu du rendez-vous',
-            //             actionOrder: 2,
-            //             responsable: "MAR",
-            //             verificationType: 'data-fill',
-            //             verificationValue: '',
-            //             properties: ['address', 'description'],
-            //             collection: 'Agenda',
-            //             documentId: "",
-            //             params: {
-            //                 taskType: "Visite technique préalable",
-            //             },
-            //             queryFilters: buildQueryFilters(queryFilters_Agenda_Map("Visite technique préalable").create),
-            //             status: 'pending',
-            //         },
-            //         {
-            //             id: 'rd1Choice',
-            //             title: 'Modifier le statut du rendez-vous 1',
-            //             instructions: 'Modifier le statut du rendez-vous 1',
-            //             actionOrder: 3,
-            //             responsable: "MAR",
-            //             verificationType: 'multiple-choices',
-            //             choices: [
-            //                 {
-            //                     label: 'Annuler',
-            //                     id: 'cancel',
-            //                     nextPhase: 'cancelProject',
-            //                     onSelectType: 'transition',
-            //                     commentRequired: true,
-            //                 },
-            //                 {
-            //                     label: 'Reporter',
-            //                     id: 'postpone',
-            //                     onSelectType: 'navigation'
-            //                 },
-            //                 {
-            //                     label: 'Confirmer',
-            //                     id: 'confirm',
-            //                     nextStep: 'housingActionFile',
-            //                     onSelectType: 'transition',
-            //                     operation: { type: 'update', field: 'status', value: 'Terminé' },
-            //                 },
-            //             ],
-            //             collection: 'Agenda',
-            //             documentId: "",
-            //             params: {
-            //                 taskType: "Visite technique préalable",
-            //             },
-            //             queryFilters: buildQueryFilters(queryFilters_Agenda_Map("Visite technique préalable").create),
-            //             status: 'pending',
-            //         },
-            //     ],
-            // },
+            
             housingActionFile: {
                 title: "Vérification de l'éligibilité du client",
                 instructions: '',
@@ -295,147 +220,127 @@ export const version9 = {
                             },
                         ],
                     },
-                    //  {
-                    //     id: 'ctrEligibilte',
-                    //     title: "Vérification de l'éligibilité du client, de la catégorie et des aides complémentaires effectuée?",
-                    //     instructions: '',
-                    //     actionOrder: 1,
-                    //     type: 'manual',
-                    //     verificationType: 'validation',
-                    //     comment: '',
-                    //     responsable: 'MAR',
-                    //     status: 'pending',
-                    //     nextPhase: 'contratCreation',
-                    // },
                 ],
             },
-            // eebCreation: {
-            //     title: "Création du contrat d’accompagnement ",
-            //     instructions: '',
-            //     stepOrder: 2,
-            //     actions: [
-            //         {
-            //             id: 'eebFileCreation',
-            //             title: 'Importer une fiche Étude et Évaluation des besoins',
-            //             instructions: 'Importer une fiche Étude et Évaluation des besoins',
-            //             actionOrder: 1,
-            //             responsable: "MAR",
-            //             verificationType: 'doc-creation',
-            //             collection: 'Documents',
-            //             documentId: "", //creation
-            //             params: {
-            //                 documentType: "Fiche EEB",
-            //             },
-            //             //Updates documentId to view the "onProgress uploading document"
-            //             queryFilters_onProgressUpload: buildQueryFilters(queryFilters_Documents_Map("Fiche EEB").create.onProgress),
-            //             //Verification:
-            //             queryFilters: buildQueryFilters(queryFilters_Documents_Map("Fiche EEB").create.onCreate),
-            //             status: 'pending',
-            //             nextStep: 'rd2Creation',
-            //         },
-            //     ]
-            // },
-            //   contratCreation: {
-            //     title: "Création du contrat d’accompagnement ",
-            //     instructions: '',
-            //     stepOrder: 2,
-            //     actions: [
-            //         {
-            //             id: 'contratCreation',
-            //             title: 'Importer le contrat d’accompagnement ',
-            //             instructions: 'Importer le contrat d’accompagnement ',
-            //             actionOrder: 1,
-            //             responsable: "MAR",
-            //             verificationType: 'doc-creation',
-            //             collection: 'Documents',
-            //             documentId: "", //creation
-            //             params: {
-            //                 documentType: "Fiche EEB",
-            //             },
-            //             //Updates documentId to view the "onProgress uploading document"
-            //             queryFilters_onProgressUpload: buildQueryFilters(queryFilters_Documents_Map("Fiche EEB").create.onProgress),
-            //             //Verification:
-            //             queryFilters: buildQueryFilters(queryFilters_Documents_Map("Fiche EEB").create.onCreate),
-            //             status: 'pending',
-            //             nextStep: 'rd2Creation',
-            //         },
-            //     ]
-            // },
-            energeticAuditCreation: {
-                title: "Importer le contrat d’accompagnement ",
+               energeticAuditCreation: {
+                title: "Importer le contrat d’accompagnement",
                 instructions: '',
-                stepOrder: 3,
+                stepOrder: 2,
                 actions: [
                     {
                         id: 'energeticAuditCreation',
-                        title: 'Importer le contrat d’accompagnement ',
-                        instructions: 'Importer le contrat d’accompagnement ',
+                        title: "Importer le contrat d’accompagnement   ",
+                        instructions: "Importer le contrat d’accompagnement ",
                         actionOrder: 1,
                         responsable: "MAR",
                         verificationType: 'doc-creation',
                         collection: 'Documents',
                         documentId: "", //creation
                         params: {
-                            documentType: "Contrat d’accompagnement",
+                            documentType: "Contrat CGU-CGV",
                         },
                         //Updates documentId to view the "onProgress uploading document"
-                        queryFilters_onProgressUpload: buildQueryFilters(queryFilters_Documents_Map("Contrat d’accompagnement").create.onProgress),
+                        queryFilters_onProgressUpload: buildQueryFilters(queryFilters_Documents_Map("Contrat CGU-CGV").create.onProgress),
                         //Verification:
-                        queryFilters: buildQueryFilters(queryFilters_Documents_Map("Contrat d’accompagnement").create.onCreate),
+                        queryFilters: buildQueryFilters(queryFilters_Documents_Map("Contrat CGU-CGV").create.onCreate),
                         status: 'pending',
-                        nextStep: 'rd2Creation',
+        
+                       nextStep: 'rd2Creation',
                     },
                 ]
             },
-            //##draft
-            // clientFolderCreation: {
-            //     title: "Dossier client",
-            //     instructions: '',
-            //     stepOrder: 4,
-            //     actions: [
-            //         {   //##new
-            //             id: 'eebFileCreation',
-            //             title: 'Créer un dossier client',
-            //             instructions: 'Importer un dossier client dûment rempli',
-            //             actionOrder: 1,
-            //             responsable: "MAR",
-            //             verificationType: 'doc-creation',
-            //             collection: 'Documents',
-            //             documentId: "", //creation
-            //             params: {
-            //                 documentType: "Dossier client",
-            //             },
-            //             //Updates documentId to view the "onProgress uploading document"
-            //             queryFilters_onProgressUpload: buildQueryFilters(queryFilters_Documents_Map("Dossier client").create.onProgress),
-            //             //Verification:
-            //             queryFilters: buildQueryFilters(queryFilters_Documents_Map("Dossier client").create.onCreate),
-            //             status: 'pending',
-            //             nextStep: 'rd2Creation',
-            //         },
-            //     ]
-            // },
-            rd2Creation: {
-                title: 'Initiation rendez-vous 2',
+          
+            
+           rd2Creation: {
+                title: 'Signature du contrat d’accompagnement',
+                instructions: '',
+                stepOrder: 3,
+                actions: [
+                   
+                    {   //##new
+                        id: 'rd2Creation',
+                        title: "Signer le contrat d’accompagnement",
+                        instructions: "Signature du contrat d’accompagnement par le client",
+                        actionOrder: 1,
+                        responsable: 'Client',
+                        verificationType: 'doc-creation',
+                        collection: 'Documents',
+                        documentId: "", //edit
+                        params: {
+                            documentType: "Contrat CGU-CGV",
+                            isSignature: true
+                        },
+                        //Updates documentId to view the "onProgress uploading document"
+                        queryFilters_onProgressUpload: buildQueryFilters(queryFilters_Documents_Map("Contrat CGU-CGV").sign.onProgress),
+                        //Verification:
+                        queryFilters: buildQueryFilters(queryFilters_Documents_Map("Contrat CGU-CGV").sign.onCreate),
+                        comment: "",
+                        choices: [
+                            {
+                                id: 'cancel',
+                                label: 'Annuler',
+                                nextPhase: 'cancelProject',
+                                onSelectType: 'transition',
+                                commentRequired: true,
+                            },
+                            {
+                                id: 'sign',
+                                label: "Signer le contrat d’accompagnement",
+                                onSelectType: 'navigation',
+                            },
+                        ],
+                        status: 'pending',
+                        nextStep: 'impDocClient',
+                       
+                    },
+                ],
+                 
+            },
+             impDocClient: {
+                title: "Importer les documents (RI ,PI...) ",
                 instructions: '',
                 stepOrder: 4,
                 actions: [
                     {
-                        id: 'rd2Creation',
-                        title: 'Créer un rendez-vous 2',
-                        instructions: '',
+                        id: 'impRI',
+                        title: "Importer le Relevé d'impôt  ",
+                        instructions: "Importer le Relevé d'impôt du client",
                         actionOrder: 1,
-                        responsable: "MAR",
+                        responsable: "Client",
                         verificationType: 'doc-creation',
-                        collection: 'Agenda',
-                        documentId: "",
+                        collection: 'Documents',
+                        documentId: "", //creation
                         params: {
-                            taskType: "Présentation étude",
+                            documentType: "Relevé d'impôt",
                         },
-                        queryFilters: buildQueryFilters(queryFilters_Agenda_Map("Présentation étude").create),
+                        //Updates documentId to view the "onProgress uploading document"
+                        queryFilters_onProgressUpload: buildQueryFilters(queryFilters_Documents_Map("Relevé d'impôt").create.onProgress),
+                        //Verification:
+                        queryFilters: buildQueryFilters(queryFilters_Documents_Map("Relevé d'impôt").create.onCreate),
                         status: 'pending',
-                        nextStep: 'quoteCreation',
-                    }
-                ],
+                        // nextStep: 'impAuditEnrg',
+                         nextPhase: 'rdn',
+                    },
+                    //  {
+                    //     id: 'impRI',
+                    //     title: "Importer le Relevé d'impôt  ",
+                    //     instructions: "Importer le Relevé d'impôt du client",
+                    //     actionOrder: 1,
+                    //     responsable: "Client",
+                    //     verificationType: 'doc-creation',
+                    //     collection: 'Documents',
+                    //     documentId: "", //creation
+                    //     params: {
+                    //         documentType: "Relevé d'impôt",
+                    //     },
+                    //     //Updates documentId to view the "onProgress uploading document"
+                    //     queryFilters_onProgressUpload: buildQueryFilters(queryFilters_Documents_Map("Relevé d'impôt").create.onProgress),
+                    //     //Verification:
+                    //     queryFilters: buildQueryFilters(queryFilters_Documents_Map("Relevé d'impôt").create.onCreate),
+                    //     status: 'pending',
+                    //     nextPhase: 'rdn',
+                    // },
+                ]
             },
             quoteCreation: {
                 title: "Création d'une offre précontractuelle",
