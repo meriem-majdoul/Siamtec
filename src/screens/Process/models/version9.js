@@ -318,54 +318,221 @@ export const version9 = {
                         //Verification:
                         queryFilters: buildQueryFilters(queryFilters_Documents_Map("Relevé d'impôt").create.onCreate),
                         status: 'pending',
-                        // nextStep: 'impAuditEnrg',
-                         nextPhase: 'rdn',
+                        nextStep: 'impAuditEnrg',
+                       
                     },
-                    //  {
-                    //     id: 'impRI',
-                    //     title: "Importer le Relevé d'impôt  ",
-                    //     instructions: "Importer le Relevé d'impôt du client",
-                    //     actionOrder: 1,
-                    //     responsable: "Client",
-                    //     verificationType: 'doc-creation',
-                    //     collection: 'Documents',
-                    //     documentId: "", //creation
-                    //     params: {
-                    //         documentType: "Relevé d'impôt",
-                    //     },
-                    //     //Updates documentId to view the "onProgress uploading document"
-                    //     queryFilters_onProgressUpload: buildQueryFilters(queryFilters_Documents_Map("Relevé d'impôt").create.onProgress),
-                    //     //Verification:
-                    //     queryFilters: buildQueryFilters(queryFilters_Documents_Map("Relevé d'impôt").create.onCreate),
-                    //     status: 'pending',
-                    //     nextPhase: 'rdn',
-                    // },
                 ]
             },
-            quoteCreation: {
-                title: "Création d'une offre précontractuelle",
+            impAuditEnrg: {
+                title: "Importer l’audit énergétique Par le MAR  ",
                 instructions: '',
                 stepOrder: 5,
                 actions: [
-                    {   //##new
-                        id: 'quoteCreation',
-                        title: 'Créer une offre précontractuelle',
-                        instructions: 'Créer une offre précontractuelle',
+                    {
+                        id: 'impAuditEnrg',
+                        title: "Importer l’audit énergétique  ",
+                        instructions: "Importer l’audit énergétique",
                         actionOrder: 1,
                         responsable: "MAR",
                         verificationType: 'doc-creation',
                         collection: 'Documents',
                         documentId: "", //creation
                         params: {
-                            documentType: "Offre précontractuelle",
+                            documentType: "Audit énergétique",
                         },
                         //Updates documentId to view the "onProgress uploading document"
-                        queryFilters_onProgressUpload: buildQueryFilters(queryFilters_Documents_Map("Offre précontractuelle").create.onProgress),
+                        queryFilters_onProgressUpload: buildQueryFilters(queryFilters_Documents_Map("Audit énergétique").create.onProgress),
                         //Verification:
-                        queryFilters: buildQueryFilters(queryFilters_Documents_Map("Offre précontractuelle").create.onCreate),
+                        queryFilters: buildQueryFilters(queryFilters_Documents_Map("Audit énergétique").create.onCreate),
                         status: 'pending',
-                        nextPhase: 'rdn',
-
+                        nextStep: 'impDevis',
+                        //   nextPhase: 'rdn',
+                    },
+                ]
+            },
+            impDevis: {
+                title: "Importer les devis des entreprises choisies",
+                instructions: '',
+                stepOrder: 6,
+                actions: [
+                    {
+                        id: 'impDevis',
+                        title: "Importer les devis  ",
+                        instructions: "Le client intègre les devis des entreprises qu’il a choisies ",
+                        actionOrder: 1,
+                        responsable: "Client",
+                        verificationType: 'doc-creation',
+                        collection: 'Documents',
+                        documentId: "", //creation
+                        params: {
+                            documentType: "Devis",
+                        },
+                        //Updates documentId to view the "onProgress uploading document"
+                        queryFilters_onProgressUpload: buildQueryFilters(queryFilters_Documents_Map("Devis").create.onProgress),
+                        //Verification:
+                        queryFilters: buildQueryFilters(queryFilters_Documents_Map("Devis").create.onCreate),
+                        status: 'pending',
+                           nextStep: 'valideteDevis',
+                    },
+                ]
+            },
+              valideteDevis: {
+                title: "Validation des devis du M.A.R ",
+                instructions: '',
+                stepOrder: 7,
+                actions: [ //Audit energetique
+                    {
+                        id: 'valideteDevis',
+                        title: "Valider des devis du client par la MAR ",
+                        instructions: '',
+                        actionOrder: 1,
+                        type: 'manual',
+                        comment: '',
+                        responsable: "MAR",
+                        status: 'pending',
+                        verificationType: 'multiple-choices',
+                        choices: [
+                            {
+                                label: 'Annuler',
+                                id: 'cancel',
+                                onSelectType: 'transition',
+                                // nextStep: 'cancelProject',
+                            },
+                            {
+                                label: 'Valider',
+                                id: 'confirm',
+                                onSelectType: 'validation',
+                                nextStep: 'valideteAD',
+                            },
+                        ],
+                    },
+                ],
+            },
+               valideteAD: {
+                title: "Validation de l'Audit définitif  ",
+                instructions: '',
+                stepOrder: 8,
+                actions: [ //Audit energetique
+                    {
+                        id: 'valideteAD',
+                        title: "Valider l'Audit définitif  ",
+                        instructions: '',
+                        actionOrder: 1,
+                        type: 'manual',
+                        comment: '',
+                        responsable: "MAR",
+                        status: 'pending',
+                        verificationType: 'multiple-choices',
+                        choices: [
+                            {
+                                label: 'Annuler',
+                                id: 'cancel',
+                                onSelectType: 'transition',
+                                // nextStep: 'cancelProject',
+                            },
+                            {
+                                label: 'Valider',
+                                id: 'confirm',
+                                onSelectType: 'validation',
+                                nextStep: 'valideteDoss',
+                            },
+                        ],
+                    },
+                ],
+            },
+              valideteDoss: {
+                title: "DOSSIER COMPLET – DÉPÔT AUPRÈS DES ORGANISMES   ",
+                instructions: '',
+                stepOrder: 9,
+                actions: [ //Audit energetique
+                    {
+                        id: 'valideteDoss',
+                        title: "DOSSIER COMPLET? – DÉPÔT AUPRÈS DES ORGANISMES ",
+                        instructions: '',
+                        actionOrder: 1,
+                        type: 'manual',
+                        comment: '',
+                        responsable: "MAR",
+                        status: 'pending',
+                        verificationType: 'multiple-choices',
+                        choices: [
+                            {
+                                label: 'Annuler',
+                                id: 'cancel',
+                                onSelectType: 'transition',
+                                // nextStep: 'cancelProject',
+                            },
+                            {
+                                label: 'Valider',
+                                id: 'confirm',
+                                onSelectType: 'validation',
+                               nextStep: 'AccAides',
+                            },
+                        ],
+                    },
+                ],
+            },
+              AccAides: {
+                title: "ACCORD DES AIDES",
+                instructions: '',
+                stepOrder: 10,
+                actions: [ //Audit energetique
+                    {
+                        id: 'AccAides',
+                        title: "ACCORD DES AIDES ",
+                        instructions: '',
+                        actionOrder: 1,
+                        type: 'manual',
+                        comment: '',
+                        responsable: "MAR",
+                        status: 'pending',
+                        verificationType: 'multiple-choices',
+                        choices: [
+                            {
+                                label: 'Annuler',
+                                id: 'cancel',
+                                onSelectType: 'transition',
+                                // nextStep: 'cancelProject',
+                            },
+                            {
+                                label: 'Valider',
+                                id: 'confirm',
+                                onSelectType: 'validation',
+                                nextStep: 'demandeAcpt',
+                            },
+                        ],
+                    },
+                ],
+            },
+              demandeAcpt: {
+                title: "Voulez-vous faire une demande d’acompte?",
+                instructions: '',
+                stepOrder: 11,
+                actions: [ //Audit energetique
+                    {
+                        id: 'demandeAcpt',
+                        title: "Voulez-vous faire une demande d’acompte?",
+                        instructions: '',
+                        actionOrder: 1,
+                        type: 'manual',
+                        comment: '',
+                        responsable: "Client",
+                        status: 'pending',
+                        verificationType: 'multiple-choices',
+                        choices: [
+                            {
+                                label: 'NON',
+                                id: 'cancel',
+                                onSelectType: 'transition',
+                                // nextStep: 'cancelProject',
+                            },
+                            {
+                                label: 'OUI',
+                                id: 'confirm',
+                                onSelectType: 'validation',
+                                // nextStep: 'energeticAuditCreation',
+                            },
+                        ],
                     },
                 ],
             },
