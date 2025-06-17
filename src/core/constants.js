@@ -21,13 +21,13 @@ export const latestProcessVersion = "version9"
 
 export const roles = [
     { id: 'admin', label: 'Admin', value: 'Admin', bool: 'isAdmin', level: 3 },
-    { id: 'backoffice', label: 'Back office', value: 'Back office', bool: 'isBackOffice', level: 3 },
+    // { id: 'backoffice', label: 'Back office', value: 'Back office', bool: 'isBackOffice', level: 3 },
     { id: 'dircom', label: 'MAR', value: 'MAR', bool: 'isDirCom', level: 2 },
-    { id: 'com', label: "Chargé d'affaires", value: "Chargé d'affaires", bool: 'isCom', level: 1 },
+    // { id: 'com', label: "Chargé d'affaires", value: "Chargé d'affaires", bool: 'isCom', level: 1 },
     { id: 'tech', label: 'Entreprise technique', value: 'Entreprise technique', bool: 'isTech', level: 1 },
-    { id: 'poseur', label: 'Équipe technique', value: 'Équipe technique', bool: 'isPoseur', level: 0 },
+    // { id: 'poseur', label: 'Équipe technique', value: 'Équipe technique', bool: 'isPoseur', level: 0 },
     { id: 'client', label: 'Client', value: 'Client', bool: 'isClient', level: -1 },
-    { id: 'designoffice', label: "Bureau d'étude", value: "Bureau d'étude", bool: 'isClient', level: -1 }
+    // { id: 'designoffice', label: "Bureau d'étude", value: "Bureau d'étude", bool: 'isClient', level: -1 }
 ]
 
 export const highRoles = ['admin', 'backoffice', 'dircom', 'tech']
