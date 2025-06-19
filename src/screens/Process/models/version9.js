@@ -218,6 +218,7 @@ export const version9 = {
                                 onSelectType: 'validation',
                                 nextStep: 'energeticAuditCreation',
                             },
+                            
                         ],
                     },
                 ],
@@ -530,7 +531,39 @@ export const version9 = {
                                 label: 'OUI',
                                 id: 'confirm',
                                 onSelectType: 'validation',
-                                // nextStep: 'energeticAuditCreation',
+                                nextStep: 'DemTrv',
+                            },
+                        ],
+                    },
+                ],
+            },
+              DemTrv: {
+                title: "DÉMARRAGE DES TRAVAUX",
+                instructions: '',
+                stepOrder: 12,
+                actions: [ //Audit energetique
+                    {
+                        id: 'DemTrv',
+                        title: "DÉMARRAGE DES TRAVAUX",
+                        instructions: '',
+                        actionOrder: 1,
+                        type: 'manual',
+                        comment: '',
+                        responsable: "Client",
+                        status: 'pending',
+                        verificationType: 'multiple-choices',
+                        choices: [
+                            {
+                                label: 'Annuler',
+                                id: 'cancel',
+                                onSelectType: 'transition',
+                                // nextStep: 'cancelProject',
+                            },
+                            {
+                                label: 'Valider',
+                                id: 'confirm',
+                                onSelectType: 'validation',
+                                // nextStep: 'demandeAcpt',
                             },
                         ],
                     },
@@ -2303,7 +2336,6 @@ export const version9 = {
             'Admin',
             'MAR',
             'Entreprise technique',
-            'Équipe technique',
         ],
         steps: {
             resumeProject: {

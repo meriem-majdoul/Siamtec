@@ -1636,7 +1636,14 @@ class StepsForm extends Component {
           <View style={{ flex: 1, padding: theme.padding }}>
             {/* <Text style={[theme.customFontMSsemibold.body, { opacity: 0.8, marginBottom: 16 }]}>{message3}</Text>
                         {this.renderTrackingSteps()} */}
-
+          <Text style={[{ opacity: 0.8, marginBottom: 16, color:'black' }]}>Montant: {estimation} Є</Text>
+          <Text style={[{ opacity: 0.8, marginBottom: 16, color:'black' }]}>Produits: </Text>
+            {products.map((product, index) => (
+              <Text key={index} style={[{ opacity: 0.8, marginBottom: 16, color:'black' }]}>
+                - {product}
+              </Text>
+            ))}
+            <Text style={[{ opacity: 0.8, marginBottom: 16, color:'black' }]}>Choisissez un MAR pour créer votre projet: </Text>
             <ItemPicker
                 onPress={() =>
                     this.props.navigation.navigate('AgendaStack', {
