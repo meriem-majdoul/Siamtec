@@ -97,6 +97,7 @@ class StepsForm extends Component {
     this.submitContactForm = this.submitContactForm.bind(this);
     this.myAlert = myAlert.bind(this);
     this.refreshComContact = refreshComContact.bind(this)
+    
 
   
     BackHandler.addEventListener(
@@ -150,6 +151,7 @@ class StepsForm extends Component {
       totalImagesSize: 0,
       isTotalImagesSizeExceeded: false,
       comContact: { id: '', fullName: '', email: '', role: '', error: '' },
+       projectName: '',
     };
 
     this.state = this.initialState;
@@ -1279,7 +1281,9 @@ class StepsForm extends Component {
       }
     });
   }
-
+  handleProjectNameChange(value) {
+    this.setState({ projectName: value });
+  }
   // Function to create a project
   async createProject(DocId, form) {
 
@@ -1298,7 +1302,7 @@ class StepsForm extends Component {
   
     // Mapper les champs
       const project = {
-        name: form.nameSir || form.nameMiss || "Nouveau Projet",
+        name: this.state.projectName || form.nameSir || form.nameMiss || "Nouveau Projet",
         description: "Projet généré à partir de la simulation",
         address: clientData?.address || "",
         client: {
@@ -1643,6 +1647,17 @@ class StepsForm extends Component {
                 - {product}
               </Text>
             ))}
+
+            <Text style={[{ opacity: 0.8, marginBottom: 6, color: 'black' }]}>
+              Nom de projet:
+            </Text>
+            <TextInput
+             style={[{marginBottom: 16 }]}
+                 placeholder="Entrez le nom du projet"
+              placeholderTextColor="#888"
+             value={this.state.projectName}
+                onChangeText={(value) => this.handleProjectNameChange(value)}
+            />
             <Text style={[{ opacity: 0.8, marginBottom: 16, color:'black' }]}>Choisissez un MAR pour créer votre projet: </Text>
             <ItemPicker
                 onPress={() =>
