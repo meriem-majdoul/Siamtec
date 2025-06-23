@@ -499,9 +499,115 @@ export const version9 = {
                                 label: 'Valider',
                                 id: 'confirm',
                                 onSelectType: 'validation',
-                                nextStep: 'demandeAcpt',
+                                nextStep: 'paymentStatus',
                             },
                         ],
+                    },
+                ],
+            },
+              
+           
+            paymentStatus: {
+                //conversion
+                title: 'Demande d’acompte',
+                instructions: '',
+                stepOrder: 11,
+                actions: [
+                   
+                    {
+                        id: 'billingAmount',
+                        title: 'Voulez-vous faire une demande d’acompte?',
+                        instructions: "Veuillez saisir le montant à payer.",
+                        actionOrder: 1,
+                        //Verification
+                        collection: 'Projects',
+                        documentId: '', //#dynamic
+                        properties: ['acomptes', "amount"],
+                        params: {
+                            screenParams: {
+                                sections: { billing: { billAmount: true } },
+                            }
+                        },
+                        verificationType: 'multiple-choices',
+                        choices: [
+                            {
+                                id: 'confirm',
+                                label: 'Continuer',
+                                onSelectType: 'validation',
+                            },
+                            {
+                                id: 'edit',
+                                label: 'Modifier',
+                                onSelectType: 'navigation'
+                            },
+                        ],
+                    
+                        screenPush: true,
+                        //Comment
+                        comment: '',
+                        //Verification
+                        type: 'auto',
+                        verificationValue: '',
+                        //Others
+                        responsable: 'Client',
+                        status: 'pending',
+                        nextStep: 'emailBill',
+                    },
+                ],
+            },
+            emailBill: {
+                title: 'Envoi facture par mail',
+                instructions: '',
+                stepOrder: 14,
+                actions: [
+                    //task: verify if bill & attestation fluide are still existing
+                    {
+                        id: 'emailBill',
+                        title: 'Envoi automatique de la facture finale + attestation fluide par mail en cours...',
+                        instructions: '',
+                        actionOrder: 1,
+                        collection: 'Projects',
+                        documentId: '', //#dynamic
+                        queryFilters: [{ filter: 'project.id', operation: '==', value: '' }],
+                        properties: ['finalBillSentViaEmail'],
+                        status: 'pending',
+                        verificationType: 'data-fill',
+                        verificationValue: false,
+                        cloudFunction: {
+                            endpoint: 'sendEmail',
+                            queryAttachmentsUrls: {
+                                Facture: [
+                                    { filter: 'project.id', operation: '==', value: '' },
+                                    { filter: 'type', operation: '==', value: 'Facture' },
+                                    {
+                                        filter: 'attachment.downloadURL',
+                                        operation: '!=',
+                                        value: '',
+                                    },
+                                ],
+                                'Attestation fluide': [
+                                    { filter: 'project.id', operation: '==', value: '' },
+                                    {
+                                        filter: 'type',
+                                        operation: '==',
+                                        value: 'Attestation fluide',
+                                    },
+                                    {
+                                        filter: 'attachment.downloadURL',
+                                        operation: '!=',
+                                        value: '',
+                                    },
+                                ],
+                            },
+                            params: {
+                                subject: 'Facture finale et attestation fluide',
+                                dest: 'majdoulmeriem2001@gmail.com', //#task: change it
+                                projectId: '',
+                                attachments: [],
+                            },
+                        },
+                       // responsable: 'Équipe technique',
+                        nextStep: 'clientReview',
                     },
                 ],
             },
@@ -517,7 +623,47 @@ export const version9 = {
                         actionOrder: 1,
                         type: 'manual',
                         comment: '',
+                        status: 'pending',
                         responsable: "Client",
+                        verificationType: 'data-fill',
+                        verificationValue: '',
+                        collection: 'Projects',
+                        documentId: '', //#dynamic
+                        properties: ['paiement'],
+                        status: 'pending',
+                         nextStep: 'validePaiem',
+                    
+                        
+                        // choices: [
+                        //     {
+                        //         label: 'NON',
+                        //         id: 'cancel',
+                        //         onSelectType: 'transition',
+                        //         // nextStep: 'cancelProject',
+                        //     },
+                        //     {
+                        //         label: 'OUI',
+                        //         id: 'confirm',
+                        //         onSelectType: 'validation',
+                        //         nextStep: 'choixAccpt',
+                        //     },
+                        // ],
+                    },
+                ],
+            },
+             validePaiem: {
+                title: "Choisir un accompte",
+                instructions: '',
+                stepOrder: 12,
+                actions: [ //Audit energetique
+                    {
+                        id: 'validePaiem',
+                        title: "Vous avez bien reçu le paiement?",
+                        instructions: '',
+                        actionOrder: 1,
+                        type: 'manual',
+                        comment: '',
+                        responsable: "MAR",
                         status: 'pending',
                         verificationType: 'multiple-choices',
                         choices: [
@@ -540,7 +686,7 @@ export const version9 = {
               DemTrv: {
                 title: "DÉMARRAGE DES TRAVAUX",
                 instructions: '',
-                stepOrder: 12,
+                stepOrder: 13,
                 actions: [ //Audit energetique
                     {
                         id: 'DemTrv',
@@ -1770,179 +1916,68 @@ export const version9 = {
             //         //#task: Add last action multi-choice (contrat "en cours" or "terminé")
             //     ],
             // },
-            facturationOption1: {
-                //no conversion
-                title: 'Facturation',
-                instructions: '',
-                stepOrder: 8,
-                actions: [
-                    {
-                        id: 'billCreation',
-                        title: 'Créer une facture',
-                        instructions: 'Créer une facture',
-                        actionOrder: 1,
-                        responsable: 'Équipe technique',
-                        verificationType: 'doc-creation',
-                        collection: 'Documents',
-                        documentId: "", //creation
-                        params: {
-                            documentType: "Facture",
-                        },
-                        //Updates documentId to view the "onProgress uploading document"
-                        queryFilters_onProgressUpload: buildQueryFilters(queryFilters_Documents_Map("Facture").create.onProgress),
-                        //Verification:
-                        queryFilters: buildQueryFilters(queryFilters_Documents_Map("Facture").create.onCreate),
-                        status: 'pending',
-                        nextStep: 'paymentStatus',
-                    }
-                    //##done:task: Delete "Signer la facture"
-                ],
-            },
-            paymentStatus: {
-                title: 'Finalisation de la facturation',
-                instructions: '',
-                stepOrder: 9,
-                actions: [
-                    {
-                        id: 'billingAmount',
-                        title: 'Saisir les montants restant à payer par les aides',
-                        instructions: "Veuillez saisir les montants restant à payer par les aides",
-                        actionOrder: 1,
-                        collection: 'Projects',
-                        params: {
-                            screenParams: {
-                                sections: { billing: { billAids: true } },
-                            }
-                        },
-                        verificationType: 'multiple-choices',
-                        choices: [
-                            {
-                                id: 'confirm',
-                                label: 'Continuer',
-                                onSelectType: 'validation',
-                            },
-                            {
-                                id: 'edit',
-                                label: 'Modifier',
-                                onSelectType: 'navigation'
-                            },
-                        ],
-                        screenPush: true,
-                        //Comment
-                        comment: '',
-                        //Others
-                        responsable: 'Entreprise technique',
-                        status: 'pending',
-                    },
-                    {
-                        id: 'advValidation',
-                        title: "Validation de la facture par le DAF", //#task allow adv to view Offre précontractuelle before validating (multi-choice: voir/valider)
-                        instructions: '',
-                        actionOrder: 2,
-                        type: 'manual',
-                        comment: '',
-                        responsable: 'Admin',
-                        status: 'pending',
-                        verificationType: 'multiple-choices',
-                        choices: [
-                            {
-                                label: 'Annuler',
-                                id: 'cancel',
-                                nextPhase: 'cancelProject',
-                                onSelectType: 'transition',
-                                commentRequired: true,
-                            },
-                            {
-                                label: 'Valider',
-                                id: 'confirm',
-                                onSelectType: 'validation'
-                            },
-                        ],
-                    },
-                    //##done:task: Ajouter montant HT + TTC ??
-                    {
-                        id: 'billingAmount',
-                        title: 'Saisir le montant de la facture',
-                        instructions: "Veuillez saisir le montant HT et TTC de la facture.",
-                        actionOrder: 3,
-                        //Verification
-                        collection: 'Projects',
-                        documentId: '', //#dynamic
-                        properties: ['bill', "amount"],
-                        params: {
-                            screenParams: {
-                                sections: { billing: { billAmount: true } },
-                            }
-                        },
-                        screenPush: true,
-                        //Comment
-                        comment: '',
-                        //Verification
-                        type: 'auto',
-                        verificationType: 'data-fill',
-                        verificationValue: '',
-                        //Others
-                        responsable: 'Équipe technique',
-                        status: 'pending',
-                        nextStep: 'clientReview',
-                    },
-                ]
-            },
+            // facturationOption1: {
+            //     //no conversion
+            //     title: 'Facturation',
+            //     instructions: '',
+            //     stepOrder: 8,
+            //     actions: [
+            //         {
+            //             id: 'billCreation',
+            //             title: 'Créer une facture',
+            //             instructions: 'Créer une facture',
+            //             actionOrder: 1,
+            //             responsable: 'Équipe technique',
+            //             verificationType: 'doc-creation',
+            //             collection: 'Documents',
+            //             documentId: "", //creation
+            //             params: {
+            //                 documentType: "Facture",
+            //             },
+            //             //Updates documentId to view the "onProgress uploading document"
+            //             queryFilters_onProgressUpload: buildQueryFilters(queryFilters_Documents_Map("Facture").create.onProgress),
+            //             //Verification:
+            //             queryFilters: buildQueryFilters(queryFilters_Documents_Map("Facture").create.onCreate),
+            //             status: 'pending',
+            //             nextStep: 'paymentStatus',
+            //         }
+            //         //##done:task: Delete "Signer la facture"
+            //     ],
+            // },
             // paymentStatus: {
-            //     //conversion
             //     title: 'Finalisation de la facturation',
             //     instructions: '',
             //     stepOrder: 9,
             //     actions: [
             //         {
-            //             //##task: add multiCommentsPicker
-            //             id: 'paymentStatus',
-            //             title: 'Modifier le statut du paiement',
-            //             instructions: '',
+            //             id: 'billingAmount',
+            //             title: 'Saisir les montants restant à payer par les aides',
+            //             instructions: "Veuillez saisir les montants restant à payer par les aides",
             //             actionOrder: 1,
-            //             type: 'manual',
+            //             collection: 'Projects',
+            //             params: {
+            //                 screenParams: {
+            //                     sections: { billing: { billAids: true } },
+            //                 }
+            //             },
             //             verificationType: 'multiple-choices',
-            //             onSelectType: 'multiCommentsPicker', //only in multiCommentsPicker
-            //             comment: '',
             //             choices: [
             //                 {
-            //                     label: 'Attente paiement client',
-            //                     id: 'pending',
-            //                     onSelectType: 'multiCommentsPicker',
-            //                     selected: false,
-            //                     stay: true,
-            //                 },
-            //                 {
-            //                     label: 'Attente paiement financement',
-            //                     id: 'pending',
-            //                     onSelectType: 'multiCommentsPicker',
-            //                     selected: false,
-            //                     stay: true,
-            //                 },
-            //                 //##task: Diviser Attente paiement aide en MPR et CEE
-            //                 {
-            //                     label: 'Attente paiement aide MPR',
-            //                     id: 'pending',
-            //                     onSelectType: 'multiCommentsPicker',
-            //                     selected: false,
-            //                     stay: true,
-            //                 },
-            //                 {
-            //                     label: 'Attente paiement aide CEE',
-            //                     id: 'pending',
-            //                     onSelectType: 'multiCommentsPicker',
-            //                     selected: false,
-            //                     stay: true,
-            //                 },
-            //                 {
-            //                     label: 'Payé',
             //                     id: 'confirm',
-            //                     onSelectType: 'multiCommentsPicker',
-            //                     selected: false,
-            //                     stay: false,
+            //                     label: 'Continuer',
+            //                     onSelectType: 'validation',
+            //                 },
+            //                 {
+            //                     id: 'edit',
+            //                     label: 'Modifier',
+            //                     onSelectType: 'navigation'
             //                 },
             //             ],
-            //             responsable: 'Équipe technique',
+            //             screenPush: true,
+            //             //Comment
+            //             comment: '',
+            //             //Others
+            //             responsable: 'Entreprise technique',
             //             status: 'pending',
             //         },
             //         {
@@ -1951,9 +1986,8 @@ export const version9 = {
             //             instructions: '',
             //             actionOrder: 2,
             //             type: 'manual',
-            //             //verificationType: 'validation',
             //             comment: '',
-            //             responsable: 'DAF',
+            //             responsable: 'Admin',
             //             status: 'pending',
             //             verificationType: 'multiple-choices',
             //             choices: [
@@ -1964,7 +1998,11 @@ export const version9 = {
             //                     onSelectType: 'transition',
             //                     commentRequired: true,
             //                 },
-            //                 { label: 'Valider', id: 'confirm', onSelectType: 'validation' },
+            //                 {
+            //                     label: 'Valider',
+            //                     id: 'confirm',
+            //                     onSelectType: 'validation'
+            //                 },
             //             ],
             //         },
             //         //##done:task: Ajouter montant HT + TTC ??
@@ -1992,66 +2030,174 @@ export const version9 = {
             //             //Others
             //             responsable: 'Équipe technique',
             //             status: 'pending',
-            //             nextStep: 'emailBill',
+            //             nextStep: 'clientReview',
+            //         },
+            //     ]
+            // },
+            // // paymentStatus: {
+            // //     //conversion
+            // //     title: 'Finalisation de la facturation',
+            // //     instructions: '',
+            // //     stepOrder: 9,
+            // //     actions: [
+            // //         {
+            // //             //##task: add multiCommentsPicker
+            // //             id: 'paymentStatus',
+            // //             title: 'Modifier le statut du paiement',
+            // //             instructions: '',
+            // //             actionOrder: 1,
+            // //             type: 'manual',
+            // //             verificationType: 'multiple-choices',
+            // //             onSelectType: 'multiCommentsPicker', //only in multiCommentsPicker
+            // //             comment: '',
+            // //             choices: [
+            // //                 {
+            // //                     label: 'Attente paiement client',
+            // //                     id: 'pending',
+            // //                     onSelectType: 'multiCommentsPicker',
+            // //                     selected: false,
+            // //                     stay: true,
+            // //                 },
+            // //                 {
+            // //                     label: 'Attente paiement financement',
+            // //                     id: 'pending',
+            // //                     onSelectType: 'multiCommentsPicker',
+            // //                     selected: false,
+            // //                     stay: true,
+            // //                 },
+            // //                 //##task: Diviser Attente paiement aide en MPR et CEE
+            // //                 {
+            // //                     label: 'Attente paiement aide MPR',
+            // //                     id: 'pending',
+            // //                     onSelectType: 'multiCommentsPicker',
+            // //                     selected: false,
+            // //                     stay: true,
+            // //                 },
+            // //                 {
+            // //                     label: 'Attente paiement aide CEE',
+            // //                     id: 'pending',
+            // //                     onSelectType: 'multiCommentsPicker',
+            // //                     selected: false,
+            // //                     stay: true,
+            // //                 },
+            // //                 {
+            // //                     label: 'Payé',
+            // //                     id: 'confirm',
+            // //                     onSelectType: 'multiCommentsPicker',
+            // //                     selected: false,
+            // //                     stay: false,
+            // //                 },
+            // //             ],
+            // //             responsable: 'Équipe technique',
+            // //             status: 'pending',
+            // //         },
+            // //         {
+            // //             id: 'advValidation',
+            // //             title: "Validation de la facture par le DAF", //#task allow adv to view Offre précontractuelle before validating (multi-choice: voir/valider)
+            // //             instructions: '',
+            // //             actionOrder: 2,
+            // //             type: 'manual',
+            // //             //verificationType: 'validation',
+            // //             comment: '',
+            // //             responsable: 'DAF',
+            // //             status: 'pending',
+            // //             verificationType: 'multiple-choices',
+            // //             choices: [
+            // //                 {
+            // //                     label: 'Annuler',
+            // //                     id: 'cancel',
+            // //                     nextPhase: 'cancelProject',
+            // //                     onSelectType: 'transition',
+            // //                     commentRequired: true,
+            // //                 },
+            // //                 { label: 'Valider', id: 'confirm', onSelectType: 'validation' },
+            // //             ],
+            // //         },
+            // //         //##done:task: Ajouter montant HT + TTC ??
+            // //         {
+            // //             id: 'billingAmount',
+            // //             title: 'Saisir le montant de la facture',
+            // //             instructions: "Veuillez saisir le montant HT et TTC de la facture.",
+            // //             actionOrder: 3,
+            // //             //Verification
+            // //             collection: 'Projects',
+            // //             documentId: '', //#dynamic
+            // //             properties: ['bill', "amount"],
+            // //             params: {
+            // //                 screenParams: {
+            // //                     sections: { billing: { billAmount: true } },
+            // //                 }
+            // //             },
+            // //             screenPush: true,
+            // //             //Comment
+            // //             comment: '',
+            // //             //Verification
+            // //             type: 'auto',
+            // //             verificationType: 'data-fill',
+            // //             verificationValue: '',
+            // //             //Others
+            // //             responsable: 'Équipe technique',
+            // //             status: 'pending',
+            // //             nextStep: 'emailBill',
+            // //         },
+            // //     ],
+            // // },
+            // emailBill: {
+            //     title: 'Envoi facture par mail',
+            //     instructions: '',
+            //     stepOrder: 10,
+            //     actions: [
+            //         //task: verify if bill & attestation fluide are still existing
+            //         {
+            //             id: 'emailBill',
+            //             title: 'Envoi automatique de la facture finale + attestation fluide par mail en cours...',
+            //             instructions: '',
+            //             actionOrder: 1,
+            //             collection: 'Projects',
+            //             documentId: '', //#dynamic
+            //             queryFilters: [{ filter: 'project.id', operation: '==', value: '' }],
+            //             properties: ['finalBillSentViaEmail'],
+            //             status: 'pending',
+            //             verificationType: 'data-fill',
+            //             verificationValue: false,
+            //             cloudFunction: {
+            //                 endpoint: 'sendEmail',
+            //                 queryAttachmentsUrls: {
+            //                     Facture: [
+            //                         { filter: 'project.id', operation: '==', value: '' },
+            //                         { filter: 'type', operation: '==', value: 'Facture' },
+            //                         {
+            //                             filter: 'attachment.downloadURL',
+            //                             operation: '!=',
+            //                             value: '',
+            //                         },
+            //                     ],
+            //                     'Attestation fluide': [
+            //                         { filter: 'project.id', operation: '==', value: '' },
+            //                         {
+            //                             filter: 'type',
+            //                             operation: '==',
+            //                             value: 'Attestation fluide',
+            //                         },
+            //                         {
+            //                             filter: 'attachment.downloadURL',
+            //                             operation: '!=',
+            //                             value: '',
+            //                         },
+            //                     ],
+            //                 },
+            //                 params: {
+            //                     subject: 'Facture finale et attestation fluide',
+            //                     dest: 'sa.lyoussi@gmail.com', //#task: change it
+            //                     projectId: '',
+            //                     attachments: [],
+            //                 },
+            //             },
+            //            // responsable: 'Équipe technique',
+            //             nextStep: 'clientReview',
             //         },
             //     ],
             // },
-            emailBill: {
-                title: 'Envoi facture par mail',
-                instructions: '',
-                stepOrder: 10,
-                actions: [
-                    //task: verify if bill & attestation fluide are still existing
-                    {
-                        id: 'emailBill',
-                        title: 'Envoi automatique de la facture finale + attestation fluide par mail en cours...',
-                        instructions: '',
-                        actionOrder: 1,
-                        collection: 'Projects',
-                        documentId: '', //#dynamic
-                        queryFilters: [{ filter: 'project.id', operation: '==', value: '' }],
-                        properties: ['finalBillSentViaEmail'],
-                        status: 'pending',
-                        verificationType: 'data-fill',
-                        verificationValue: false,
-                        cloudFunction: {
-                            endpoint: 'sendEmail',
-                            queryAttachmentsUrls: {
-                                Facture: [
-                                    { filter: 'project.id', operation: '==', value: '' },
-                                    { filter: 'type', operation: '==', value: 'Facture' },
-                                    {
-                                        filter: 'attachment.downloadURL',
-                                        operation: '!=',
-                                        value: '',
-                                    },
-                                ],
-                                'Attestation fluide': [
-                                    { filter: 'project.id', operation: '==', value: '' },
-                                    {
-                                        filter: 'type',
-                                        operation: '==',
-                                        value: 'Attestation fluide',
-                                    },
-                                    {
-                                        filter: 'attachment.downloadURL',
-                                        operation: '!=',
-                                        value: '',
-                                    },
-                                ],
-                            },
-                            params: {
-                                subject: 'Facture finale et attestation fluide',
-                                dest: 'sa.lyoussi@gmail.com', //#task: change it
-                                projectId: '',
-                                attachments: [],
-                            },
-                        },
-                       // responsable: 'Équipe technique',
-                        nextStep: 'clientReview',
-                    },
-                ],
-            },
             clientReview: {
                 title: 'Satisfaction client',
                 instructions:

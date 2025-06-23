@@ -32,7 +32,7 @@ const states = [
     { label: 'Annulé', value: 'Annulé' },
 ]
 
-const properties = ["client", "name", "note", "address", "state", "step", "color", "comContact", "techContact", "intervenant", "bill", "attachments", "process", "createdBy", "createdAt", "editedBy", "editedAt"]
+const properties = ["client", "name", "note", "address", "state", "step", "color", "comContact", "techContact", "intervenant", "bill", "attachments", "acomptes","process", "createdBy", "createdAt", "editedBy", "editedAt","acomptes"]
 
 const sectionsModels = {
     project: {
@@ -102,7 +102,8 @@ const sectionsModels = {
             fields: {
                 notes: { show: false }
             }
-        }
+        },
+        
     }
 }
 
@@ -263,6 +264,10 @@ class CreateProject extends Component {
                     email: '',
                     role: ''
                 }
+            },
+            acomptes:{
+                amount: '',
+                status:false,
             },
             //logs (Auto-Gen)
             createdAt: '',
@@ -509,7 +514,7 @@ class CreateProject extends Component {
     }
 
     // Prepare project data
-    const props = ["name", "client", "note", "state", "step", "address", "color", "bill", "comContact", "techContact", "intervenant"];
+    const props = ["name", "client", "note", "state", "step", "address", "color", "bill","acomptes" ,"comContact", "techContact", "intervenant"];
     const project = unformatDocument(this.state, props, this.props.currentUser, this.isEdit);
     project.attachments = attachments;
     project.processVersion = latestProcessVersion;
@@ -792,6 +797,26 @@ class CreateProject extends Component {
                 // error={!!price.error}
                 // errorText={price.error}
                 />
+            </View>
+        )
+    }
+     renderacompteAmountField(acompte, canWrite) {
+        return (
+            <View style={{ flex: 1 }}>
+                <MyInput
+                    label="Montant HT à payer (€)*"
+                    returnKeyType="done"
+                    keyboardType='numeric'
+                    value={acompte.amount}
+                    onChangeText={amount => {
+                        acompte.amount = amount
+                        this.setState({ acompte })
+                    }}
+                    editable={canWrite && this.isCurrentHighRole}
+                // error={!!price.error}
+                // errorText={price.error}
+                />
+              
             </View>
         )
     }
@@ -1280,6 +1305,22 @@ class CreateProject extends Component {
             />
         )
     }
+      renderAcomptesSection(showFields, isExpanded, canWrite) {
+        return (
+            <FormSection
+                sectionTitle='Acomptes'
+                sectionIcon={faFolder}
+                isExpanded={isExpanded}
+                onPressSection={() => this.toggleSection("acomptes")}
+                containerStyle={{ marginBottom: 1 }}
+                form={
+                    <View style={{ flex: 1 }}>
+                      {showFields.acompteAmount.show && this.renderAcompteAmountField(acompte, canWrite)}
+                    </View>
+                }
+            />
+        )
+    }
 
     renderBillingSection(showFields, isExpanded, bill, canWrite) {
         return (
@@ -1441,7 +1482,9 @@ class CreateProject extends Component {
                 {sections["billing"].show &&
                     this.renderBillingSection(sections["billing"].fields, sections["billing"].isExpanded, bill, canWrite)
                 }
-
+                {sections["acomptes"].show &&
+                    this.renderAcomptesSection(sections["acomptes"].fields, sections["acomptes"].isExpanded, canWrite)
+                }
                 {sections["pictures"].show &&
                     this.renderPicturesSection(sections["pictures"].fields, sections["pictures"].isExpanded, loading, canWrite, isConnected)
                 }
