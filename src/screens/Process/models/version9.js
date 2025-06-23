@@ -522,10 +522,10 @@ export const version9 = {
                         //Verification
                         collection: 'Projects',
                         documentId: '', //#dynamic
-                        properties: ['acomptes', "amount"],
+                        properties: ['acomptes', "acompteAmount"],
                         params: {
                             screenParams: {
-                                sections: { billing: { billAmount: true } },
+                                sections: { acomptes: { acompteAmount: true } },
                             }
                         },
                         verificationType: 'multiple-choices',
@@ -538,7 +538,8 @@ export const version9 = {
                             {
                                 id: 'edit',
                                 label: 'Modifier',
-                                onSelectType: 'navigation'
+                                onSelectType: 'navigation',
+                                nextStep: 'DemTrv',
                             },
                         ],
                     
@@ -551,7 +552,7 @@ export const version9 = {
                         //Others
                         responsable: 'Client',
                         status: 'pending',
-                        nextStep: 'emailBill',
+                        
                     },
                 ],
             },

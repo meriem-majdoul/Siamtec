@@ -32,7 +32,7 @@ const states = [
     { label: 'Annulé', value: 'Annulé' },
 ]
 
-const properties = ["client", "name", "note", "address", "state", "step", "color", "comContact", "techContact", "intervenant", "bill", "attachments", "acomptes","process", "createdBy", "createdAt", "editedBy", "editedAt","acomptes"]
+const properties = ["client", "name", "note", "address", "state", "step", "color", "comContact", "techContact", "intervenant", "bill", "attachments", "acomptes","process", "createdBy", "createdAt", "editedBy", "editedAt"]
 
 const sectionsModels = {
     project: {
@@ -89,6 +89,13 @@ const sectionsModels = {
             fields: {
                 billAmount: { show: false },
                 billAids: { show: false },
+            }
+        },
+         acomptes: {
+            isExpanded: false,
+            show: false,
+            fields: {
+                acompteAmount: { show: false },
             }
         },
         pictures: {
@@ -215,6 +222,13 @@ class CreateProject extends Component {
                     billAids: { show: true },
                 }
             },
+             acomptes: {
+            isExpanded: false,
+            show: false,
+            fields: {
+                acompteAmount: { show: false },
+            }
+        },
             pictures: {
                 isExpanded: !this.isEdit,
                 show: true,
@@ -266,7 +280,7 @@ class CreateProject extends Component {
                 }
             },
             acomptes:{
-                amount: '',
+                acompteAmount: '',
                 status:false,
             },
             //logs (Auto-Gen)
@@ -800,19 +814,19 @@ class CreateProject extends Component {
             </View>
         )
     }
-     renderacompteAmountField(acompte, canWrite) {
+     renderAcompteAmountField(acomptes, canWrite) {
         return (
             <View style={{ flex: 1 }}>
                 <MyInput
                     label="Montant HT à payer (€)*"
                     returnKeyType="done"
                     keyboardType='numeric'
-                    value={acompte.amount}
-                    onChangeText={amount => {
-                        acompte.amount = amount
-                        this.setState({ acompte })
+                    value={acomptes.acompteAmount}
+                    onChangeText={acompteAmount => {
+                        acomptes.acompteAmount = acompteAmount
+                        this.setState({ acomptes })
                     }}
-                    editable={canWrite && this.isCurrentHighRole}
+                    editable={canWrite}
                 // error={!!price.error}
                 // errorText={price.error}
                 />
@@ -871,6 +885,8 @@ class CreateProject extends Component {
             </View>
         )
     }
+
+  
 
     renderNotesField(canWrite) {
         const { note } = this.state
@@ -1305,7 +1321,7 @@ class CreateProject extends Component {
             />
         )
     }
-      renderAcomptesSection(showFields, isExpanded, canWrite) {
+      renderAcomptesSection(showFields, isExpanded,acomptes, canWrite) {
         return (
             <FormSection
                 sectionTitle='Acomptes'
@@ -1315,7 +1331,7 @@ class CreateProject extends Component {
                 containerStyle={{ marginBottom: 1 }}
                 form={
                     <View style={{ flex: 1 }}>
-                      {showFields.acompteAmount.show && this.renderAcompteAmountField(acompte, canWrite)}
+                      {showFields.acompteAmount.show && this.renderAcompteAmountField(acomptes, canWrite)}
                     </View>
                 }
             />
@@ -1339,6 +1355,7 @@ class CreateProject extends Component {
             />
         )
     }
+
 
     renderPicturesSection(showFields, isExpanded, loading, canWrite, isConnected) {
 
@@ -1446,7 +1463,7 @@ class CreateProject extends Component {
 
     renderForm(canWrite, loading, isConnected) {
 
-        const { sections, bill, name, step, client, address, comContact, techContact } = this.state
+        const { sections, bill, name, step, client, address, comContact, techContact,acomptes } = this.state
         const canReadTasks = this.props.permissions.tasks.canRead
         const prerequiredFields = [name, client.id, address.description, comContact.id]
         const isStepTech = techSteps.includes(step)
@@ -1483,7 +1500,7 @@ class CreateProject extends Component {
                     this.renderBillingSection(sections["billing"].fields, sections["billing"].isExpanded, bill, canWrite)
                 }
                 {sections["acomptes"].show &&
-                    this.renderAcomptesSection(sections["acomptes"].fields, sections["acomptes"].isExpanded, canWrite)
+                    this.renderAcomptesSection(sections["acomptes"].fields, sections["acomptes"].isExpanded,acomptes, canWrite)
                 }
                 {sections["pictures"].show &&
                     this.renderPicturesSection(sections["pictures"].fields, sections["pictures"].isExpanded, loading, canWrite, isConnected)
