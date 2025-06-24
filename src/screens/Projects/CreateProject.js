@@ -816,7 +816,15 @@ class CreateProject extends Component {
     }
      renderAcompteAmountField(acomptes, canWrite) {
         return (
+           
             <View style={{ flex: 1 }}>
+                 {canWrite &&
+                    <Text
+                        
+                        style={[theme.customFontMSregular.caption, { color: theme.colors.primary, marginBottom: 5, marginTop: 16 }]}>
+                        + Ajouter un acompte
+                    </Text>
+                 }
                 <MyInput
                     label="Montant HT à payer (€)*"
                     returnKeyType="done"

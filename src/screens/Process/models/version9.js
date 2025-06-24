@@ -189,7 +189,7 @@ export const version9 = {
         phaseOrder: 2,
         followers: ['Admin', 'MAR'],
         steps: {
-            
+             
             housingActionFile: {
                 title: "Vérification de l'éligibilité du client",
                 instructions: '',
@@ -216,10 +216,61 @@ export const version9 = {
                                 label: 'Valider',
                                 id: 'confirm',
                                 onSelectType: 'validation',
-                                nextStep: 'energeticAuditCreation',
+                                nextStep: 'paymentStatus',
                             },
                             
                         ],
+                    },
+                ],
+            },
+
+            paymentStatus: {
+                //conversion
+                title: 'Demande d’acompte',
+                instructions: '',
+                stepOrder: 2,
+                actions: [
+                   
+                    {
+                        id: 'billingAmount',
+                        title: 'Voulez-vous faire une demande d’acompte?',
+                        instructions: "Veuillez saisir le montant à payer.",
+                        actionOrder: 1,
+                        //Verification
+                        collection: 'Projects',
+                        documentId: '', //#dynamic
+                        properties: ['acomptes', "acompteAmount"],
+                        params: {
+                            screenParams: {
+                                sections: { acomptes: { acompteAmount: true } },
+                            }
+                        },
+                        verificationType: 'multiple-choices',
+                        choices: [
+                            {
+                                id: 'confirm',
+                                label: 'Continuer',
+                                onSelectType: 'validation',
+                                nextStep: 'validePaiem',
+                            },
+                            {
+                                id: 'edit',
+                                label: 'Modifier',
+                                onSelectType: 'navigation',
+                                nextStep: 'validePaiem',
+                            },
+                        ],
+                    
+                        screenPush: true,
+                        //Comment
+                        comment: '',
+                        //Verification
+                        type: 'auto',
+                        verificationValue: '',
+                        //Others
+                        responsable: 'MAR',
+                        status: 'pending',
+                        
                     },
                 ],
             },
@@ -507,153 +558,59 @@ export const version9 = {
             },
               
            
-            paymentStatus: {
-                //conversion
-                title: 'Demande d’acompte',
-                instructions: '',
-                stepOrder: 11,
-                actions: [
+            // paymentStatus: {
+            //     //conversion
+            //     title: 'Demande d’acompte',
+            //     instructions: '',
+            //     stepOrder: 11,
+            //     actions: [
                    
-                    {
-                        id: 'billingAmount',
-                        title: 'Voulez-vous faire une demande d’acompte?',
-                        instructions: "Veuillez saisir le montant à payer.",
-                        actionOrder: 1,
-                        //Verification
-                        collection: 'Projects',
-                        documentId: '', //#dynamic
-                        properties: ['acomptes', "acompteAmount"],
-                        params: {
-                            screenParams: {
-                                sections: { acomptes: { acompteAmount: true } },
-                            }
-                        },
-                        verificationType: 'multiple-choices',
-                        choices: [
-                            {
-                                id: 'confirm',
-                                label: 'Continuer',
-                                onSelectType: 'validation',
-                            },
-                            {
-                                id: 'edit',
-                                label: 'Modifier',
-                                onSelectType: 'navigation',
-                                nextStep: 'DemTrv',
-                            },
-                        ],
+            //         {
+            //             id: 'billingAmount',
+            //             title: 'Voulez-vous faire une demande d’acompte?',
+            //             instructions: "Veuillez saisir le montant à payer.",
+            //             actionOrder: 1,
+            //             //Verification
+            //             collection: 'Projects',
+            //             documentId: '', //#dynamic
+            //             properties: ['acomptes', "acompteAmount"],
+            //             params: {
+            //                 screenParams: {
+            //                     sections: { acomptes: { acompteAmount: true } },
+            //                 }
+            //             },
+            //             verificationType: 'multiple-choices',
+            //             choices: [
+            //                 {
+            //                     id: 'confirm',
+            //                     label: 'Continuer',
+            //                     onSelectType: 'validation',
+            //                     nextStep: 'validePaiem',
+            //                 },
+            //                 {
+            //                     id: 'edit',
+            //                     label: 'Modifier',
+            //                     onSelectType: 'navigation',
+            //                     nextStep: 'validePaiem',
+            //                 },
+            //             ],
                     
-                        screenPush: true,
-                        //Comment
-                        comment: '',
-                        //Verification
-                        type: 'auto',
-                        verificationValue: '',
-                        //Others
-                        responsable: 'Client',
-                        status: 'pending',
+            //             screenPush: true,
+            //             //Comment
+            //             comment: '',
+            //             //Verification
+            //             type: 'auto',
+            //             verificationValue: '',
+            //             //Others
+            //             responsable: 'Client',
+            //             status: 'pending',
                         
-                    },
-                ],
-            },
-            emailBill: {
-                title: 'Envoi facture par mail',
-                instructions: '',
-                stepOrder: 14,
-                actions: [
-                    //task: verify if bill & attestation fluide are still existing
-                    {
-                        id: 'emailBill',
-                        title: 'Envoi automatique de la facture finale + attestation fluide par mail en cours...',
-                        instructions: '',
-                        actionOrder: 1,
-                        collection: 'Projects',
-                        documentId: '', //#dynamic
-                        queryFilters: [{ filter: 'project.id', operation: '==', value: '' }],
-                        properties: ['finalBillSentViaEmail'],
-                        status: 'pending',
-                        verificationType: 'data-fill',
-                        verificationValue: false,
-                        cloudFunction: {
-                            endpoint: 'sendEmail',
-                            queryAttachmentsUrls: {
-                                Facture: [
-                                    { filter: 'project.id', operation: '==', value: '' },
-                                    { filter: 'type', operation: '==', value: 'Facture' },
-                                    {
-                                        filter: 'attachment.downloadURL',
-                                        operation: '!=',
-                                        value: '',
-                                    },
-                                ],
-                                'Attestation fluide': [
-                                    { filter: 'project.id', operation: '==', value: '' },
-                                    {
-                                        filter: 'type',
-                                        operation: '==',
-                                        value: 'Attestation fluide',
-                                    },
-                                    {
-                                        filter: 'attachment.downloadURL',
-                                        operation: '!=',
-                                        value: '',
-                                    },
-                                ],
-                            },
-                            params: {
-                                subject: 'Facture finale et attestation fluide',
-                                dest: 'majdoulmeriem2001@gmail.com', //#task: change it
-                                projectId: '',
-                                attachments: [],
-                            },
-                        },
-                       // responsable: 'Équipe technique',
-                        nextStep: 'clientReview',
-                    },
-                ],
-            },
-              demandeAcpt: {
-                title: "Voulez-vous faire une demande d’acompte?",
-                instructions: '',
-                stepOrder: 11,
-                actions: [ //Audit energetique
-                    {
-                        id: 'demandeAcpt',
-                        title: "Voulez-vous faire une demande d’acompte?",
-                        instructions: '',
-                        actionOrder: 1,
-                        type: 'manual',
-                        comment: '',
-                        status: 'pending',
-                        responsable: "Client",
-                        verificationType: 'data-fill',
-                        verificationValue: '',
-                        collection: 'Projects',
-                        documentId: '', //#dynamic
-                        properties: ['paiement'],
-                        status: 'pending',
-                         nextStep: 'validePaiem',
-                    
-                        
-                        // choices: [
-                        //     {
-                        //         label: 'NON',
-                        //         id: 'cancel',
-                        //         onSelectType: 'transition',
-                        //         // nextStep: 'cancelProject',
-                        //     },
-                        //     {
-                        //         label: 'OUI',
-                        //         id: 'confirm',
-                        //         onSelectType: 'validation',
-                        //         nextStep: 'choixAccpt',
-                        //     },
-                        // ],
-                    },
-                ],
-            },
-             validePaiem: {
-                title: "Choisir un accompte",
+            //         },
+            //     ],
+            // },
+          
+             validePaiem: { 
+                title: "Validation de paiement.",
                 instructions: '',
                 stepOrder: 12,
                 actions: [ //Audit energetique
