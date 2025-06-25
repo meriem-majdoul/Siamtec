@@ -442,6 +442,7 @@ class UploadDocument extends Component {
             })
 
         const fileUploaded = await this.uploadFile(DocumentId)
+        
         if (!fileUploaded)
             setToast(this, 'e', errorMessages.documents.upload) //#task: put it on redux store
         return fileUploaded

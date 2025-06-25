@@ -216,7 +216,7 @@ export const version9 = {
                                 label: 'Valider',
                                 id: 'confirm',
                                 onSelectType: 'validation',
-                                nextStep: 'paymentStatus',
+                                nextStep: 'energeticAuditCreation',
                             },
                             
                         ],
@@ -224,56 +224,7 @@ export const version9 = {
                 ],
             },
 
-            paymentStatus: {
-                //conversion
-                title: 'Demande d’acompte',
-                instructions: '',
-                stepOrder: 2,
-                actions: [
-                   
-                    {
-                        id: 'billingAmount',
-                        title: 'Voulez-vous faire une demande d’acompte?',
-                        instructions: "Veuillez saisir le montant à payer.",
-                        actionOrder: 1,
-                        //Verification
-                        collection: 'Projects',
-                        documentId: '', //#dynamic
-                        properties: ['acomptes', "acompteAmount"],
-                        params: {
-                            screenParams: {
-                                sections: { acomptes: { acompteAmount: true } },
-                            }
-                        },
-                        verificationType: 'multiple-choices',
-                        choices: [
-                            {
-                                id: 'confirm',
-                                label: 'Continuer',
-                                onSelectType: 'validation',
-                                nextStep: 'validePaiem',
-                            },
-                            {
-                                id: 'edit',
-                                label: 'Modifier',
-                                onSelectType: 'navigation',
-                                nextStep: 'validePaiem',
-                            },
-                        ],
-                    
-                        screenPush: true,
-                        //Comment
-                        comment: '',
-                        //Verification
-                        type: 'auto',
-                        verificationValue: '',
-                        //Others
-                        responsable: 'MAR',
-                        status: 'pending',
-                        
-                    },
-                ],
-            },
+           
                energeticAuditCreation: {
                 title: "Importer le contrat d’accompagnement",
                 instructions: '',
@@ -558,56 +509,56 @@ export const version9 = {
             },
               
            
-            // paymentStatus: {
-            //     //conversion
-            //     title: 'Demande d’acompte',
-            //     instructions: '',
-            //     stepOrder: 11,
-            //     actions: [
+            paymentStatus: {
+                //conversion
+                title: 'Demande d’acompte',
+                instructions: '',
+                stepOrder: 11,
+                actions: [
                    
-            //         {
-            //             id: 'billingAmount',
-            //             title: 'Voulez-vous faire une demande d’acompte?',
-            //             instructions: "Veuillez saisir le montant à payer.",
-            //             actionOrder: 1,
-            //             //Verification
-            //             collection: 'Projects',
-            //             documentId: '', //#dynamic
-            //             properties: ['acomptes', "acompteAmount"],
-            //             params: {
-            //                 screenParams: {
-            //                     sections: { acomptes: { acompteAmount: true } },
-            //                 }
-            //             },
-            //             verificationType: 'multiple-choices',
-            //             choices: [
-            //                 {
-            //                     id: 'confirm',
-            //                     label: 'Continuer',
-            //                     onSelectType: 'validation',
-            //                     nextStep: 'validePaiem',
-            //                 },
-            //                 {
-            //                     id: 'edit',
-            //                     label: 'Modifier',
-            //                     onSelectType: 'navigation',
-            //                     nextStep: 'validePaiem',
-            //                 },
-            //             ],
+                    {
+                        id: 'billingAmount',
+                        title: 'Voulez-vous faire une demande d’acompte?',
+                        instructions: "Veuillez saisir le montant à payer.",
+                        actionOrder: 1,
+                        //Verification
+                        collection: 'Projects',
+                        documentId: '', //#dynamic
+                        properties: ['acomptes', "acompteAmount"],
+                        params: {
+                            screenParams: {
+                                sections: { acomptes: { acompteAmount: true } },
+                            }
+                        },
+                        verificationType: 'multiple-choices',
+                        choices: [
+                            {
+                                id: 'confirm',
+                                label: 'Continuer',
+                                onSelectType: 'validation',
+                                nextStep: 'validePaiem',
+                            },
+                            {
+                                id: 'edit',
+                                label: 'Modifier',
+                                onSelectType: 'navigation',
+                                nextStep: 'validePaiem',
+                            },
+                        ],
                     
-            //             screenPush: true,
-            //             //Comment
-            //             comment: '',
-            //             //Verification
-            //             type: 'auto',
-            //             verificationValue: '',
-            //             //Others
-            //             responsable: 'Client',
-            //             status: 'pending',
+                        screenPush: true,
+                        //Comment
+                        comment: '',
+                        //Verification
+                        type: 'auto',
+                        verificationValue: '',
+                        //Others
+                        responsable: 'Client',
+                        status: 'pending',
                         
-            //         },
-            //     ],
-            // },
+                    },
+                ],
+            },
           
              validePaiem: { 
                 title: "Validation de paiement.",
@@ -617,27 +568,41 @@ export const version9 = {
                     {
                         id: 'validePaiem',
                         title: "Vous avez bien reçu le paiement?",
-                        instructions: '',
+                        instructions: 'Valider les acomptes payé.',
                         actionOrder: 1,
-                        type: 'manual',
-                        comment: '',
-                        responsable: "MAR",
-                        status: 'pending',
+                        collection: 'Projects',
+                        documentId: '', //#dynamic
+                        properties: ['acomptes', "acompteAmount"],
+                        params: {
+                            screenParams: {
+                                sections: { acomptes: { acompteAmount: true } },
+                            }
+                        },
                         verificationType: 'multiple-choices',
                         choices: [
                             {
-                                label: 'NON',
-                                id: 'cancel',
-                                onSelectType: 'transition',
-                                // nextStep: 'cancelProject',
-                            },
-                            {
-                                label: 'OUI',
                                 id: 'confirm',
+                                label: 'Continuer',
                                 onSelectType: 'validation',
                                 nextStep: 'DemTrv',
                             },
+                            {
+                                id: 'edit',
+                                label: 'Modifier',
+                                onSelectType: 'navigation',
+                                nextStep: 'DemTrv',
+                            },
                         ],
+                    
+                        screenPush: true,
+                        //Comment
+                        comment: '',
+                        //Verification
+                        type: 'auto',
+                        verificationValue: '',
+                        //Others
+                        responsable: 'MAR',
+                        status: 'pending',
                     },
                 ],
             },
@@ -653,7 +618,7 @@ export const version9 = {
                         actionOrder: 1,
                         type: 'manual',
                         comment: '',
-                        responsable: "Client",
+                        responsable: "MAR",
                         status: 'pending',
                         verificationType: 'multiple-choices',
                         choices: [

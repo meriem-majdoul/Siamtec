@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, ScrollView, TouchableOpacity, Keyboard, TextInput, KeyboardAvoidingView, Platform } from 'react-native';
-import { List } from 'react-native-paper'
+import { List,Checkbox } from 'react-native-paper'
 import _ from 'lodash'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
-import { faInfoCircle, faQuoteRight, faTasks, faFolder, faImage, faTimes, faChevronRight, faFileAlt, faCheckCircle, faEye, faArrowRight, faRedo, faAddressBook, faEuroSign, faRetweet, faUser } from '@fortawesome/free-solid-svg-icons'
+import { faInfoCircle,faMoneyCheckAlt, faQuoteRight, faTasks, faFolder, faImage, faTimes, faChevronRight, faFileAlt, faCheckCircle, faEye, faArrowRight, faRedo, faAddressBook, faEuroSign, faRetweet, faUser } from '@fortawesome/free-solid-svg-icons'
 import ImageView from 'react-native-image-view'
 import { SliderBox } from "react-native-image-slider-box"
 import { connect } from 'react-redux'
@@ -144,7 +144,7 @@ class CreateProject extends Component {
         this.currentUser = firebase.auth().currentUser
         this.isCurrentHighRole = highRoles.includes(this.props.role.id)
         this.isClient = this.props.role.id === 'client'
-
+    
         // Accès aux paramètres de navigation avec React Navigation v5/v6
         this.projectParam = this.props.route?.params?.project || '';
         this.ProjectId = this.props.route?.params?.ProjectId || this.projectParam.id || "";
@@ -155,7 +155,7 @@ class CreateProject extends Component {
         // Pré-remplir les champs
         this.client = this.props.route?.params?.client || { id: '', fullName: '', email: '', role: '', phone: "" };
         this.address = this.props.route?.params?.address || { description: '', place_id: '', marker: { latitude: '', longitude: '' }, error: '' };
-        this.comContact = this.props.role.id === "com" && !this.isEdit ? this.props.currentUser : { id: '', fullName: '', email: '', role: '' };
+        this.comContact = this.props.role.id === "MAR" && !this.isEdit ? this.props.currentUser : { id: '', fullName: '', email: '', role: '' };
         this.sections = this.props.route?.params?.sections || null; // Exemple : { info: { projectWorkTypes: true } }
 
         //onSubmit, Go back if goBackConditions elements are not null
@@ -224,9 +224,9 @@ class CreateProject extends Component {
             },
              acomptes: {
             isExpanded: false,
-            show: false,
+            show: this.isEdit,
             fields: {
-                acompteAmount: { show: false },
+                acompteAmount: { show: this.isEdit },
             }
         },
             pictures: {
@@ -279,10 +279,7 @@ class CreateProject extends Component {
                     role: ''
                 }
             },
-            acomptes:{
-                acompteAmount: '',
-                status:false,
-            },
+            acomptes:[],
             //logs (Auto-Gen)
             createdAt: '',
             createdBy: { id: '', fullName: '' },
@@ -325,6 +322,7 @@ class CreateProject extends Component {
 
     }
 
+    
     //Requires bill amount (from backend)s
     async componentDidMount() {
         if (this.isEdit) await this.initEditMode()
@@ -530,6 +528,7 @@ class CreateProject extends Component {
     // Prepare project data
     const props = ["name", "client", "note", "state", "step", "address", "color", "bill","acomptes" ,"comContact", "techContact", "intervenant"];
     const project = unformatDocument(this.state, props, this.props.currentUser, this.isEdit);
+
     project.attachments = attachments;
     project.processVersion = latestProcessVersion;
     project.workTypes = workTypes.filter((wt) => wt.selected).map((wt) => wt.value);
@@ -814,34 +813,69 @@ class CreateProject extends Component {
             </View>
         )
     }
-     renderAcompteAmountField(acomptes, canWrite) {
-        return (
-           
-            <View style={{ flex: 1 }}>
-                 {canWrite &&
-                    <Text
-                        
-                        style={[theme.customFontMSregular.caption, { color: theme.colors.primary, marginBottom: 5, marginTop: 16 }]}>
+
+    addAcompte() {
+        const { acomptes } = this.state;
+        const newAcompte = { acompteAmount: '', status: false };
+        this.setState({ acomptes: [...acomptes, newAcompte] });
+    }
+
+    updateAcompteAmount(index, value) {
+        const { acomptes } = this.state;
+        const updatedAcomptes = [...acomptes];
+        updatedAcomptes[index].acompteAmount = value; // Modifier le montant
+        this.setState({ acomptes: updatedAcomptes });
+    }
+
+     updatePaiementRecu = (index, checked) => {
+    const updatedAcomptes = [...this.state.acomptes];
+    updatedAcomptes[index].status = checked;
+    this.setState({ acomptes: updatedAcomptes });
+};
+
+
+     renderAcompteAmountField(acomptes, canWrite) { 
+  
+    return (
+        <View style={{ marginTop: 16 }}>
+              {canWrite && (
+                    <Text onPress={() => this.addAcompte()} style={[theme.customFontMSregular.caption, { color: theme.colors.primary, marginBottom: 5, marginTop: 16 }]}>
                         + Ajouter un acompte
                     </Text>
-                 }
-                <MyInput
-                    label="Montant HT à payer (€)*"
-                    returnKeyType="done"
-                    keyboardType='numeric'
-                    value={acomptes.acompteAmount}
-                    onChangeText={acompteAmount => {
-                        acomptes.acompteAmount = acompteAmount
-                        this.setState({ acomptes })
-                    }}
-                    editable={canWrite}
-                // error={!!price.error}
-                // errorText={price.error}
-                />
-              
-            </View>
-        )
-    }
+            )}
+            
+            {acomptes.map((acompte, index) => (
+                <View key={index} style={{ marginBottom: 16 }}>
+                    <Text  style={[theme.customFontMSregular.caption, { color: 'black', marginTop: 16 }]}>
+                        Acompte {index + 1} :</Text>
+                    <MyInput
+                        placeholder="Montant HT à payer (€)"
+                        keyboardType="numeric"
+                        value={acompte.acompteAmount}
+                        onChangeText={(value) => this.updateAcompteAmount(index, value)}
+                        editable={this.props.role.id =='client'}
+                    />
+                     <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 8 }}>
+                         <Text style={[theme.customFontMSregular.caption, { color: 'black', marginRRight: 8 }]}>
+                          Paiement reçu
+                        </Text>
+                        <Checkbox
+                        status={acompte.status ? 'checked' : 'unchecked'}
+                       
+                        onPress={() => {
+                            if (this.props.role.id === 'dircom') {
+                                this.updatePaiementRecu(index, !acompte.status);
+                            }
+                        }}
+                        editable={this.props.role.id=='dircom'}
+                        />
+                        
+                    </View>
+                </View>
+            ))}
+        </View>
+    );
+}
 
     renderBillAidsPaymentsField(bill, canWrite) {
         return (
@@ -1333,7 +1367,7 @@ class CreateProject extends Component {
         return (
             <FormSection
                 sectionTitle='Acomptes'
-                sectionIcon={faFolder}
+                sectionIcon={faMoneyCheckAlt}
                 isExpanded={isExpanded}
                 onPressSection={() => this.toggleSection("acomptes")}
                 containerStyle={{ marginBottom: 1 }}
@@ -1592,7 +1626,9 @@ class CreateProject extends Component {
             </View >
         )
     }
+    
 }
+
 
 const mapStateToProps = (state) => {
     return {
@@ -1604,6 +1640,7 @@ const mapStateToProps = (state) => {
         //fcmToken: state.fcmtoken
     }
 }
+
 
 export default connect(mapStateToProps)(CreateProject)
 
