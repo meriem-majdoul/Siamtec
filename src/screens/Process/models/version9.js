@@ -224,7 +224,6 @@ export const version9 = {
                 ],
             },
 
-           
                energeticAuditCreation: {
                 title: "Importer le contrat d’accompagnement",
                 instructions: '',
@@ -508,7 +507,6 @@ export const version9 = {
                 ],
             },
               
-           
             paymentStatus: {
                 //conversion
                 title: 'Demande d’acompte',
@@ -632,7 +630,7 @@ export const version9 = {
                                 label: 'Valider',
                                 id: 'confirm',
                                 onSelectType: 'validation',
-                                // nextStep: 'demandeAcpt',
+                                nextPhase: 'rdn',
                             },
                         ],
                     },
@@ -647,6 +645,58 @@ export const version9 = {
         phaseOrder: 3,
         followers: ['Admin', 'MAR'],
         steps: {
+
+            choixEntrTech: {
+            //conversion
+            title: 'Choix d’entreprise technique',
+            instructions: '',
+            stepOrder: 1,
+            actions: [
+            
+                {
+                    id: 'choixEntrTech',
+                    title: 'Choisissez une entreprise technique pour votre projet.',
+                    instructions: "Choisissez une entreprise technique pour votre projet.",
+                    actionOrder: 1,
+                    //Verification
+                    collection: 'Projects',
+                    documentId: '', //#dynamic
+                    properties: ['contacts', "tech"],
+                    params: {
+                        screenParams: {
+                            sections: { contacts: { tech: true } },
+                        }
+                    },
+                    verificationType: 'multiple-choices',
+                    choices: [
+                        {
+                            id: 'confirm',
+                            label: 'Continuer',
+                            onSelectType: 'validation',
+                            nextStep: 'validePaiem',
+                        },
+                        {
+                            id: 'edit',
+                            label: 'Modifier',
+                            onSelectType: 'navigation',
+                            nextStep: 'validePaiem',
+                        },
+                    ],
+                
+                    screenPush: true,
+                    //Comment
+                    comment: '',
+                    //Verification
+                    type: 'auto',
+                    verificationValue: '',
+                    //Others
+                    responsable: 'MAR',
+                    status: 'pending',
+                    
+                },
+            ],
+        },
+                
             rd2Creation: {
                 title: 'Créer un rendez-vous 2', //1. verify if RD2 exists
                 instructions: '',

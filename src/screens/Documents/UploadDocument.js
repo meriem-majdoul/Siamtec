@@ -430,23 +430,116 @@ class UploadDocument extends Component {
         }
     }
 
-    //3. Upload
-    async handleUpload(document, DocumentId, isConversion, isConnected) {
-        if (!this.isEdit || isConversion)
-            await this.attachmentListener(DocumentId)
+// 3. Upload
+async handleUpload(document, DocumentId, isConversion, isConnected) {
+    try {
+        if (!this.isEdit || isConversion) {
+            await this.attachmentListener(DocumentId);
+        }
 
-        if (!isConnected)
+        if (!isConnected) {
             this.setState({
                 loading: false,
-                loadingConversion: false
-            })
+                loadingConversion: false,
+            });
+            return false; // Arrête l'exécution si non connecté
+        }
 
-        const fileUploaded = await this.uploadFile(DocumentId)
+        const fileUploaded = await this.uploadFile(DocumentId);
+        if (!fileUploaded) {
+            setToast(this, 'e', "Erreur lors de l'upload du document");
+            return false;
+        }
+
+        console.log('Début de la vérification IA');
         
-        if (!fileUploaded)
-            setToast(this, 'e', errorMessages.documents.upload) //#task: put it on redux store
-        return fileUploaded
+        // Récupération et encodage du fichier en Base64
+        const fileContent = await this.getFileAsBase64(document.attachment.downloadURL);
+        // console.log('fileContent: ',fileContent);
+        const verificationResult = await this.verifyDocumentAI(fileContent);
+        console.log('verificationResult:  ', verificationResult);
+     
+
+        if (verificationResult.error) {
+            setToast(this, 'e', `Erreur IA : ${verificationResult.message}`);
+        } else {
+            setToast(this, 's', `Vérification réussie : ${verificationResult.message}`);
+        }
+
+        return fileUploaded;
+    } catch (error) {
+        console.error("Erreur dans handleUpload :", error);
+        setToast(this, 'e', "Erreur inattendue lors du traitement");
+        return false;
     }
+}
+
+async getFileAsBase64(fileUrl) {
+    try {
+        const response = await fetch(fileUrl);
+        const blob = await response.blob();
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onloadend = () => resolve(reader.result.split(",")[1]); // Encodage en Base64
+            reader.onerror = reject;
+            reader.readAsDataURL(blob);
+        });
+    } catch (error) {
+        console.error("Erreur lors de l'encodage du fichier en Base64 :", error);
+        throw new Error("Impossible d'encoder le fichier en Base64");
+    }
+}
+
+async verifyDocumentAI(base64Content) {
+    const apiEndpoint = `https://eu-documentai.googleapis.com/v1/projects/226695008961/locations/eu/processors/3290b0ce633eb7a0:process`;
+
+    try {
+        const token = "ya29.c.c0ASRK0GaRehCYc_GmjCCEeLKmOgG-yo1Mf2_SAYhqzF8imuAcK_9uphF9h9818P61IGd5sDxfZFiLZxp6gknZNmPtqjeR2kVC-97e4hOLRjPisuWazYFZx9BKLWbidFjljrZ3Xj2YQpfJXCUqMHEQ43e4m07ds92A90fl5zdOtvCKaEzGVT1DhY079UHadaA7dIFHdyR-hFJ1R6TtPGh8dd1maAcFlByCxXR0N2HHfzb6fShfDVXucHjexriGbSznpKhqoETnadUCrtWzpfzK7WP537u9Fc0zaH4hou0_O6ln__-bYL__Cudrsz-Szrctg0kPiQzCUhHpMAD8nXI9Vl5CFcVs__iW-7j6O0Vr9_0TnH3_af9S5dA0H385D07_bl2Wtrk_lzls4mjpd9Sb5wzah9pejglVB8pv456Z7lher_Rlha593O5-2aiuZ7kBzFSncukF3qQsc6ux5kykZec6aOFWfI7u1tsljf6q8rMgp6qI5lY5R6y2O3Sc_vwsFqjjeZjx2Xcvyawc1pftesl4be3bhqvylIueU8aQ37_gMfSpOedXUMgmMi3MWcekqoXpUe6mnsIlJkBQRVJzR3_jclouJg7tw8b5YekYdbJea9VXq_stJbsp34O3cXv0wBf3v5sOdy_zy9FU5h-7WbcB7m0Q2XmFQRFpoIy9dwfcqhXjBR8cO0gBhSY5w96xbkJZ6Xwy6fMMq84qqRZhvb-Yq5aYdpOS2V1iSURUJ7Mf_BYghUe6nJoqvYW5xwnJp-vapeYFIzWX-i6I6YZuSRRp_k9rp0Icu5y_mIjyl-WJhRVq5r6OqghjdmYztkjWWful2QWZ5MZqj-j65Xr6m4vv5FZmzW-uIaYUe59ik2igYh41VQfpxrF0Xo9VIoB7st8x42xBsjFRaSYdXkoUlee72nMh1pMU5FYlrf_9zVofBBhWFt06M13UkS8xMBfxecoO3JXJ0rhJMfoayucJk411god3s5uiFfkd8mB_mSFw23woecsir6U"; // Utilisez une variable d'environnement
+        const response = await fetch(apiEndpoint, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({
+                rawDocument: {
+                    content: base64Content, // Utilisation du contenu Base64
+                },
+            }),
+        });
+
+        if (!response.ok) {
+            return {
+                error: true,
+                message: `Erreur API (${response.status}): ${response.statusText}`,
+            };
+        }
+
+        const result = await response.json();
+        if (result.document) {
+            return {
+                error: false,
+                message: "Analyse réussie",
+                content: result.document.text,
+            };
+        } else {
+            return {
+                error: true,
+                message: "Aucune donnée extraite",
+            };
+        }
+    } catch (error) {
+        console.error("Erreur lors de l'analyse Document AI :", error);
+        return {
+            error: true,
+            message: "Erreur d'analyse IA",
+        };
+    }
+}
+
+
+
+
 
     async uploadFile(DocumentId) {
         var { project, type, attachment } = this.state

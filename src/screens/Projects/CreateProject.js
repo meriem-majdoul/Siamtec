@@ -455,7 +455,7 @@ class CreateProject extends Component {
         const clientError = nameValidator(client.fullName, '"Client"')
         const nameError = nameValidator(name, '"Nom du projet"')
         const comContactError = nameValidator(comContact.id, '"MAR"')
-        //const techContactError = isStepTech ? nameValidator(techContact.id, '"Équipe technique"') : ''
+        //const techContactError = isStepTech ? nameValidator(techContact.id, '"Entreprise technique"') : ''
         const addressError = '' //Address optional on offline mode
         //var addressError = isConnected ? nameValidator(address.description, '"Emplacemment"') : '' //Address optional on offline mode
        // const hasPriorTechVisitError = this.isEdit ? "" : hasPriorTechVisit ? "" : "La création d'une visite technique préalable est obligatoire."
@@ -727,10 +727,10 @@ class CreateProject extends Component {
                     prevScreen: 'CreateProject',
                     isRoot: false,
                     titleText: 'Choisir un poseur',
-                    query: db.collection('Users').where('role', '==', 'Équipe technique').where('deleted', '==', false)
+                    query: db.collection('Users').where('role', '==', 'Entreprise technique').where('deleted', '==', false)
                 }})
                 }
-                label="Équipe technique *"
+                label="Entreprise technique *"
                 value={techContact.fullName || ''}
                 error={!!techContact.error}
                 errorText={techContact.error}
